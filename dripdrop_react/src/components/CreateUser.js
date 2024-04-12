@@ -1,8 +1,12 @@
 import { useState } from "react"
+import axios from "axios";
+import { useNavigate} from "react-router-dom";
 
 export default function CreateUser(){
 
-    const [inputs, setInputs] = useState({})
+    const navigate = useNavigate();
+
+    const [inputs, setInputs] = useState([])
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -10,9 +14,12 @@ export default function CreateUser(){
         setInputs(values => ({...values, [name]: value}));
     }
     const handleSubmit = (event) => {
-        event.preventDefault()
+        event.preventDefault();
 
-        console.log(inputs);
+        axios.post('http://localhost:80/PHP-API/user/save', inputs).then(function(response){
+            console.log(response.data);
+            navigate('/')
+        })
     }
     return(
         <div>  
