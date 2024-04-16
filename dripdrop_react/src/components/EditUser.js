@@ -15,7 +15,7 @@ export default function EditUser(){
     }, []);
 
     function getUser(){
-        axios.get(`http://localhost:80/PHP-API/user/${id}`).then(function(response){
+        axios.get(`http://localhost:80/PHP-API/users/${id}`).then(function(response){
             console.log(response.data)
             setInputs(response.data)
         });
