@@ -17,10 +17,15 @@ export default function CreateUser(){
         event.preventDefault();
 
         axios.post('http://localhost:80/PHP-API/users/save', inputs).then(function(response){
+            localStorage.setItem('token', response.data.token);
             console.log(response.data);
             navigate('/')
         })
+        .catch(function(error){
+            console.log('Authentication failed: ',error)
+        })
     }
+    
     return(
         <div>  
             <h1>Create User</h1>

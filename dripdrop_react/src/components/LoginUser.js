@@ -1,63 +1,37 @@
-import { useState, useEffect } from "react";
+import { useState } from "react"
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
-export default function EditUser(){
+export default function LoginUser(){
 
     const navigate = useNavigate();
 
-    const [inputs, setInputs] = useState([]);
-
-    const {id} = useParams();
-
-    useEffect(() => {
-        getUser();
-    }, []);
-
-    function getUser(){
-        axios.get(`http://localhost:80/PHP-API/users/${id}`).then(function(response){
-            console.log(response.data)
-            setInputs(response.data)
-        });
-    }
-
+    const [inputs, setInputs] = useState([])
 
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}));
     }
-
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        axios.put(`http://localhost:80/PHP-API/users/${id}/edit`, inputs).then(function(response){
+        axios.post('http://localhost:80/PHP-API/login', inputs).then(function(response){
             console.log(response.data);
-            navigate('/');
         })
     }
-
     return(
         <div>  
-            <h1>Edit User</h1>
+            <h1>Login User</h1>
             <form onSubmit={handleSubmit}>
                 <table cellSpacing="10">
                     <tbody>
                         <tr>
                             <th>
-                                <label>Name: </label>
-                            </th>
-                            <td>
-                                <input value={inputs.name} type="text" name="name" onChange={handleChange}/>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input value={inputs.email} type="text" name="email" onChange={handleChange}/>
+                                <input type="text" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -66,7 +40,7 @@ export default function EditUser(){
                                 <label>Password: </label>
                             </th>
                             <td>
-                                <input value={inputs.password} type="text" name="password" onChange={handleChange}/>
+                                <input type="text" name="password" onChange={handleChange}/>
                             </td>
                         </tr>
 
