@@ -4,10 +4,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditUser(){
 
+    // gets the navigate function from the router
     const navigate = useNavigate();
 
+    // sets the inputs to an empty array
     const [inputs, setInputs] = useState([]);
 
+    // gets the id from the URL
     const {id} = useParams();
 
     useEffect(() => {
@@ -53,7 +56,7 @@ export default function EditUser(){
         <div>  
             <h1>Edit User</h1>
             <form onSubmit={handleSubmit}>
-                <table cellSpacing="10">
+                <table cellSpacing="10" align="center">
                     <tbody>
                         <tr>
                             <th>

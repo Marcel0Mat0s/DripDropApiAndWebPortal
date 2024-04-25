@@ -4,24 +4,26 @@ import ListUser from './components/ListUser';
 import CreateUser from './components/CreateUser';
 import EditUser from './components/EditUser'
 import LoginUser from './components/LoginUser';
+import ListPlants from './components/ListPlants';
+import CreatePlant from './components/CreatePlant';
+import Main from './components/Main';
+import logo from './images/dripdropdigital.png';
 
 function App() {
   return (
     <div className="App">
-      <h5>React CRUD operations using PHP API and MySQL</h5>
+      <body>
+        <div class="header">
+          <a href="/login">Login</a>
+          <a href="/user/create">Create User</a>
+        </div>
+          <br/>
+          <img src={logo} alt="Logotipo DripDrop" class="logo"/>
+      </body>
 
       <BrowserRouter>
         <nav>
           <ul>
-            <li>
-              <Link to="/">List Users</Link>
-            </li>
-            <li>
-              <Link to="user/create">Create User</Link>
-            </li>
-            <li>
-              <Link to="login">Login</Link>
-            </li>
           </ul>
         </nav>
         <Routes>

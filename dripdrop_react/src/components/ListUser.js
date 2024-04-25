@@ -25,7 +25,7 @@ export default function ListUser(){
     return(
         <div>
             <h1>List Users</h1>
-            <table>
+            <table align='center'>
                 <thead>
                     <tr>
                         <th>#</th>
