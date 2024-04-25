@@ -28,7 +28,8 @@ export default function CreatePlant(){
             const lon = position.coords.longitude;
    
             // Set the location in the Location input
-            document.getElementById('location').value = `${lat},${lon}`;
+            document.getElementById('location').value = `${lat}, ${lon}`;
+            setInputs(values => ({...values, location: `${lat}, ${lon}`}));
         });
     }, []);
 
@@ -91,7 +92,7 @@ export default function CreatePlant(){
                                 <label >Location: </label>
                             </th>
                             <td>
-                                <input id="location" type="text" name="location" onChange={handleChange}/>
+                                <input id="location" type="text" name="location"/>
                             </td>
                         </tr>
                         <tr>
@@ -100,6 +101,7 @@ export default function CreatePlant(){
                             </th>
                             <td>
                                 <select name="type" onChange={handleChange}>
+                                    <option value="">Select a type</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>
                                     )}
