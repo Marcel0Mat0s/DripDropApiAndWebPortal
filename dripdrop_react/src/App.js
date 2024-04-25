@@ -31,6 +31,9 @@ function App() {
           <Route path="user/create" element={<CreateUser/>} />
           <Route path="user/:id/edit" element={<EditUser/>} />
           <Route path="login" element={<LoginUser/>} />
+          <Route path="main" element={<Main/>} />
+          <Route path="plants" element={<ListPlants/>} />
+          <Route path="plant/create" element={<CreatePlant/>} />
         </Routes>
       </BrowserRouter>
     </div>
