@@ -17,7 +17,7 @@ export default function ListUser(){
     }
 
     const deleteUser = (id) => {
-        axios.delete(`http://localhost:80/PHP-API/user/${id}/delete`).then(function(response){
+        axios.delete(`http://localhost:80/PHP-API/users/${id}/delete`).then(function(response){
             console.log(response.data)
             getUsers();
         });

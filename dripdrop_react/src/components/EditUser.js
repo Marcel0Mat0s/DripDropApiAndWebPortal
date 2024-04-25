@@ -31,10 +31,22 @@ export default function EditUser(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        axios.put(`http://localhost:80/PHP-API/user/${id}/edit`, inputs).then(function(response){
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        axios.put(`http://localhost:80/PHP-API/users/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/');
         })
+        .catch(error => {
+            console.log('Failed to update user: ', error);
+            alert('Failed to update user');
+        });
     }
 
     return(

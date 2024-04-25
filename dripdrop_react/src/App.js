@@ -3,6 +3,7 @@ import './App.css';
 import ListUser from './components/ListUser';
 import CreateUser from './components/CreateUser';
 import EditUser from './components/EditUser'
+import LoginUser from './components/LoginUser';
 
 function App() {
   return (
@@ -18,12 +19,16 @@ function App() {
             <li>
               <Link to="user/create">Create User</Link>
             </li>
+            <li>
+              <Link to="login">Login</Link>
+            </li>
           </ul>
         </nav>
         <Routes>
           <Route index element={<ListUser/>} />
           <Route path="user/create" element={<CreateUser/>} />
           <Route path="user/:id/edit" element={<EditUser/>} />
+          <Route path="login" element={<LoginUser/>} />
         </Routes>
       </BrowserRouter>
     </div>
