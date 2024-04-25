@@ -35,7 +35,7 @@ export default function ListPlants(){
                         <tr key={key}>
                             <td>{plant.name}</td>
                             <td>
-                                <Link to={`plant/${plant.id}/edit`} style={{marginRight: "10px"}}>Edit</Link>
+                                <Link to={`/plant/${plant.id}/edit`} style={{marginRight: "10px"}}>Edit</Link>
                                 <button onClick={() => deletePlant(plant.id)}>Delete</button>
                             </td>
                         </tr>
