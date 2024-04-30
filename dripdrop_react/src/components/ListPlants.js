@@ -1,9 +1,13 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function ListPlants(){
+
+    const navigate = useNavigate();
+
     const [plants, setPlants] = useState([]);
+
     useEffect(() => {
         getPlants();
     }, []);
@@ -21,6 +25,7 @@ export default function ListPlants(){
             getPlants();
         });
     }
+
     return(
         <div>
             <h1>List Plants</h1>
@@ -33,7 +38,9 @@ export default function ListPlants(){
                 <tbody>
                     {plants.map((plant, key) =>
                         <tr key={key}>
-                            <td>{plant.name}</td>
+                            <td>
+                                <Link to={`/states/${plant.id}`}>{plant.name}</Link>
+                            </td>
                             <td>
                                 <Link to={`/plant/${plant.id}/edit`} style={{marginRight: "10px"}}>Edit</Link>
                                 <button onClick={() => deletePlant(plant.id)}>Delete</button>

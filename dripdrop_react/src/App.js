@@ -9,6 +9,7 @@ import CreatePlant from './components/CreatePlant';
 import Main from './components/Main';
 import logo from './images/dripdropdigital.png';
 import EditPlant from './components/EditPlant';
+import ListStates from './components/ListStates';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="plants" element={<ListPlants/>} />
           <Route path="plant/create" element={<CreatePlant/>} />
           <Route path="plant/:id/edit" element={<EditPlant/>} />
+          <Route path="states/:plantId" element={<ListStates/>} />
         </Routes>
       </BrowserRouter>
     </div>
