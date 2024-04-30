@@ -13,8 +13,6 @@ export default function ListStates(){
 
     const userId = localStorage.getItem('userId');
 
-    console.log(plantId);
-
     useEffect(() => {
         // gets the plant state from the API every 20 seconds
         const interval = setInterval(() => {
