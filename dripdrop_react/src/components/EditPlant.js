@@ -2,23 +2,35 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function EditUser(){
+export default function EditPlant(){
 
     // gets the navigate function from the router
     const navigate = useNavigate();
 
     // sets the inputs to an empty array
     const [inputs, setInputs] = useState([]);
+    const [types, setTypes] = useState([]);
 
     // gets the id from the URL
     const {id} = useParams();
 
+    // Gets the user ID from local storage
+    const userId = localStorage.getItem('userId');
+
     useEffect(() => {
-        getUser();
+        // gets the plant types from the API
+        axios.get('http://localhost:80/PHP-API/types').then(function(response){
+            setTypes(response.data);
+
+        }).catch(function(error){
+            console.log('Plant types retrieval failed: ',error)
+        });
+
+        getPlant();
     }, []);
 
-    function getUser(){
-        axios.get(`http://localhost:80/PHP-API/users/${id}`).then(function(response){
+    function getPlant(){
+        axios.get(`http://localhost:80/PHP-API/plants/${id}`).then(function(response){
             console.log(response.data)
             setInputs(response.data)
         });
@@ -34,6 +46,8 @@ export default function EditUser(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        console.log(inputs);
+
         // gets the token from local storage and sets it in the headers
         const token = localStorage.getItem('token');
         const config = {
@@ -42,9 +56,10 @@ export default function EditUser(){
             }
         };
 
-        axios.put(`http://localhost:80/PHP-API/users/${id}/edit`, inputs, config).then(function(response){
+        // Send a PUT request to the server
+        axios.put(`http://localhost:80/PHP-API/plants/${userId}/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
-            navigate('/');
+            navigate('/plants');
         })
         .catch(error => {
             console.log('Failed to update user: ', error);
@@ -69,19 +84,24 @@ export default function EditUser(){
 
                         <tr>
                             <th>
-                                <label>Email: </label>
+                                <label >Location: </label>
                             </th>
                             <td>
-                                <input value={inputs.email} type="text" name="email" onChange={handleChange}/>
+                                <input id="location" type="text" name="location" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label>Password: </label>
+                                <label>Type: </label>
                             </th>
                             <td>
-                                <input value={inputs.password} type="text" name="password" onChange={handleChange}/>
+                                <select name="type" onChange={handleChange}>
+                                    <option value="">Select a type</option>
+                                    {types.map((type) => 
+                                        <option key={type.id} value={type.id}>{type.name}</option>
+                                    )}
+                                </select>
                             </td>
                         </tr>
 

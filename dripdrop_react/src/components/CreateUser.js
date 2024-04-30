@@ -30,7 +30,7 @@ export default function CreateUser(){
         <div>  
             <h1>Create User</h1>
             <form onSubmit={handleSubmit}>
-                <table cellSpacing="10">
+                <table cellSpacing="10" align="center">
                     <tbody>
                         <tr>
                             <th>

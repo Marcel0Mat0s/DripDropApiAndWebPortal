@@ -2,7 +2,7 @@ import { useState } from "react"
 import axios from "axios";
 import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken, removeToken } from './../redux/actions';
+import { setToken, removeToken, setUserId, removeUserId } from './../redux/actions';
 
 export default function LoginUser(){
 
@@ -34,11 +34,20 @@ export default function LoginUser(){
             // Get the token from the response
             const token = response.data.token;
 
+            const userId = response.data.userId;
+
             // Set the token in the redux store and local storage
             dispatch(setToken(token));
             localStorage.setItem('token', token);
 
+            // Set the user id in the redux store and local storage
+            dispatch(setUserId(userId));
+            localStorage.setItem('userId', userId);
+
             console.log(token);
+
+            // Redirect to the main page
+            navigate('/main');
         } catch (error) {
             console.log('Authentication failed: ', error);
         }
@@ -46,8 +55,17 @@ export default function LoginUser(){
   
     // Logout function
     const logout = () => {
+
+        // Remove the token from the redux store and local storage
         dispatch(removeToken());
         localStorage.removeItem('token');
+
+        // Remove the user id from the redux store and local storage
+        dispatch(removeUserId());
+        localStorage.removeItem('userId');
+
+        // Redirect to the principal page
+        navigate('/');
 
         console.log('Logged out');
     }
@@ -56,7 +74,9 @@ export default function LoginUser(){
         <div>  
             <h1>Login User</h1>
             <form onSubmit={handleSubmit}>
-                <table cellSpacing="10">
+
+                <table cellSpacing="10" align="center">
+
                     <tbody>
                         <tr>
                             <th>
@@ -78,7 +98,7 @@ export default function LoginUser(){
 
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Save</button>
+                                <button>Login</button>
                             </td>
                         </tr>
 
