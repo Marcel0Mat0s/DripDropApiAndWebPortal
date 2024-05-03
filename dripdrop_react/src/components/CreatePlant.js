@@ -13,14 +13,7 @@ export default function CreatePlant(){
 
     useEffect(() => {
 
-        // gets the plant types from the API
-        axios.get('http://localhost:80/PHP-API/types').then(function(response){
-            console.log(response.data);
-            setTypes(response.data);
-
-        }).catch(function(error){
-            console.log('Plant types retrieval failed: ',error)
-        });
+        getTypes();
 
         // gets the location of the user
         navigator.geolocation.getCurrentPosition(function(position){
@@ -33,11 +26,34 @@ export default function CreatePlant(){
         });
     }, []);
 
+    // Gets the plant types from the API
+    function getTypes(){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        // gets the plant types from the API
+        axios.get(`http://localhost:80/PHP-API/types/null/${userId}`, config).then(function(response){
+            console.log(response.data);
+            setTypes(response.data);
+
+        }).catch(function(error){
+            console.log('Plant types retrieval failed: ',error)
+        });
+
+    }
+
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}));
     }
+
     const handleSubmit = (event) => {
         event.preventDefault();
 

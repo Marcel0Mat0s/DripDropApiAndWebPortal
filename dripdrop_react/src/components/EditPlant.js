@@ -18,19 +18,43 @@ export default function EditPlant(){
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
+        getTypes();
+        getPlant();
+    }, []);
+
+    // Gets the plant types from the API
+    function getTypes(){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
         // gets the plant types from the API
-        axios.get('http://localhost:80/PHP-API/types').then(function(response){
+        axios.get(`http://localhost:80/PHP-API/types/null/${userId}`, config).then(function(response){
+            console.log(response.data);
             setTypes(response.data);
 
         }).catch(function(error){
             console.log('Plant types retrieval failed: ',error)
         });
 
-        getPlant();
-    }, []);
+    }
 
     function getPlant(){
-        axios.get(`http://localhost:80/PHP-API/plants/${id}`).then(function(response){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        axios.get(`http://localhost:80/PHP-API/plants/${id}/${userId}`, config).then(function(response){
             console.log(response.data)
             setInputs(response.data)
         });

@@ -35,7 +35,7 @@ export default function ListStates(){
             }
         };
 
-        axios.get( `http://localhost:80/PHP-API/states/${userId}/${plantId}`, config).then(function(response){
+        axios.get( `http://localhost:80/PHP-API/states/null/${userId}/${plantId}/now`, config).then(function(response){
             console.log(response.data)
             setState(response.data)
         });

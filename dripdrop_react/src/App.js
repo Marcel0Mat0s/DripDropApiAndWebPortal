@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
 import './App.css';
-import ListUser from './components/ListUser';
+import Home from './components/Home';
 import CreateUser from './components/CreateUser';
 import EditUser from './components/EditUser'
 import LoginUser from './components/LoginUser';
@@ -29,7 +29,7 @@ function App() {
           </ul>
         </nav>
         <Routes>
-          <Route index element={<ListUser/>} />
+          <Route index element={<Home/>} />
           <Route path="user/create" element={<CreateUser/>} />
           <Route path="user/:id/edit" element={<EditUser/>} />
           <Route path="login" element={<LoginUser/>} />

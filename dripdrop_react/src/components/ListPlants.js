@@ -1,19 +1,28 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function ListPlants(){
 
-    const navigate = useNavigate();
-
     const [plants, setPlants] = useState([]);
+
+    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
         getPlants();
     }, []);
 
     function getPlants(){
-        axios.get('http://localhost:80/PHP-API/plants/').then(function(response){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        axios.get(`http://localhost:80/PHP-API/plants/null/${userId}`, config).then(function(response){
             console.log(response.data)
             setPlants(response.data)
         });
