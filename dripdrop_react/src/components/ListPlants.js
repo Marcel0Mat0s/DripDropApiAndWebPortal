@@ -29,7 +29,16 @@ export default function ListPlants(){
     }
 
     const deletePlant = (id) => {
-        axios.delete(`http://localhost:80/PHP-API/plants/${id}/delete`).then(function(response){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        axios.delete(`http://localhost:80/PHP-API/plants/${id}/${userId}/delete`, config).then(function(response){
             console.log(response.data)
             getPlants();
         });

@@ -51,9 +51,12 @@ export default function EditUser(){
             }
         };
 
-        axios.put(`http://localhost:80/PHP-API/users/${id}/edit`, inputs, config).then(function(response){
+        axios.put(`http://localhost:80/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
-            navigate('/');
+            /**
+             * TODO
+             * navigate(`/user/${id}/deatils`);
+             */
         })
         .catch(error => {
             console.log('Failed to update user: ', error);

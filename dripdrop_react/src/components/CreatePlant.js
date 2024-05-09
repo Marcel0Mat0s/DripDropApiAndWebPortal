@@ -79,7 +79,7 @@ export default function CreatePlant(){
         console.log(inputs);
 
 
-        axios.post(`http://localhost:80/PHP-API/plants/${userId}/save`, inputs, config).then(function(response){
+        axios.post(`http://localhost:80/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
             console.log(response.data);
             // redirect to the plants page
             navigate('/plants')

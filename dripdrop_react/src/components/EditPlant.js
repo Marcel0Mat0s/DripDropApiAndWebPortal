@@ -81,7 +81,7 @@ export default function EditPlant(){
         };
 
         // Send a PUT request to the server
-        axios.put(`http://localhost:80/PHP-API/plants/${userId}/${id}/edit`, inputs, config).then(function(response){
+        axios.put(`http://localhost:80/PHP-API/plants/${id}/${userId}/edit`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/plants');
         })
