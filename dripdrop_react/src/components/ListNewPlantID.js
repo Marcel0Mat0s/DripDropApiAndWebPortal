@@ -37,15 +37,13 @@ export default function ListNewPlantID() {
     return(
         <div>
             <h1>O ID da sua nova planta é:</h1>
-            <br/>
             <h1 id='plantId'>x</h1>
-            <br/>
-            <p>Clique <a href='https://192.168.4.1:5000' target="_blank" rel="noopener noreferrer">aqui</a> após 
+            <p>Clique <a style={{color: 'grey'}} href='https://192.168.4.1:5000' target="_blank" rel="noopener noreferrer">aqui</a> após 
             se conectar à rede:</p>
             <p> DripDropDigital do dispositivo com a palavra-passe "dripdrop123#" para o configurar</p>
             <br/>
 
-            <button onClick={() => navigate('/Plants')}>Continuar</button>
+            <button id='buttonYes' onClick={() => navigate('/main')}>Continuar</button>
         </div>
     );
 }

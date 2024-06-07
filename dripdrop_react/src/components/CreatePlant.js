@@ -92,32 +92,32 @@ export default function CreatePlant(){
 
     return(
         <div>
-            <h1>Create Plant</h1>
+            <h1>Criar Planta</h1>
             <form onSubmit={handleSubmit}>
             <table cellSpacing="10" align="center">
                     <tbody>
                         <tr>
                             <th>
-                                <label>Name: </label>
+                                <label>Nome: </label>
                             </th>
                             <td>
-                                <input type="text" name="name" onChange={handleChange}/>
+                                <input id='roundedS' type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
                         <tr>
                             <th>
-                                <label >Location: </label>
+                                <label >Localização: </label>
                             </th>
                             <td>
-                                <input id="location" type="text" name="location"/>
+                                <input id="location" type="text" name="location" style={{borderRadius: '5px'}}/>
                             </td>
                         </tr>
                         <tr>
                             <th>
-                                <label>Type: </label>
+                                <label>Tipo: </label>
                             </th>
                             <td>
-                                <select name="type" onChange={handleChange}>
+                                <select id='roundedS' style={{width: '100%'}} name="type" onChange={handleChange}>
                                     <option value="">Seleciona um tipo</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>
@@ -125,9 +125,10 @@ export default function CreatePlant(){
                                 </select>
                             </td>
                         </tr>
+                        <br/>
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Criar</button>
+                                <button id="buttonYes">Criar</button>
                             </td>
                         </tr>
                     </tbody>

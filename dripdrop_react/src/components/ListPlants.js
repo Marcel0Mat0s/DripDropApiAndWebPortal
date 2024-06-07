@@ -46,28 +46,26 @@ export default function ListPlants(){
 
     return(
         <div>
-            <h1>List Plants</h1>
+            <h1>Lista de Plantas</h1>
             <table align='center'>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                    </tr>
-                </thead>
                 <tbody>
                     {plants.map((plant, key) =>
                         <tr key={key}>
-                            <td>
-                                <Link to={`/states/${plant.id}`}>{plant.name}</Link>
+                            <td id='tdSpace'>
+                                <Link style={{color: '#D3D3D3'}} to={`/states/${plant.id}`}>{plant.name}</Link>
                             </td>
-                            <td>
-                                <Link to={`/plant/${plant.id}/edit`} style={{marginRight: "10px"}}>Edit</Link>
-                                <button onClick={() => deletePlant(plant.id)}>Delete</button>
+                            <td id='tdSpace'>
+                                <Link id='buttonYes' to={`/plant/${plant.id}/edit`}>Editar</Link>
+                            </td>
+                            <td id='tdSpace'>
+                                <button id='buttonNo' onClick={() => deletePlant(plant.id)}>Apagar</button>
                             </td>
                         </tr>
                     )}
                 </tbody>
             </table>
-            <Link to="/plant/create">Create Plant</Link>
+            <br/>
+            <Link id='buttonBlue' to="/plant/create">Nova Planta</Link>
         </div>
         
     )

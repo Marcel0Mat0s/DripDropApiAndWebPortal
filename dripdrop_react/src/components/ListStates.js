@@ -44,39 +44,160 @@ export default function ListStates(){
     return(
         <div>
             <h1>Plant State</h1>
-            <table align='center'>
-                <thead>
-                    <tr>
-                        <th>Plant</th>
-                        <th>Humidity Air</th>
-                        <th>Temperature</th>
-                        <th>Wind Direction</th>
-                        <th>Wind Speed</th>
-                        <th>Precipitation</th>
-                        <th>Humidity Soil</th>
-                        <th>NDVI</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
+            <table align="center">
                 <tbody>
-                    {state.map((state, key) =>
-                        <tr key={key}>
-                            <td>{state.plant}</td>
-                            <td>{state.humidity_air}</td>
-                            <td>{state.temperature}</td>
-                            <td>{state.wind_direction}</td>
-                            <td>{state.wind_speed}</td>
-                            <td>{state.precipitation}</td>
-                            <td>{state.humidity_soil}</td>
-                            <td>{state.ndvi}</td>
-                            <td>{state.date}</td>
-                            <td>{state.time}</td>
-                        </tr>
-                    )}
+                    <tr>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    Planta
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.plant}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                        <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                            <th>
+                                Humidade do Ar
+                            </th>
+                            <tbody>
+                                {state.map((state, key) =>
+                                    <tr key={key}>
+                                        <td>{state.humidity_air}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    Temperatura
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.temperature}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    Direção do Vento
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.wind_direction}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    Velocidade do Vento
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.wind_speed}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    Precipitação
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.precipitation}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    Humidade do Solo
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.humidity_soil}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    NDVI
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.ndvi}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    Data
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.date}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                                <th>
+                                    Hora
+                                </th>
+                                <tbody>
+                                    {state.map((state, key) =>
+                                        <tr key={key}>
+                                            <td>{state.time}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>                            
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-
         </div>  
     )
 }

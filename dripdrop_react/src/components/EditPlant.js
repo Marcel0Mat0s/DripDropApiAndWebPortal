@@ -93,45 +93,45 @@ export default function EditPlant(){
 
     return(
         <div>  
-            <h1>Edit User</h1>
+            <h1>Editar Planta</h1>
             <form onSubmit={handleSubmit}>
                 <table cellSpacing="10" align="center">
                     <tbody>
                         <tr>
                             <th>
-                                <label>Name: </label>
+                                <label>Nome: </label>
                             </th>
-                            <td>
-                                <input value={inputs.name} type="text" name="name" onChange={handleChange}/>
+                            <td >
+                                <input id="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label >Location: </label>
+                                <label >Localização: </label>
                             </th>
                             <td>
-                                <input id="location" type="text" name="location" onChange={handleChange}/>
+                                <input id="location" style={{borderRadius: '5px'}} type="text" name="location" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label>Type: </label>
+                                <label>Tipo: </label>
                             </th>
                             <td>
-                                <select name="type" onChange={handleChange}>
-                                    <option value="">Select a type</option>
+                                <select style={{width: '100%', borderRadius: '5px'}} name="type" onChange={handleChange}>
+                                    <option value="">Selecione um tipo</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>
                                     )}
                                 </select>
                             </td>
                         </tr>
-
+                        <br/>
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Save</button>
+                                <button id='buttonYes'>Guardar</button>
                             </td>
                         </tr>
                     </tbody>

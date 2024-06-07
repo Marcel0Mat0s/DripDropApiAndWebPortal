@@ -4,12 +4,40 @@ export default function Main(){
         window.location.href = '/plants';
     }
 
+    function goToInfo(){
+        window.location.href = '/info';
+    }
+
+    function goToAbout(){
+        window.location.href = '/about';
+    }
+
+    function goToEditUser(){
+        window.location.href = '/user/' + localStorage.getItem('userId') + '/edit';
+    }
+
     return(
         <div>
-            <button onClick={goToPlants}>Plants</button>
-            <button>About</button>
-            <button>Info</button>
-            <button>Settings</button>
+            <table align='center'>
+                <tbody>
+                    <tr>
+                        <th>
+                            <button id="buttonBlue" style={{height: '80px'}} onClick={goToPlants}>Plantas</button>
+                        </th>
+                        <th>
+                            <button id="buttonBlue" style={{height: '80px'}} onClick={goToAbout}>Sobre</button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <button id="buttonBlue" style={{height: '80px'}} onClick={goToInfo}>Aprenda!</button>
+                        </th>
+                        <th>
+                            <button id="buttonBlue" style={{height: '80px'}} onClick={goToEditUser}>Definições</button>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     )
 }

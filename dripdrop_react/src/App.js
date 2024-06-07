@@ -11,14 +11,16 @@ import logo from './images/dripdropdigital.png';
 import EditPlant from './components/EditPlant';
 import ListStates from './components/ListStates';
 import ListNewPlantID from './components/ListNewPlantID';
+import Info from './components/Info';
+import About from './components/About';
 
 function App() {
   return (
     <div className="App">
       <body>
         <div class="header">
-          <a href="/login">Login</a>
-          <a href="/user/create">Create User</a>
+          <a href="/login">Iniciar Sessão</a>
+          <a href="/user/create">Criar Conta</a>
         </div>
           <br/>
           <img src={logo} alt="Logotipo DripDrop" class="logo"/>
@@ -40,6 +42,8 @@ function App() {
           <Route path="plant/:id/edit" element={<EditPlant/>} />
           <Route path="states/:plantId" element={<ListStates/>} />
           <Route path="plant" element={<ListNewPlantID/>} />
+          <Route path="info" element={<Info/>} />
+          <Route path="about" element={<About/>} />
         </Routes>
       </BrowserRouter>
     </div>

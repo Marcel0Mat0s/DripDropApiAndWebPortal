@@ -28,16 +28,16 @@ export default function CreateUser(){
     
     return(
         <div>  
-            <h1>Create User</h1>
+            <h1>Criar Conta</h1>
             <form onSubmit={handleSubmit}>
                 <table cellSpacing="10" align="center">
                     <tbody>
                         <tr>
                             <th>
-                                <label>Name: </label>
+                                <label>Nome: </label>
                             </th>
                             <td>
-                                <input type="text" name="name" onChange={handleChange}/>
+                                <input id="roundedS" type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -46,22 +46,22 @@ export default function CreateUser(){
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input type="text" name="email" onChange={handleChange}/>
+                                <input id="roundedS" type="text" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label>Password: </label>
+                                <label>Palavra-passe: </label>
                             </th>
                             <td>
-                                <input type="text" name="password" onChange={handleChange}/>
+                                <input id="roundedS" type="text" name="password" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Save</button>
+                                <button id="buttonYes">Criar</button>
                             </td>
                         </tr>
                     </tbody>
