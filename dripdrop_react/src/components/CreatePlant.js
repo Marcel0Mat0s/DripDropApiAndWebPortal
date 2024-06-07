@@ -81,8 +81,9 @@ export default function CreatePlant(){
 
         axios.post(`http://localhost:80/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
             console.log(response.data);
-            // redirect to the plants page
-            navigate('/plants')
+
+            // redirect to the plant page after creation to show the new plant id to the user
+            navigate('/plant')
         })
         .catch(function(error){
             console.log('Plant creation failed: ',error)
@@ -117,7 +118,7 @@ export default function CreatePlant(){
                             </th>
                             <td>
                                 <select name="type" onChange={handleChange}>
-                                    <option value="">Select a type</option>
+                                    <option value="">Seleciona um tipo</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>
                                     )}
@@ -126,7 +127,7 @@ export default function CreatePlant(){
                         </tr>
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Save</button>
+                                <button>Criar</button>
                             </td>
                         </tr>
                     </tbody>

@@ -10,6 +10,7 @@ import Main from './components/Main';
 import logo from './images/dripdropdigital.png';
 import EditPlant from './components/EditPlant';
 import ListStates from './components/ListStates';
+import ListNewPlantID from './components/ListNewPlantID';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="plant/create" element={<CreatePlant/>} />
           <Route path="plant/:id/edit" element={<EditPlant/>} />
           <Route path="states/:plantId" element={<ListStates/>} />
+          <Route path="plant" element={<ListNewPlantID/>} />
         </Routes>
       </BrowserRouter>
     </div>

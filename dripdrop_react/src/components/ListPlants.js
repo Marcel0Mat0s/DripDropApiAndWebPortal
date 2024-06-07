@@ -38,7 +38,7 @@ export default function ListPlants(){
             }
         };
 
-        axios.delete(`http://localhost:80/PHP-API/plants/${id}/${userId}/delete`, config).then(function(response){
+        axios.delete(`http://localhost:80/PHP-API/plants/${id}/${userId}/${id}/delete`, config).then(function(response){
             console.log(response.data)
             getPlants();
         });
