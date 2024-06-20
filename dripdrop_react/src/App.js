@@ -41,7 +41,7 @@ function App() {
           <Route path="plants" element={<ListPlants/>} />
           <Route path="plant/create" element={<CreatePlant/>} />
           <Route path="plant/:id/edit" element={<EditPlant/>} />
-          <Route path="states/:plantId" element={<ListStates/>} />
+          <Route path="states/:plantId/:plantType" element={<ListStates/>} />
           <Route path="plant" element={<ListNewPlantID/>} />
           <Route path="info" element={<Info/>} />
           <Route path="about" element={<About/>} />

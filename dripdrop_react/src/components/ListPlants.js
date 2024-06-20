@@ -52,7 +52,7 @@ export default function ListPlants(){
                     {plants.map((plant, key) =>
                         <tr key={key}>
                             <td id='tdSpace'>
-                                <Link style={{color: '#D3D3D3'}} to={`/states/${plant.id}`}>{plant.name}</Link>
+                                <Link style={{color: '#D3D3D3'}} to={`/states/${plant.id}/${plant.type}`}>{plant.name}</Link>
                             </td>
                             <td id='tdSpace'>
                                 <Link id='buttonYes' to={`/plant/${plant.id}/edit`}>Editar</Link>
