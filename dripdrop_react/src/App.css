@@ -15,10 +15,10 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #0C1920;
 }
 .header {
-    background-color: #333;
+    background-color: #012741;
     color: #fff;
     padding: 10px 20px;
     text-align: right;
@@ -27,8 +27,9 @@ body {
     color: #fff;
     text-decoration: none;
     padding: 8px 15px;
-    background-color: #5cb85c;
-    border-radius: 5px;
+    background-color: #0e6e0e;
+    border-radius: 10px;
+    margin: 5px;
 }
 .title {
     text-align: center;
@@ -38,4 +39,80 @@ body {
     display: block;
     margin: 0 auto;
     width: 400px; /* ajuste conforme necessário */
+}
+/* Torna o texto branco */
+h2, h3, h4, h5, h6, p, label {
+    color: #fff;
+}
+
+h1 {
+    color: #45f9ff;
+}
+
+/* Butões de confirmação (com id de "buttonYes") */
+#buttonYes {
+    background-color: #0e6e0e;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Butões de negação (com id de "buttonNo") */
+#buttonNo {
+    background-color: #7b1113;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Butões (com id de "buttonBlue") */
+#buttonBlue {
+    background-color: #45f9ff;
+    color: #000000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 150px;
+    font-weight: bold;
+    font-size: medium;
+}
+
+/* Espaçamento para as tabelas */
+#tdSpace {
+    padding: 10px;
+}
+
+/* Cartão branco */
+#whiteCard {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+}
+
+/* pequenas bordas redondas */
+#roundedS {
+  border-radius: 5px;
+}
+
+/* bordas redondas */
+#roundedM {
+  border-radius: 10px;
+}
+
+/* bordas redondas grandes */
+#roundedL {
+  border-radius: 20px;
+}
+
+/* Id da planta grande */
+#plantId {
+  font-size: 100px;
+  color: #0e6e0e
 }

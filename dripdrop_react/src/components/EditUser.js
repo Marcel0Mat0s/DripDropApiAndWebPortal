@@ -18,9 +18,24 @@ export default function EditUser(){
     }, []);
 
     function getUser(){
-        axios.get(`http://localhost:80/PHP-API/users/${id}`).then(function(response){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        axios.get(`http://localhost:80/PHP-API/users/${id}/${id}`, config).then(function(response){
             console.log(response.data)
             setInputs(response.data)
+
+            
+            // Unhash the password shes being hashed like this : $data->password = password_hash($data->password, PASSWORD_DEFAULT);
+            // so we need to hash it back to normal
+            // setInputs({...response.data, password: ''
+
         });
     }
 
@@ -42,9 +57,9 @@ export default function EditUser(){
             }
         };
 
-        axios.put(`http://localhost:80/PHP-API/users/${id}/edit`, inputs, config).then(function(response){
+        axios.put(`http://localhost:80/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
-            navigate('/');
+            navigate('/main')
         })
         .catch(error => {
             console.log('Failed to update user: ', error);
@@ -54,16 +69,16 @@ export default function EditUser(){
 
     return(
         <div>  
-            <h1>Edit User</h1>
+            <h1>Definições</h1>
             <form onSubmit={handleSubmit}>
                 <table cellSpacing="10" align="center">
                     <tbody>
                         <tr>
                             <th>
-                                <label>Name: </label>
+                                <label>Nome: </label>
                             </th>
                             <td>
-                                <input value={inputs.name} type="text" name="name" onChange={handleChange}/>
+                                <input id="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -72,22 +87,13 @@ export default function EditUser(){
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input value={inputs.email} type="text" name="email" onChange={handleChange}/>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>
-                                <label>Password: </label>
-                            </th>
-                            <td>
-                                <input value={inputs.password} type="text" name="password" onChange={handleChange}/>
+                                <input id="roundedS" value={inputs.email} type="text" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Save</button>
+                                <button id="buttonYes">Guardar</button>
                             </td>
                         </tr>
                     </tbody>

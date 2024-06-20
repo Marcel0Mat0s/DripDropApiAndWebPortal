@@ -13,14 +13,7 @@ export default function CreatePlant(){
 
     useEffect(() => {
 
-        // gets the plant types from the API
-        axios.get('http://localhost:80/PHP-API/types').then(function(response){
-            console.log(response.data);
-            setTypes(response.data);
-
-        }).catch(function(error){
-            console.log('Plant types retrieval failed: ',error)
-        });
+        getTypes();
 
         // gets the location of the user
         navigator.geolocation.getCurrentPosition(function(position){
@@ -33,11 +26,34 @@ export default function CreatePlant(){
         });
     }, []);
 
+    // Gets the plant types from the API
+    function getTypes(){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        // gets the plant types from the API
+        axios.get(`http://localhost:80/PHP-API/types/null/${userId}`, config).then(function(response){
+            console.log(response.data);
+            setTypes(response.data);
+
+        }).catch(function(error){
+            console.log('Plant types retrieval failed: ',error)
+        });
+
+    }
+
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}));
     }
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -63,10 +79,11 @@ export default function CreatePlant(){
         console.log(inputs);
 
 
-        axios.post(`http://localhost:80/PHP-API/plants/${userId}/save`, inputs, config).then(function(response){
+        axios.post(`http://localhost:80/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
             console.log(response.data);
-            // redirect to the plants page
-            navigate('/plants')
+
+            // redirect to the plant page after creation to show the new plant id to the user
+            navigate('/plant')
         })
         .catch(function(error){
             console.log('Plant creation failed: ',error)
@@ -75,42 +92,43 @@ export default function CreatePlant(){
 
     return(
         <div>
-            <h1>Create Plant</h1>
+            <h1>Criar Planta</h1>
             <form onSubmit={handleSubmit}>
             <table cellSpacing="10" align="center">
                     <tbody>
                         <tr>
                             <th>
-                                <label>Name: </label>
+                                <label>Nome: </label>
                             </th>
                             <td>
-                                <input type="text" name="name" onChange={handleChange}/>
+                                <input id='roundedS' type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
                         <tr>
                             <th>
-                                <label >Location: </label>
+                                <label >Localização: </label>
                             </th>
                             <td>
-                                <input id="location" type="text" name="location"/>
+                                <input id="location" type="text" name="location" style={{borderRadius: '5px'}}/>
                             </td>
                         </tr>
                         <tr>
                             <th>
-                                <label>Type: </label>
+                                <label>Tipo: </label>
                             </th>
                             <td>
-                                <select name="type" onChange={handleChange}>
-                                    <option value="">Select a type</option>
+                                <select id='roundedS' style={{width: '100%'}} name="type" onChange={handleChange}>
+                                    <option value="">Seleciona um tipo</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>
                                     )}
                                 </select>
                             </td>
                         </tr>
+                        <br/>
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Save</button>
+                                <button id="buttonYes">Criar</button>
                             </td>
                         </tr>
                     </tbody>

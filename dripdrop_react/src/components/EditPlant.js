@@ -18,19 +18,43 @@ export default function EditPlant(){
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
+        getTypes();
+        getPlant();
+    }, []);
+
+    // Gets the plant types from the API
+    function getTypes(){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
         // gets the plant types from the API
-        axios.get('http://localhost:80/PHP-API/types').then(function(response){
+        axios.get(`http://localhost:80/PHP-API/types/null/${userId}`, config).then(function(response){
+            console.log(response.data);
             setTypes(response.data);
 
         }).catch(function(error){
             console.log('Plant types retrieval failed: ',error)
         });
 
-        getPlant();
-    }, []);
+    }
 
     function getPlant(){
-        axios.get(`http://localhost:80/PHP-API/plants/${id}`).then(function(response){
+
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        axios.get(`http://localhost:80/PHP-API/plants/${id}/${userId}`, config).then(function(response){
             console.log(response.data)
             setInputs(response.data)
         });
@@ -57,7 +81,7 @@ export default function EditPlant(){
         };
 
         // Send a PUT request to the server
-        axios.put(`http://localhost:80/PHP-API/plants/${userId}/${id}/edit`, inputs, config).then(function(response){
+        axios.put(`http://localhost:80/PHP-API/plants/${id}/${userId}/edit`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/plants');
         })
@@ -69,45 +93,45 @@ export default function EditPlant(){
 
     return(
         <div>  
-            <h1>Edit User</h1>
+            <h1>Editar Planta</h1>
             <form onSubmit={handleSubmit}>
                 <table cellSpacing="10" align="center">
                     <tbody>
                         <tr>
                             <th>
-                                <label>Name: </label>
+                                <label>Nome: </label>
                             </th>
-                            <td>
-                                <input value={inputs.name} type="text" name="name" onChange={handleChange}/>
+                            <td >
+                                <input id="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label >Location: </label>
+                                <label >Localização: </label>
                             </th>
                             <td>
-                                <input id="location" type="text" name="location" onChange={handleChange}/>
+                                <input id="location" style={{borderRadius: '5px'}} type="text" name="location" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label>Type: </label>
+                                <label>Tipo: </label>
                             </th>
                             <td>
-                                <select name="type" onChange={handleChange}>
-                                    <option value="">Select a type</option>
+                                <select style={{width: '100%', borderRadius: '5px'}} name="type" onChange={handleChange}>
+                                    <option value="">Selecione um tipo</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>
                                     )}
                                 </select>
                             </td>
                         </tr>
-
+                        <br/>
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Save</button>
+                                <button id='buttonYes'>Guardar</button>
                             </td>
                         </tr>
                     </tbody>

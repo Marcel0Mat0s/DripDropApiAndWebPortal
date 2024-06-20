@@ -72,7 +72,7 @@ export default function LoginUser(){
 
     return(
         <div>  
-            <h1>Login User</h1>
+            <h1>Iniciar Sessão</h1>
             <form onSubmit={handleSubmit}>
 
                 <table cellSpacing="10" align="center">
@@ -83,28 +83,23 @@ export default function LoginUser(){
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input type="text" name="email" onChange={handleChange}/>
+                                <input id="roundedS" type="text" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label>Password: </label>
+                                <label>Palavra-passe: </label>
                             </th>
                             <td>
-                                <input type="text" name="password" onChange={handleChange}/>
+                                <input id="roundedS" type="text" name="password" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <td colSpan="2" align="right">
-                                <button>Login</button>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td colSpan="2" align="right">
-                                <button onClick={logout}>Logout</button>
+                                <button id="buttonYes">Iniciar Sessão</button>
+                                <button style={{marginLeft: '5px'}} id="buttonNo" onClick={logout}>Logout</button>
                             </td>
                         </tr>
                     </tbody>
