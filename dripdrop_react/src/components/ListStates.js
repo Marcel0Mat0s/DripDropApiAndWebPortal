@@ -196,6 +196,11 @@ export default function ListStates(){
                             </table>                            
                         </td>
                     </tr>
+                    <tr>
+                        <td colSpan="2" align="right">
+                            <button id="buttonBlue" onClick={() => navigate(`/states/all/${plantId}`)}>Ver tudo</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>  

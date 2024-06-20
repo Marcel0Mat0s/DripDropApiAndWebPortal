@@ -13,6 +13,7 @@ import ListStates from './components/ListStates';
 import ListNewPlantID from './components/ListNewPlantID';
 import Info from './components/Info';
 import About from './components/About';
+import ListAllStates from './components/ListAllStates';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="plant" element={<ListNewPlantID/>} />
           <Route path="info" element={<Info/>} />
           <Route path="about" element={<About/>} />
+          <Route path="states/all/:plantId" element={<ListAllStates/>} />
         </Routes>
       </BrowserRouter>
     </div>
