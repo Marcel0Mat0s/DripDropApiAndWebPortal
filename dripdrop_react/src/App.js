@@ -16,12 +16,18 @@ import About from './components/About';
 import ListAllStates from './components/ListAllStates';
 
 function App() {
+
+  function navigateTo(path){
+    return function(){
+      window.location.href = path;
+    } 
+  }
+
   return (
     <div className="App">
       <body>
         <div class="header">
-          <a href="/login">Iniciar Sessão</a>
-          <a href="/user/create">Criar Conta</a>
+          <button class='buttonYes' onClick={navigateTo("/login")} >Iniciar/Terminar Sessão</button>
         </div>
           <br/>
           <img src={logo} alt="Logotipo DripDrop" class="logo"/>
@@ -41,7 +47,7 @@ function App() {
           <Route path="plants" element={<ListPlants/>} />
           <Route path="plant/create" element={<CreatePlant/>} />
           <Route path="plant/:id/edit" element={<EditPlant/>} />
-          <Route path="states/:plantId/:plantType" element={<ListStates/>} />
+          <Route path="states/:plantId/:plantType/:plantName" element={<ListStates/>} />
           <Route path="plant" element={<ListNewPlantID/>} />
           <Route path="info" element={<Info/>} />
           <Route path="about" element={<About/>} />

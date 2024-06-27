@@ -43,11 +43,12 @@ export default function ListAllStates(){
     return(
         <div>
             <h1>Plant State</h1>
+            <button class='buttonYes' onClick={() => navigate('/plants')}>Continuar</button>
             <table align="center">
                 <tbody>
                     <tr>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
+                            <table class="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
                                 <thead>
                                     <th>Planta</th>
                                     <th>Humidade do Ar</th>
@@ -84,7 +85,6 @@ export default function ListAllStates(){
                 </tbody>
             </table>
             <br/>
-            <button id='buttonYes' onClick={() => navigate('/main')}>Continuar</button>
         </div>
     )
 

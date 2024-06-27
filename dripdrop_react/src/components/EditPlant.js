@@ -95,23 +95,23 @@ export default function EditPlant(){
         <div>  
             <h1>Editar Planta</h1>
             <form onSubmit={handleSubmit}>
-                <table cellSpacing="10" align="center">
-                    <tbody>
+                <table align="center">
+                    <tbody width="100%">
                         <tr>
                             <th>
                                 <label>Nome: </label>
                             </th>
                             <td >
-                                <input id="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
+                                <input class="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label >Localização: </label>
+                                <label >Local: </label>
                             </th>
                             <td>
-                                <input id="location" style={{borderRadius: '5px'}} type="text" name="location" onChange={handleChange}/>
+                                <input id="location" class="roundedS" type="text" name="location" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -120,7 +120,7 @@ export default function EditPlant(){
                                 <label>Tipo: </label>
                             </th>
                             <td>
-                                <select style={{width: '100%', borderRadius: '5px'}} name="type" onChange={handleChange}>
+                                <select class="roundedS" style={{width: '100%'}} name="type" onChange={handleChange}>
                                     <option value="">Selecione um tipo</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>
@@ -131,7 +131,7 @@ export default function EditPlant(){
                         <br/>
                         <tr>
                             <td colSpan="2" align="right">
-                                <button id='buttonYes'>Guardar</button>
+                                <button class='buttonYes'>Guardar</button>
                             </td>
                         </tr>
                     </tbody>

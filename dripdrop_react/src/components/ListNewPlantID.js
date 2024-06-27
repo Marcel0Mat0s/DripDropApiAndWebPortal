@@ -43,7 +43,7 @@ export default function ListNewPlantID() {
             <p> DripDropDigital do dispositivo com a palavra-passe "dripdrop123#" para o configurar</p>
             <br/>
 
-            <button id='buttonYes' onClick={() => navigate('/main')}>Continuar</button>
+            <button class='buttonYes' onClick={() => navigate('/main')}>Continuar</button>
         </div>
     );
 }

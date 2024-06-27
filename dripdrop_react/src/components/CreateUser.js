@@ -30,14 +30,14 @@ export default function CreateUser(){
         <div>  
             <h1>Criar Conta</h1>
             <form onSubmit={handleSubmit}>
-                <table cellSpacing="10" align="center">
+                <table align="center">
                     <tbody>
                         <tr>
                             <th>
                                 <label>Nome: </label>
                             </th>
                             <td>
-                                <input id="roundedS" type="text" name="name" onChange={handleChange}/>
+                                <input class="roundedS" type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -46,7 +46,7 @@ export default function CreateUser(){
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input id="roundedS" type="text" name="email" onChange={handleChange}/>
+                                <input class="roundedS" type="text" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -55,13 +55,13 @@ export default function CreateUser(){
                                 <label>Palavra-passe: </label>
                             </th>
                             <td>
-                                <input id="roundedS" type="text" name="password" onChange={handleChange}/>
+                                <input class="roundedS" type="text" name="password" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <td colSpan="2" align="right">
-                                <button id="buttonYes">Criar</button>
+                                <button class="buttonYes">Criar</button>
                             </td>
                         </tr>
                     </tbody>

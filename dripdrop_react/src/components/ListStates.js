@@ -9,13 +9,12 @@ export default function ListStates(){
     // gets the plant id from the URL
     const {plantId} = useParams();
     const {plantType} = useParams();
+    const {plantName} = useParams();
 
     const [state, setState] = useState([]);
 
     const userId = localStorage.getItem('userId');
-    //const [humiditySoil, setHumiditySoil] = useState(0);
-    //const [NDVI, setNDVI] = useState(0);
-
+    
     useEffect(() => {
         // gets the plant state from the API every 20 seconds
         const interval = setInterval(() => {
@@ -87,27 +86,27 @@ export default function ListStates(){
 
     return(
         <div>
-            <h1>Plant State</h1>
+            <h1>Estado da {plantName}</h1>
             <table align="center">
                 <tbody>
                     <tr>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
-                                    Planta
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
+                                    Rega
                                 </th>
                                 <tbody>
                                     {state.map((state, key) =>
                                         <tr key={key}>
-                                            <td>{state.plant}</td>
+                                            <td>{state.irrigation}</td>
                                         </tr>
                                     )}
                                 </tbody>
                             </table>
                         </td>
                         <td>
-                        <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                            <th>
+                        <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                            <th class="cardTitle">
                                 Humidade do Ar
                             </th>
                             <tbody>
@@ -122,8 +121,8 @@ export default function ListStates(){
                     </tr>
                     <tr>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
                                     Temperatura
                                 </th>
                                 <tbody>
@@ -136,8 +135,8 @@ export default function ListStates(){
                             </table>
                         </td>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
                                     Direção do Vento
                                 </th>
                                 <tbody>
@@ -152,8 +151,8 @@ export default function ListStates(){
                     </tr>
                     <tr>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
                                     Velocidade do Vento
                                 </th>
                                 <tbody>
@@ -166,8 +165,8 @@ export default function ListStates(){
                             </table>
                         </td>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
                                     Precipitação
                                 </th>
                                 <tbody>
@@ -182,8 +181,8 @@ export default function ListStates(){
                     </tr>
                     <tr>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
                                     Humidade do Solo
                                 </th>
                                 <tbody>
@@ -196,8 +195,8 @@ export default function ListStates(){
                             </table>
                         </td>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
                                     NDVI
                                 </th>
                                 <tbody>
@@ -212,8 +211,8 @@ export default function ListStates(){
                     </tr>
                     <tr>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
                                     Data
                                 </th>
                                 <tbody>
@@ -226,8 +225,8 @@ export default function ListStates(){
                             </table>
                         </td>
                         <td>
-                            <table id="whiteCard" align='center' style={{width: '200px', height: '150px'}}>
-                                <th>
+                            <table class="whiteCard" align='center' style={{width: '110px', height: '80px'}}>
+                                <th class="cardTitle">
                                     Hora
                                 </th>
                                 <tbody>
@@ -241,8 +240,11 @@ export default function ListStates(){
                         </td>
                     </tr>
                     <tr>
+                        <td colSpan="1" align="center">
+                            <button class="buttonBlue" onClick={() => navigate(`/main`)}>Voltar</button>
+                        </td>
                         <td colSpan="2" align="right">
-                            <button id="buttonBlue" onClick={() => navigate(`/states/all/${plantId}`)}>Ver tudo</button>
+                            <button class="buttonBlue" onClick={() => navigate(`/states/all/${plantId}`)}>Ver tudo</button>
                         </td>
                     </tr>
                 </tbody>

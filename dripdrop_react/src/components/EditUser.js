@@ -78,7 +78,7 @@ export default function EditUser(){
                                 <label>Nome: </label>
                             </th>
                             <td>
-                                <input id="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
+                                <input class="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -87,13 +87,13 @@ export default function EditUser(){
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input id="roundedS" value={inputs.email} type="text" name="email" onChange={handleChange}/>
+                                <input class="roundedS" value={inputs.email} type="text" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <td colSpan="2" align="right">
-                                <button id="buttonYes">Guardar</button>
+                                <button class="buttonYes">Guardar</button>
                             </td>
                         </tr>
                     </tbody>
