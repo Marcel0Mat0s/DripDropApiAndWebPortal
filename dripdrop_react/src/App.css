@@ -38,7 +38,7 @@ body {
 .logo {
     display: block;
     margin: 0 auto;
-    width: 400px; /* ajuste conforme necessário */
+    width: 220px; /* ajuste conforme necessário */
 }
 /* Torna o texto branco */
 h2, h3, h4, h5, h6, p, label {
@@ -46,11 +46,11 @@ h2, h3, h4, h5, h6, p, label {
 }
 
 h1 {
-    color: #45f9ff;
+    color: #12B7D8;
 }
 
 /* Butões de confirmação (com id de "buttonYes") */
-#buttonYes {
+.buttonYes {
     background-color: #0e6e0e;
     color: #fff;
     padding: 10px 20px;
@@ -60,7 +60,7 @@ h1 {
 }
 
 /* Butões de negação (com id de "buttonNo") */
-#buttonNo {
+.buttonNo {
     background-color: #7b1113;
     color: #fff;
     padding: 10px 20px;
@@ -70,25 +70,25 @@ h1 {
 }
 
 /* Butões (com id de "buttonBlue") */
-#buttonBlue {
-    background-color: #45f9ff;
+.buttonBlue {
+    background-color: #12B7D8;
     color: #000000;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    width: 150px;
+    width: 110px;
     font-weight: bold;
     font-size: medium;
 }
 
 /* Espaçamento para as tabelas */
-#tdSpace {
-    padding: 10px;
+.tdSpace {
+    margin: 10px;
 }
 
 /* Cartão branco */
-#whiteCard {
+.whiteCard {
   background-color: #ffffff;
   color: #000000;
   padding: 10px 20px;
@@ -96,18 +96,23 @@ h1 {
   border-radius: 10px;
 }
 
+.cardTitle {
+  font-size: 10px;
+  font-weight: bold;
+}
+
 /* pequenas bordas redondas */
-#roundedS {
+.roundedS {
   border-radius: 5px;
 }
 
 /* bordas redondas */
-#roundedM {
+.roundedM {
   border-radius: 10px;
 }
 
 /* bordas redondas grandes */
-#roundedL {
+.roundedL {
   border-radius: 20px;
 }
 

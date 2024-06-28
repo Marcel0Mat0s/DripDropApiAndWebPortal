@@ -30,7 +30,7 @@ export default function LoginUser(){
         try {
 
             // Send a POST request to the server
-            const response = await axios.post('http://localhost:80/PHP-API/login', {email, password});
+            const response = await axios.post('http://193.137.5.80:80/PHP-API/login', {email, password});
             // Get the token from the response
             const token = response.data.token;
 
@@ -70,12 +70,18 @@ export default function LoginUser(){
         console.log('Logged out');
     }
 
+    const navigateTo = (path) => {
+        return function(){
+            navigate(path);
+        } 
+    }
+
     return(
         <div>  
             <h1>Iniciar Sessão</h1>
             <form onSubmit={handleSubmit}>
 
-                <table cellSpacing="10" align="center">
+                <table align="center">
 
                     <tbody>
                         <tr>
@@ -83,7 +89,7 @@ export default function LoginUser(){
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input id="roundedS" type="text" name="email" onChange={handleChange}/>
+                                <input class="roundedS" type="text" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -92,14 +98,19 @@ export default function LoginUser(){
                                 <label>Palavra-passe: </label>
                             </th>
                             <td>
-                                <input id="roundedS" type="text" name="password" onChange={handleChange}/>
+                                <input class="roundedS" type="text" name="password" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <td colSpan="2" align="right">
-                                <button id="buttonYes">Iniciar Sessão</button>
-                                <button style={{marginLeft: '5px'}} id="buttonNo" onClick={logout}>Logout</button>
+                                <button class="buttonYes">Iniciar Sessão</button>
+                                <button class="buttonYes" style={{marginLeft: '5px'}} onClick={navigateTo("/user/create")}>Criar Conta</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" align="right">
+                                <button style={{marginLeft: '5px'}} class="buttonNo" onClick={logout}>Logout</button>
                             </td>
                         </tr>
                     </tbody>

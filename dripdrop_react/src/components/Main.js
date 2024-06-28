@@ -22,18 +22,18 @@ export default function Main(){
                 <tbody>
                     <tr>
                         <th>
-                            <button id="buttonBlue" style={{height: '80px'}} onClick={goToPlants}>Plantas</button>
+                            <button class="buttonBlue" style={{height: '80px'}} onClick={goToPlants}>Plantas</button>
                         </th>
                         <th>
-                            <button id="buttonBlue" style={{height: '80px'}} onClick={goToAbout}>Sobre</button>
+                            <button class="buttonBlue" style={{height: '80px'}} onClick={goToAbout}>Sobre</button>
                         </th>
                     </tr>
                     <tr>
                         <th>
-                            <button id="buttonBlue" style={{height: '80px'}} onClick={goToInfo}>Aprenda!</button>
+                            <button class="buttonBlue" style={{height: '80px'}} onClick={goToInfo}>Aprenda!</button>
                         </th>
                         <th>
-                            <button id="buttonBlue" style={{height: '80px'}} onClick={goToEditUser}>Definições</button>
+                            <button class="buttonBlue" style={{height: '80px'}} onClick={goToEditUser}>Definições</button>
                         </th>
                     </tr>
                 </tbody>

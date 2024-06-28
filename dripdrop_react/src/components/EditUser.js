@@ -27,7 +27,7 @@ export default function EditUser(){
             }
         };
 
-        axios.get(`http://localhost:80/PHP-API/users/${id}/${id}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/users/${id}/${id}`, config).then(function(response){
             console.log(response.data)
             setInputs(response.data)
 
@@ -57,7 +57,7 @@ export default function EditUser(){
             }
         };
 
-        axios.put(`http://localhost:80/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
+        axios.put(`http://193.137.5.80:80/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/main')
         })
@@ -78,7 +78,7 @@ export default function EditUser(){
                                 <label>Nome: </label>
                             </th>
                             <td>
-                                <input id="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
+                                <input class="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -87,13 +87,13 @@ export default function EditUser(){
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input id="roundedS" value={inputs.email} type="text" name="email" onChange={handleChange}/>
+                                <input class="roundedS" value={inputs.email} type="text" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
                         <tr>
                             <td colSpan="2" align="right">
-                                <button id="buttonYes">Guardar</button>
+                                <button class="buttonYes">Guardar</button>
                             </td>
                         </tr>
                     </tbody>

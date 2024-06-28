@@ -38,7 +38,7 @@ export default function CreatePlant(){
         };
 
         // gets the plant types from the API
-        axios.get(`http://localhost:80/PHP-API/types/null/${userId}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/types/null/${userId}`, config).then(function(response){
             console.log(response.data);
             setTypes(response.data);
 
@@ -79,7 +79,7 @@ export default function CreatePlant(){
         console.log(inputs);
 
 
-        axios.post(`http://localhost:80/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
+        axios.post(`http://193.137.5.80:80/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
             console.log(response.data);
 
             // redirect to the plant page after creation to show the new plant id to the user
@@ -94,22 +94,22 @@ export default function CreatePlant(){
         <div>
             <h1>Criar Planta</h1>
             <form onSubmit={handleSubmit}>
-            <table cellSpacing="10" align="center">
+            <table align="center">
                     <tbody>
                         <tr>
                             <th>
                                 <label>Nome: </label>
                             </th>
                             <td>
-                                <input id='roundedS' type="text" name="name" onChange={handleChange}/>
+                                <input class='roundedS' type="text" name="name" onChange={handleChange}/>
                             </td>
                         </tr>
                         <tr>
                             <th>
-                                <label >Localização: </label>
+                                <label >Local: </label>
                             </th>
                             <td>
-                                <input id="location" type="text" name="location" style={{borderRadius: '5px'}}/>
+                                <input id="location" class="roundedS" type="text" name="location"/>
                             </td>
                         </tr>
                         <tr>
@@ -117,7 +117,7 @@ export default function CreatePlant(){
                                 <label>Tipo: </label>
                             </th>
                             <td>
-                                <select id='roundedS' style={{width: '100%'}} name="type" onChange={handleChange}>
+                                <select class='roundedS' style={{width: '100%'}} name="type" onChange={handleChange}>
                                     <option value="">Seleciona um tipo</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>
@@ -128,7 +128,7 @@ export default function CreatePlant(){
                         <br/>
                         <tr>
                             <td colSpan="2" align="right">
-                                <button id="buttonYes">Criar</button>
+                                <button class="buttonYes">Criar</button>
                             </td>
                         </tr>
                     </tbody>

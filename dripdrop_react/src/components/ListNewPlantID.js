@@ -25,7 +25,7 @@ export default function ListNewPlantID() {
             }
         };
 
-        axios.get(`http://localhost:80/PHP-API/plants/null/${userId}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/plants/null/${userId}`, config).then(function(response){
             console.log(response.data)
 
             // gets the last plant ID from the response.data array and sets it in the html
@@ -43,7 +43,7 @@ export default function ListNewPlantID() {
             <p> DripDropDigital do dispositivo com a palavra-passe "dripdrop123#" para o configurar</p>
             <br/>
 
-            <button id='buttonYes' onClick={() => navigate('/main')}>Continuar</button>
+            <button class='buttonYes' onClick={() => navigate('/main')}>Continuar</button>
         </div>
     );
 }
