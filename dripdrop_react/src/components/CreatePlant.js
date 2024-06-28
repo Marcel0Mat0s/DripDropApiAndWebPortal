@@ -38,7 +38,7 @@ export default function CreatePlant(){
         };
 
         // gets the plant types from the API
-        axios.get(`http://localhost:80/PHP-API/types/null/${userId}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/types/null/${userId}`, config).then(function(response){
             console.log(response.data);
             setTypes(response.data);
 
@@ -79,7 +79,7 @@ export default function CreatePlant(){
         console.log(inputs);
 
 
-        axios.post(`http://localhost:80/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
+        axios.post(`http://193.137.5.80:80/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
             console.log(response.data);
 
             // redirect to the plant page after creation to show the new plant id to the user

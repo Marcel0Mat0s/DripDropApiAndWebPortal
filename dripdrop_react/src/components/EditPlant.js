@@ -34,7 +34,7 @@ export default function EditPlant(){
         };
 
         // gets the plant types from the API
-        axios.get(`http://localhost:80/PHP-API/types/null/${userId}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/types/null/${userId}`, config).then(function(response){
             console.log(response.data);
             setTypes(response.data);
 
@@ -54,7 +54,7 @@ export default function EditPlant(){
             }
         };
 
-        axios.get(`http://localhost:80/PHP-API/plants/${id}/${userId}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/plants/${id}/${userId}`, config).then(function(response){
             console.log(response.data)
             setInputs(response.data)
         });
@@ -81,7 +81,7 @@ export default function EditPlant(){
         };
 
         // Send a PUT request to the server
-        axios.put(`http://localhost:80/PHP-API/plants/${id}/${userId}/edit`, inputs, config).then(function(response){
+        axios.put(`http://193.137.5.80:80/PHP-API/plants/${id}/${userId}/edit`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/plants');
         })

@@ -46,7 +46,7 @@ h2, h3, h4, h5, h6, p, label {
 }
 
 h1 {
-    color: #45f9ff;
+    color: #12B7D8;
 }
 
 /* Butões de confirmação (com id de "buttonYes") */
@@ -71,7 +71,7 @@ h1 {
 
 /* Butões (com id de "buttonBlue") */
 .buttonBlue {
-    background-color: #45f9ff;
+    background-color: #12B7D8;
     color: #000000;
     padding: 10px 20px;
     border: none;

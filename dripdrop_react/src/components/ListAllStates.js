@@ -29,7 +29,7 @@ export default function ListAllStates(){
             }
         };
 
-        axios.get( `http://localhost:80/PHP-API/states/null/${userId}/${plantId}/all`, config).then(function(response){
+        axios.get( `http://193.137.5.80:80/PHP-API/states/null/${userId}/${plantId}/all`, config).then(function(response){
             console.log(response.data)
             setState(response.data)
         });

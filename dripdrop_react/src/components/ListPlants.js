@@ -22,7 +22,7 @@ export default function ListPlants(){
             }
         };
 
-        axios.get(`http://localhost:80/PHP-API/plants/null/${userId}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/plants/null/${userId}`, config).then(function(response){
             console.log(response.data)
             setPlants(response.data)
         });
@@ -38,7 +38,7 @@ export default function ListPlants(){
             }
         };
 
-        axios.delete(`http://localhost:80/PHP-API/plants/${id}/${userId}/${id}/delete`, config).then(function(response){
+        axios.delete(`http://193.137.5.80:80/PHP-API/plants/${id}/${userId}/${id}/delete`, config).then(function(response){
             console.log(response.data)
             getPlants();
         });

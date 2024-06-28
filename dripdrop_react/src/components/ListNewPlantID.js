@@ -25,7 +25,7 @@ export default function ListNewPlantID() {
             }
         };
 
-        axios.get(`http://localhost:80/PHP-API/plants/null/${userId}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/plants/null/${userId}`, config).then(function(response){
             console.log(response.data)
 
             // gets the last plant ID from the response.data array and sets it in the html

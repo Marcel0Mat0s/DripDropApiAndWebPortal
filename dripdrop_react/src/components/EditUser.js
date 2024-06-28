@@ -27,7 +27,7 @@ export default function EditUser(){
             }
         };
 
-        axios.get(`http://localhost:80/PHP-API/users/${id}/${id}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/users/${id}/${id}`, config).then(function(response){
             console.log(response.data)
             setInputs(response.data)
 
@@ -57,7 +57,7 @@ export default function EditUser(){
             }
         };
 
-        axios.put(`http://localhost:80/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
+        axios.put(`http://193.137.5.80:80/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/main')
         })

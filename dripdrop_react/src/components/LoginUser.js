@@ -30,7 +30,7 @@ export default function LoginUser(){
         try {
 
             // Send a POST request to the server
-            const response = await axios.post('http://localhost:80/PHP-API/login', {email, password});
+            const response = await axios.post('http://193.137.5.80:80/PHP-API/login', {email, password});
             // Get the token from the response
             const token = response.data.token;
 

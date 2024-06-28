@@ -46,7 +46,7 @@ export default function ListStates(){
         };
 
         // gets the plant type minimum humidity from the API
-        axios.get(`http://localhost:80/PHP-API/types/${plantType}/${userId}`, config).then(function(response){
+        axios.get(`http://193.137.5.80:80/PHP-API/types/${plantType}/${userId}`, config).then(function(response){
             const minHumiditySoil = response.data.min_humidity;
             const maxHumiditySoil = response.data.max_humidity;
             const minNDVI = response.data.min_ndvi;
@@ -75,7 +75,7 @@ export default function ListStates(){
             }
         };
 
-        axios.get( `http://localhost:80/PHP-API/states/null/${userId}/${plantId}/now`, config).then(function(response){
+        axios.get( `http://193.137.5.80:80/PHP-API/states/null/${userId}/${plantId}/now`, config).then(function(response){
             console.log(response.data)
             setState(response.data)
 
