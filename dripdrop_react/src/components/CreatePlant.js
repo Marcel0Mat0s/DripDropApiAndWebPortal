@@ -6,7 +6,7 @@ export default function CreatePlant(){
 
     const navigate = useNavigate();
 
-    const [inputs, setInputs] = useState([])
+    const [inputs, setInputs] = useState({location: ''})
     const [types, setTypes] = useState([])
 
     const userId = localStorage.getItem('userId');
@@ -16,6 +16,24 @@ export default function CreatePlant(){
         getTypes();
 
         // gets the location of the user
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    // Set the location in the Location input
+                    setInputs((values) => ({ ...values, location: `${lat}, ${lon}` }));
+                },
+                (error) => {
+                    console.error("Error getting geolocation: ", error);
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+
+        /* gets the location of the user
         navigator.geolocation.getCurrentPosition(function(position){
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
@@ -24,6 +42,7 @@ export default function CreatePlant(){
             document.getElementById('location').value = `${lat}, ${lon}`;
             setInputs(values => ({...values, location: `${lat}, ${lon}`}));
         });
+        */
     }, []);
 
     // Gets the plant types from the API
@@ -57,12 +76,26 @@ export default function CreatePlant(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        /////////////////////////////VALIDATIONS///////////////////////////////
         // checks if the user ID is available
         if (!userId) {
             console.error("No user ID available for request.");
             console.log("User ID: ", userId);
             return;
         }
+
+        // checks if all the inputs are filled and valid
+        if (!inputs.name || !inputs.location || !inputs.type) {
+            alert("Todos os campos são obrigatórios.");
+            return;
+        }
+
+        // checks if the location is in the correct format
+        if (!inputs.location.includes(',')) {
+            alert("A localização deve estar no formato 'latitude, longitude'.");
+            return;
+        }
+
 
         // Add the user ID to the inputs
         inputs.userId = userId;
@@ -109,7 +142,7 @@ export default function CreatePlant(){
                                 <label >Local: </label>
                             </th>
                             <td>
-                                <input id="location" class="roundedS" type="text" name="location"/>
+                                <input id="location" class="roundedS" type="text" name="location" value={inputs.location} onChange={handleChange}/>
                             </td>
                         </tr>
                         <tr>

@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react"
 import axios from "axios";
 import { useNavigate, useParams} from "react-router-dom";
+import * as XLSX from 'xlsx';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend,} from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function ListAllStates(){
 
@@ -40,10 +47,117 @@ export default function ListAllStates(){
         return `data:image/png;base64,${image}`;
     }
 
+    function truncateText(text, maxLength) {
+        return text.length > maxLength ? text.substring(0, maxLength) : text;
+    }
+ 
+    // Function to export the data to an excel file and download it
+    function toExcel(data){
+
+        const sanitizedData = data.map(item => ({
+            plant: truncateText(item.plant, 32767),
+            humidity_air: item.humidity_air,
+            temperature: item.temperature,
+            wind_direction: item.wind_direction,
+            wind_speed: item.wind_speed,
+            precipitation: item.precipitation,
+            humidity_soil: item.humidity_soil,
+            ndvi: item.ndvi,
+            date: item.date,
+            time: item.time,
+            // Does not include image in the Excel file to avoid size and format issues
+        }));
+        
+        // Create a new wprksheet
+        const ws = XLSX.utils.json_to_sheet(sanitizedData);
+
+        // Create a new workbook
+        const wb = XLSX.utils.book_new();
+
+        // Add the worksheet to the workbook
+        XLSX.utils.book_append_sheet(wb, ws, "Plant States");
+
+        // Create a blob from the workbook
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+
+        // Trigger the download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'PlantStates.xlsx';
+        a.click();
+        window.URL.revokeObjectURL(url);
+
+        // Downloads the images from the states to a zip file with the date and time as the name
+        const zip = new JSZip();
+        const folder = zip.folder("PlantStatesImages");
+        // For each state, add the image to the zip file
+        data.forEach((item, index) => {
+            const image = item.image;
+            const base64 = image.split(',')[1];
+            folder.file(`${item.date}_${item.time}.png`, base64, {base64: true});
+        });
+
+        // Generate the zip file and download it
+        folder.generateAsync({type:"blob"}).then(function(content) {
+            saveAs(content, `${data[0].date}_${data[0].time}_Images.zip`);
+        });
+
+    }    
+
+    // NDVI Chart
+    const ndviData = {
+        // Invert the order of the states to display the most recent first
+
+        labels: state.map(item => item.date + ' ' + item.time).reverse(),
+
+        datasets: [
+            {
+                label: 'NDVI',
+                data: state.map(item => item.ndvi).reverse(),
+                fill: false,
+                backgroundColor: 'rgb(75, 192, 192)',
+                borderColor: 'rgba(75, 192, 192, 0.2)',
+            },
+        ],
+    };
+
+    const ndviOptions = {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Data e Hora',
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'NDVI',
+                },
+            },
+        },
+    };
+
+
     return(
         <div>
-            <h1>Plant State</h1>
-            <button class='buttonYes' onClick={() => navigate('/plants')}>Continuar</button>
+            <h1>Estados da Planta</h1>
+            
+            <table align="center">
+                <tr>
+                    <td>
+                    <button class='buttonYes' onClick={() => navigate('/plants')}>Voltar</button>
+                    </td>
+                    <td>
+                    <button class='buttonYes' onClick={() => toExcel(state)}>Transferir</button>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <Line data={ndviData} options={ndviOptions} />
+            <br/>
             <table align="center">
                 <tbody>
                     <tr>

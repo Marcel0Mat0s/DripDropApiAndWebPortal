@@ -72,6 +72,13 @@ export default function EditPlant(){
 
         console.log(inputs);
 
+        ///////////////////////////// Validations /////////////////////////////
+        // checks if all the fields are filled
+        if(!inputs.name || !inputs.location || !inputs.type){
+            alert('Por favor preencha todos os campos');
+            return;
+        }
+
         // gets the token from local storage and sets it in the headers
         const token = localStorage.getItem('token');
         const config = {
@@ -111,7 +118,7 @@ export default function EditPlant(){
                                 <label >Local: </label>
                             </th>
                             <td>
-                                <input id="location" class="roundedS" type="text" name="location" onChange={handleChange}/>
+                                <input id="location" class="roundedS" type="text" name="location" value={inputs.location} onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -120,7 +127,7 @@ export default function EditPlant(){
                                 <label>Tipo: </label>
                             </th>
                             <td>
-                                <select class="roundedS" style={{width: '100%'}} name="type" onChange={handleChange}>
+                                <select class="roundedS" style={{width: '100%'}} name="type" value={inputs.type} onChange={handleChange}>
                                     <option value="">Selecione um tipo</option>
                                     {types.map((type) => 
                                         <option key={type.id} value={type.id}>{type.name}</option>

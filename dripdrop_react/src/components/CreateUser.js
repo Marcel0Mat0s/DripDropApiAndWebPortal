@@ -13,8 +13,16 @@ export default function CreateUser(){
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}));
     }
+
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        ////////////////////////////// Validations //////////////////////////////
+        // cheks if all fields are filled
+        if(!inputs.name || !inputs.email || !inputs.password){
+            alert('Por favor preencha todos os campos');
+            return;
+        }
 
         axios.post('http://193.137.5.80:80/PHP-API/users/save', inputs).then(function(response){
             localStorage.setItem('token', response.data.token);
@@ -46,7 +54,7 @@ export default function CreateUser(){
                                 <label>Email: </label>
                             </th>
                             <td>
-                                <input class="roundedS" type="text" name="email" onChange={handleChange}/>
+                                <input class="roundedS" type="email" name="email" onChange={handleChange}/>
                             </td>
                         </tr>
 
@@ -55,7 +63,7 @@ export default function CreateUser(){
                                 <label>Palavra-passe: </label>
                             </th>
                             <td>
-                                <input class="roundedS" type="text" name="password" onChange={handleChange}/>
+                                <input class="roundedS" type="password" name="password" onChange={handleChange}/>
                             </td>
                         </tr>
 

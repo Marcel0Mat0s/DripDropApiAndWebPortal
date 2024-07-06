@@ -49,6 +49,13 @@ export default function EditUser(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        ////////////////////////////// Validations //////////////////////////////
+        // cheks if all fields are filled
+        if(!inputs.name || !inputs.email){
+            alert('Por favor preencha todos os campos');
+            return;
+        }
+
         // gets the token from local storage and sets it in the headers
         const token = localStorage.getItem('token');
         const config = {
