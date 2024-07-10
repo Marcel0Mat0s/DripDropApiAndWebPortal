@@ -1,20 +1,25 @@
-// Page that shows the new plant ID after the user creates a new plant
-
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// View to list the new plant ID
 export default function ListNewPlantID() {
 
+    // initializes the navigate function
     const navigate = useNavigate();
 
+    // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
 
+    // gets the plant ID when the page loads
     useEffect(() => {
         getPlants();
     });
 
-    // Gets the plants from the API
+    /**
+     * Function to get the plant ID from the API
+     * 
+     */
     function getPlants(){
 
         // gets the token from local storage and sets it in the headers
@@ -25,7 +30,8 @@ export default function ListNewPlantID() {
             }
         };
 
-        axios.get(`http://193.137.5.80:80/PHP-API/plants/null/${userId}`, config).then(function(response){
+        // gets the plant ID from the API
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/plants/null/${userId}`, config).then(function(response){
             console.log(response.data)
 
             // gets the last plant ID from the response.data array and sets it in the html

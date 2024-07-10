@@ -13,10 +13,16 @@ export default function EditUser(){
     // gets the id from the URL
     const {id} = useParams();
 
+    // gets the user data from the API when the page loads
     useEffect(() => {
         getUser();
     }, []);
 
+    /**
+     * Function to get the user data from the API
+     * 
+     * @returns
+     */
     function getUser(){
 
         // gets the token from local storage and sets it in the headers
@@ -27,29 +33,38 @@ export default function EditUser(){
             }
         };
 
-        axios.get(`http://193.137.5.80:80/PHP-API/users/${id}/${id}`, config).then(function(response){
-            console.log(response.data)
-            setInputs(response.data)
-
-            
-            // Unhash the password shes being hashed like this : $data->password = password_hash($data->password, PASSWORD_DEFAULT);
-            // so we need to hash it back to normal
-            // setInputs({...response.data, password: ''
-
+        // gets the user data from the API
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}`, config).then(function(response){
+            console.log(response.data);
+            setInputs(response.data);
         });
     }
 
-
+    /**
+     * Function to handle the change on the inputs
+     * 
+     * @param {*} event
+     * @returns
+     */
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}));
     }
 
+    /**
+     * Function to handle the submit of the form
+     * 
+     * @param {*} event
+     * @returns
+     */
     const handleSubmit = (event) => {
+
+        // prevents the default behavior of the form
         event.preventDefault();
 
         ////////////////////////////// Validations //////////////////////////////
+        
         // cheks if all fields are filled
         if(!inputs.name || !inputs.email){
             alert('Por favor preencha todos os campos');
@@ -64,7 +79,8 @@ export default function EditUser(){
             }
         };
 
-        axios.put(`http://193.137.5.80:80/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
+        // sends the data to the API to update the user
+        axios.put(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/main')
         })

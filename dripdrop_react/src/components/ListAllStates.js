@@ -7,25 +7,37 @@ import { saveAs } from 'file-saver';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend,} from 'chart.js';
 
+
+// Register the ChartJS plugins
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+// View to list all the states of a plant
 export default function ListAllStates(){
 
+    // initializes the navigate function
     const navigate = useNavigate();
 
     // gets the plant id from the URL
     const {plantId} = useParams();
 
+    // initializes the state
     const [state, setState] = useState([]);
 
+    // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
 
+    // gets the plant data from the API when the page loads
     useEffect(() => {
         
         getAllState();
         
     }, [plantId]);
 
+    /**
+     * Function to get all the states of a plant from the API
+     * 
+     * @returns
+     */
     function getAllState(){
 
         // gets the token from local storage and sets it in the headers
@@ -36,26 +48,34 @@ export default function ListAllStates(){
             }
         };
 
-        axios.get( `http://193.137.5.80:80/PHP-API/states/null/${userId}/${plantId}/all`, config).then(function(response){
+        // gets the plant states from the API
+        axios.get( `https://dripdrop.danielgraca.com/PHP-API/states/null/${userId}/${plantId}/all`, config).then(function(response){
             console.log(response.data)
             setState(response.data)
         });
     }
 
-    // Function to decode the image from the database (base64) and display it
+    /**
+     * 
+     * Function to format the image source to display it in the table
+     * 
+     * @param {*} image 
+     * @returns 
+     */
     function formatImageSrc(image){
         return `data:image/png;base64,${image}`;
     }
-
-    function truncateText(text, maxLength) {
-        return text.length > maxLength ? text.substring(0, maxLength) : text;
-    }
  
-    // Function to export the data to an excel file and download it
+    /**
+     * 
+     * Function to export the states to an Excel file
+     * 
+     * @param {*} data 
+     */
     function toExcel(data){
 
         const sanitizedData = data.map(item => ({
-            plant: truncateText(item.plant, 32767),
+            plant: item.plant,
             humidity_air: item.humidity_air,
             temperature: item.temperature,
             wind_direction: item.wind_direction,
@@ -81,7 +101,7 @@ export default function ListAllStates(){
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
 
-        // Trigger the download
+        // Trigger the download of the xls file 
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -89,32 +109,52 @@ export default function ListAllStates(){
         a.click();
         window.URL.revokeObjectURL(url);
 
+        //////////////////////////////////////////// ZIP IMAGES FILE ////////////////////////////////////////////
+
         // Downloads the images from the states to a zip file with the date and time as the name
         const zip = new JSZip();
         const folder = zip.folder("PlantStatesImages");
+
         // For each state, add the image to the zip file
         data.forEach((item, index) => {
+            // Get the base64 image
             const image = item.image;
-            const base64 = image.split(',')[1];
-            folder.file(`${item.date}_${item.time}.png`, base64, {base64: true});
+
+            // format the image source
+            const imageFormat = formatImageSrc(image);
+
+            // Create a new image element
+            const newImage = new Image();
+
+            // Set the source of the image
+            newImage.src = imageFormat;
+
+            // Add the image to the zip file
+            folder.file(`${item.date}_${item.time}.png`, newImage.src.substr(newImage.src.indexOf(',') + 1), {base64: true});
         });
 
         // Generate the zip file and download it
         folder.generateAsync({type:"blob"}).then(function(content) {
-            saveAs(content, `${data[0].date}_${data[0].time}_Images.zip`);
+            saveAs(content, `Images.zip`);
         });
 
     }    
 
-    // NDVI Chart
+    /**
+     * Function to format the data to display in the chart
+     * 
+     */
     const ndviData = {
-        // Invert the order of the states to display the most recent first
 
+        // label and data for the x-axis 
         labels: state.map(item => item.date + ' ' + item.time).reverse(),
 
+        // datasets for the chart
         datasets: [
             {
+                // label for the y-axis
                 label: 'NDVI',
+                // data for the y-axis
                 data: state.map(item => item.ndvi).reverse(),
                 fill: false,
                 backgroundColor: 'rgb(75, 192, 192)',
@@ -123,6 +163,10 @@ export default function ListAllStates(){
         ],
     };
 
+    /**
+     * Options for the NDVI chart
+     * 
+     */
     const ndviOptions = {
         scales: {
             x: {

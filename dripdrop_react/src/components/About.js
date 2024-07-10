@@ -1,3 +1,4 @@
+// view to display the about page
 export default function About(){
     return(
         <div>

@@ -1,7 +1,4 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
-
+// view to display the home page
 export default function Home(){
 
     return(

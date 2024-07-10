@@ -1,3 +1,4 @@
+// view with the tutorial information to display
 export default function Info(){
     return(
         <div>

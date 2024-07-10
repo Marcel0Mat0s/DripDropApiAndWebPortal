@@ -2,16 +2,24 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
+// View to list all the plants of a user
 export default function ListPlants(){
 
+    // initializes the plants state
     const [plants, setPlants] = useState([]);
 
+    // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
 
+    // gets the plants data from the API when the page loads
     useEffect(() => {
         getPlants();
     }, []);
 
+    /**
+     * Function to get the plants data from the API
+     * 
+     */
     function getPlants(){
 
         // gets the token from local storage and sets it in the headers
@@ -22,12 +30,19 @@ export default function ListPlants(){
             }
         };
 
-        axios.get(`http://193.137.5.80:80/PHP-API/plants/null/${userId}`, config).then(function(response){
-            console.log(response.data)
-            setPlants(response.data)
+        // gets the plants data from the API
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/plants/null/${userId}`, config).then(function(response){
+            console.log(response.data);
+            setPlants(response.data);
         });
     }
 
+    /**
+     * Function to delete a plant
+     * 
+     * @param {*} id
+     * @returns
+     */
     const deletePlant = (id) => {
 
         // gets the token from local storage and sets it in the headers
@@ -38,12 +53,19 @@ export default function ListPlants(){
             }
         };
 
-        axios.delete(`http://193.137.5.80:80/PHP-API/plants/${id}/${userId}/${id}/delete`, config).then(function(response){
+        // deletes the plant from the API
+        axios.delete(`https://dripdrop.danielgraca.com/PHP-API/plants/${id}/${userId}/${id}/delete`, config).then(function(response){
             console.log(response.data)
             getPlants();
         });
     }
 
+    /**
+     * Function to navigate to a path
+     * 
+     * @param {*} path
+     * @returns
+     */
     const goTo = (path) => () => {
         window.location.href = path;
     }

@@ -2,20 +2,26 @@ import { useEffect, useState } from "react"
 import axios from "axios";
 import { useNavigate, useParams} from "react-router-dom";
 
+// View to list the state of a plant
 export default function ListStates(){
 
+    // initializes the navigate function
     const navigate = useNavigate();
 
-    // gets the plant id from the URL
+    // gets the plant id, plant type and plant name from the URL
     const {plantId} = useParams();
     const {plantType} = useParams();
     const {plantName} = useParams();
 
+    // initializes the state
     const [state, setState] = useState([]);
 
+    // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
     
+    // gets the plant state from the API when the page loads
     useEffect(() => {
+        
         // gets the plant state from the API every 20 seconds
         const interval = setInterval(() => {
             getState();
@@ -30,11 +36,15 @@ export default function ListStates(){
         return () => clearInterval(interval);
     }, [plantId]);
 
-    // function to verify if the current humidity is below the plant type minimum humidity
+    /**
+     * Function to verify the state of the plant
+     * 
+     */
     function verifyState(){
 
         // get the current humidity soil from the td element with the id humiditySoil
         const humiditySoil = document.getElementById('humiditySoil').innerHTML;
+        // get the current NDVI from the td element with the id NDVI
         const NDVI = document.getElementById('NDVI').innerHTML;
 
         // gets the token from local storage and sets it in the headers
@@ -46,7 +56,7 @@ export default function ListStates(){
         };
 
         // gets the plant type minimum humidity from the API
-        axios.get(`http://193.137.5.80:80/PHP-API/types/${plantType}/${userId}`, config).then(function(response){
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/${plantType}/${userId}`, config).then(function(response){
             const minHumiditySoil = response.data.min_humidity;
             const maxHumiditySoil = response.data.max_humidity;
             const minNDVI = response.data.min_ndvi;
@@ -65,6 +75,10 @@ export default function ListStates(){
         });
     }
 
+    /**
+     * Function to get the state of the plant from the API
+     * 
+     */
     function getState(){
 
         // gets the token from local storage and sets it in the headers
@@ -75,12 +89,10 @@ export default function ListStates(){
             }
         };
 
-        axios.get( `http://193.137.5.80:80/PHP-API/states/null/${userId}/${plantId}/now`, config).then(function(response){
+        // gets the plant state from the API
+        axios.get( `https://dripdrop.danielgraca.com/PHP-API/states/null/${userId}/${plantId}/now`, config).then(function(response){
             console.log(response.data)
             setState(response.data)
-
-            //setHumiditySoil(state.humidity_soil);
-            //setNDVI(state.ndvi);
         });
     }
 

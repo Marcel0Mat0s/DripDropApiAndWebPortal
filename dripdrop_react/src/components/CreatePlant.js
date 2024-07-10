@@ -2,20 +2,28 @@ import { useEffect, useState } from "react"
 import axios from "axios";
 import { useNavigate} from "react-router-dom";
 
+// View to create a plant
 export default function CreatePlant(){
 
+    // inicializes the navigate function
     const navigate = useNavigate();
 
+    // initializes the inputs and types states
     const [inputs, setInputs] = useState({location: ''})
     const [types, setTypes] = useState([])
 
+    // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
 
+    /**
+     * gets the plant types and the user location when the page loads
+     */
     useEffect(() => {
 
+        // gets the plant types from the API
         getTypes();
 
-        // gets the location of the user
+        // if the browser supports geolocation, gets the user's location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -32,20 +40,11 @@ export default function CreatePlant(){
         } else {
             console.error("Geolocation is not supported by this browser.");
         }
-
-        /* gets the location of the user
-        navigator.geolocation.getCurrentPosition(function(position){
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-   
-            // Set the location in the Location input
-            document.getElementById('location').value = `${lat}, ${lon}`;
-            setInputs(values => ({...values, location: `${lat}, ${lon}`}));
-        });
-        */
     }, []);
 
-    // Gets the plant types from the API
+    /**
+     * Function to get the plant types from the API
+     */
     function getTypes(){
 
         // gets the token from local storage and sets it in the headers
@@ -57,7 +56,7 @@ export default function CreatePlant(){
         };
 
         // gets the plant types from the API
-        axios.get(`http://193.137.5.80:80/PHP-API/types/null/${userId}`, config).then(function(response){
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/null/${userId}`, config).then(function(response){
             console.log(response.data);
             setTypes(response.data);
 
@@ -67,16 +66,32 @@ export default function CreatePlant(){
 
     }
 
+    /**
+     * Function to handle the change in the inputs
+     * @param {*} event
+     * @returns
+     */
     const handleChange = (event) => {
+        // gets the name and value of the input that changed
         const name = event.target.name;
         const value = event.target.value;
+
+        // sets the new value in the inputs state
         setInputs(values => ({...values, [name]: value}));
     }
 
+    /**
+     * Function to handle the submit of the form
+     * @param {*} event
+     * @returns
+     */
     const handleSubmit = (event) => {
+
+        // prevents the default behavior of the form
         event.preventDefault();
 
         /////////////////////////////VALIDATIONS///////////////////////////////
+
         // checks if the user ID is available
         if (!userId) {
             console.error("No user ID available for request.");
@@ -96,7 +111,6 @@ export default function CreatePlant(){
             return;
         }
 
-
         // Add the user ID to the inputs
         inputs.userId = userId;
     
@@ -111,8 +125,8 @@ export default function CreatePlant(){
         // Prints the inputs to the console
         console.log(inputs);
 
-
-        axios.post(`http://193.137.5.80:80/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
+        // sends the request to the API to create the plant
+        axios.post(`https://dripdrop.danielgraca.com/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
             console.log(response.data);
 
             // redirect to the plant page after creation to show the new plant id to the user

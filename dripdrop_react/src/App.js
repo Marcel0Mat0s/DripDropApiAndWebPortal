@@ -15,8 +15,10 @@ import Info from './components/Info';
 import About from './components/About';
 import ListAllStates from './components/ListAllStates';
 
+// Main component
 function App() {
 
+  // Function to navigate to a path
   function navigateTo(path){
     return function(){
       window.location.href = path;
