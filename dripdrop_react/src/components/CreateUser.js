@@ -54,46 +54,78 @@ export default function CreateUser(){
     }
     
     return(
-        <div>  
-            <h1>Criar Conta</h1>
-            <form onSubmit={handleSubmit}>
-                <table align="center">
-                    <tbody>
-                        <tr>
-                            <th>
-                                <label>Nome: </label>
-                            </th>
-                            <td>
-                                <input class="roundedS" type="text" name="name" onChange={handleChange}/>
-                            </td>
-                        </tr>
+        <div class="d-flex items-align-center">
+            <div class="row p-0 w-100">
+                
+                <div className="whiteFullCard" class="col m-5 whiteFullCard">
 
-                        <tr>
-                            <th>
-                                <label>Email: </label>
-                            </th>
-                            <td>
-                                <input class="roundedS" type="email" name="email" onChange={handleChange}/>
-                            </td>
-                        </tr>
+                    <div class="h-25">  
+                        <h1>Crie aqui a sua conta!</h1>
+                        <br/>
+                        <hr class="hr hr-blurry" />
+                        <br/>
+                    </div>
+                    <div class="h-75">
+                        <br/>
+                        <h2 align="center">Preencha os campos:</h2>
+                        <br/>
+                        <form onSubmit={handleSubmit}>
+                            <table align="center" class="text-light">
+                                <tbody>
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingName" class="form-control" type="name" name="name" onChange={handleChange}/>
+                                        <label for="floatingName">Nome</label>
+                                    </div>
 
-                        <tr>
-                            <th>
-                                <label>Palavra-passe: </label>
-                            </th>
-                            <td>
-                                <input class="roundedS" type="password" name="password" onChange={handleChange}/>
-                            </td>
-                        </tr>
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingEmail" class="form-control" type="email" name="email" onChange={handleChange}/>
+                                        <label for="floatingEmail">Email</label>
+                                    </div>
 
-                        <tr>
-                            <td colSpan="2" align="right">
-                                <button class="buttonYes">Criar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingPassword" class="form-control" type="password" name="password" onChange={handleChange}/>
+                                        <label for="floatingPassword">Palavra-passe</label>
+                                    </div>
+
+                                    <tr>
+                                        <td colSpan="2" align="right">
+                                            <button class="btn btn-outline-success">Criar</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>  
+                </div> 
+                <div className="whiteFullCard" class="col m-5 whiteFullCard">
+                    <div class="h-25">
+                        <h1 align="center">Já tem conta? 😃</h1>
+                        <br/>
+                        <hr class="hr hr-blurry" />
+                        <br/>
+                    </div>
+                    <div class="h-75">
+                        <br/>
+                        <table align="center" class="w-75">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h2 align="left">Inicie Sessão!</h2>
+                                        <br/>
+                                        <p align='left'>Já tem conta? Não perca tempo e inicie sessão agora mesmo para começar a monitorizar as suas plantas!</p>
+                                        <br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <button class="btn btn-outline-success" align="end" onClick={() => navigate('/login')}>Iniciar Sessão</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> 
+            </div>
         </div>
     )
 }

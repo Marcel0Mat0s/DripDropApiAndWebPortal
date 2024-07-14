@@ -129,7 +129,7 @@ export default function LoginUser(){
                     
                     <form class="h-75" onSubmit={handleSubmit}>
                         <br/>
-                        <table align="center" class="text-light gap-y-4">
+                        <table align="center" class="text-light">
                             <thead>
                                 <tr>
                                     <td class="text-dark">
@@ -166,13 +166,14 @@ export default function LoginUser(){
                     </div>
                     <div class="h-75">
                         <br/>
-                        <table align="center">
+                        <table align="center" class="w-75">
                             <tbody>
                                 <tr>
                                     <td>
                                         <h2 align="left">Registe-se já!</h2>
                                         <br/>
-                                        <p align='center'>Crie a sua conta DripDrop e comece já a monitorizar as suas plantas!</p>
+                                        <p align='left'>Crie a sua conta DripDrop e comece já a monitorizar as suas plantas!</p>
+                                        <br/>
                                     </td>
                                 </tr>
                                 <tr>
