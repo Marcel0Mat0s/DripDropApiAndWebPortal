@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken, removeToken, setUserId, removeUserId } from './../redux/actions';
+import logo from '../images/dripdropdigital.png';
 
 // View to login a user
 export default function LoginUser(){
@@ -113,46 +114,77 @@ export default function LoginUser(){
     }
 
     return(
-        <div>  
-            <div className="whiteFullCard">
-                <form onSubmit={handleSubmit}>
+        <div class="d-flex items-align-center">
+            <div class="row p-0 w-100">
+                
+                <div className="whiteFullCard" class="col m-5 whiteFullCard">
 
-                    <table align="center">
+                    <div class="h-25">
+                        <h1 align="center">Entre na sua conta DripDrop!</h1>
+                        <br/>
 
-                        <tbody>
-                            <tr>
-                                <th>
-                                    <label>Email: </label>
-                                </th>
-                                <td>
-                                    <input class="roundedS" type="email" name="email" onChange={handleChange}/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    <label>Palavra-passe: </label>
-                                </th>
-                                <td>
-                                    <input class="roundedS" type="password" name="password" onChange={handleChange}/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td colSpan="2" align="right">
-                                    <button class="buttonYes">Iniciar Sessão</button>
-                                    <button class="buttonYes" style={{marginLeft: '5px'}} onClick={navigateTo("/user/create")}>Criar Conta</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2" align="right">
-                                    <button style={{marginLeft: '5px'}} class="buttonNo" onClick={logout}>Logout</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>  
+                        <hr class="hr hr-blurry" />
+                        <br/>
+                    </div>
+                    
+                    <form class="h-75" onSubmit={handleSubmit}>
+                        <br/>
+                        <table align="center" class="text-light gap-y-4">
+                            <thead>
+                                <tr>
+                                    <td class="text-dark">
+                                        <h2 align="left">Iniciar Sessão</h2>
+                                    </td>
+                                </tr>
+                                <br/>
+                            </thead>
+                            <tbody>
+                                <div class="form-floating mb-3">
+                                    <input id="floatingEmail" class="form-control" type="email" name="email" placeholder="name@example.com" onChange={handleChange}/>
+                                    <label for="floatingEmail">Email</label>
+                                </div>
+                                
+                                <div class="form-floating mb-3">
+                                    <input id="floatingPassword" class="form-control" type="password" name="password" placeholder="Password" onChange={handleChange}/>
+                                    <label for="floatingPassword">Palavra-passe</label>
+                                </div>
+                                
+                                <div colSpan="2" align="right">
+                                    <button class="btn btn-outline-success">Iniciar Sessão</button>
+                                </div>
+                                
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div className="whiteFullCard" class="col m-5 whiteFullCard">
+                    <div class="h-25">
+                        <h1 align="center">Ainda não tem conta? 😢</h1>
+                        <br/>
+                        <hr class="hr hr-blurry" />
+                        <br/>
+                    </div>
+                    <div class="h-75">
+                        <br/>
+                        <table align="center">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h2 align="left">Registe-se já!</h2>
+                                        <br/>
+                                        <p align='center'>Crie a sua conta DripDrop e comece já a monitorizar as suas plantas!</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <button class="btn btn-outline-success" align="end" onClick={navigateTo("/user/create")}>Criar Conta</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>  
+            </div>
         </div>
     )
 }

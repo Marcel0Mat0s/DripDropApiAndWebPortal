@@ -9,11 +9,11 @@ export default function Home(){
         <div >
             <div class="row w-100">
 
-                <div class="col p-0 ">
+                <div class="col">
                     <img src={logo} alt='DripDrop' class="w-75" />
                 </div>
 
-                <div class="col p-0 d-flex align-items-center">
+                <div class="col d-flex align-items-center">
                     <table align='center' class="w-75 " >
                         <tbody>
                             <tr>

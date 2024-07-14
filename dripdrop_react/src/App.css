@@ -41,7 +41,7 @@ body {
     width: 220px; /* ajuste conforme necessário */
 }
 /* Torna o texto branco */
-h2, h3, h4, h5, h6, label {
+h2, h3, h4, h5, h6 {
     color: #fff;
 }
 
@@ -89,10 +89,7 @@ h1 {
     font-size: medium;
 }
 
-/* Espaçamento para as tabelas */
-.tdSpace {
-    margin: 10px;
-}
+
 
 /* Cartão branco */
 .whiteCard {
