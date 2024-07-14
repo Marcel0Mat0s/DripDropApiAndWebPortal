@@ -114,44 +114,45 @@ export default function LoginUser(){
 
     return(
         <div>  
-            <h1>Iniciar Sessão</h1>
-            <form onSubmit={handleSubmit}>
+            <div className="whiteFullCard">
+                <form onSubmit={handleSubmit}>
 
-                <table align="center">
+                    <table align="center">
 
-                    <tbody>
-                        <tr>
-                            <th>
-                                <label>Email: </label>
-                            </th>
-                            <td>
-                                <input class="roundedS" type="email" name="email" onChange={handleChange}/>
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <label>Email: </label>
+                                </th>
+                                <td>
+                                    <input class="roundedS" type="email" name="email" onChange={handleChange}/>
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <th>
-                                <label>Palavra-passe: </label>
-                            </th>
-                            <td>
-                                <input class="roundedS" type="password" name="password" onChange={handleChange}/>
-                            </td>
-                        </tr>
+                            <tr>
+                                <th>
+                                    <label>Palavra-passe: </label>
+                                </th>
+                                <td>
+                                    <input class="roundedS" type="password" name="password" onChange={handleChange}/>
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td colSpan="2" align="right">
-                                <button class="buttonYes">Iniciar Sessão</button>
-                                <button class="buttonYes" style={{marginLeft: '5px'}} onClick={navigateTo("/user/create")}>Criar Conta</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="2" align="right">
-                                <button style={{marginLeft: '5px'}} class="buttonNo" onClick={logout}>Logout</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
+                            <tr>
+                                <td colSpan="2" align="right">
+                                    <button class="buttonYes">Iniciar Sessão</button>
+                                    <button class="buttonYes" style={{marginLeft: '5px'}} onClick={navigateTo("/user/create")}>Criar Conta</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2" align="right">
+                                    <button style={{marginLeft: '5px'}} class="buttonNo" onClick={logout}>Logout</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>  
         </div>
     )
 }

@@ -15,6 +15,7 @@ import Info from './components/Info';
 import About from './components/About';
 import ListAllStates from './components/ListAllStates';
 
+
 // Main component
 function App() {
 
@@ -26,15 +27,39 @@ function App() {
   }
 
   return (
+    
     <div className="App">
-      <body>
-        <div class="header">
-          <button class='buttonYes' onClick={navigateTo("/login")} >Iniciar/Terminar Sessão</button>
-        </div>
-          <br/>
-          <img src={logo} alt="Logotipo DripDrop" class="logo"/>
-      </body>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
 
+          <a class="navbar-brand" aria-current="page" href="/">Drip Drop Digital</a>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+              <li class="nav-item">
+                <a class="nav-link" href="/about">Sobre</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="/info">Tutorial</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true">Plantas</a>
+              </li>
+            </ul>
+
+            <a class="nav-link d-flex" href="/login">Iniciar Sessão</a>
+           
+          </div>
+        </div>
+      </nav>
+      <br/>
       <BrowserRouter>
         <nav>
           <ul>
