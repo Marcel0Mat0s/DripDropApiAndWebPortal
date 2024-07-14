@@ -5,8 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaf
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import {
-    TextField, Select, MenuItem, FormControl, InputLabel, Button,
-    Box, Typography, Grid, Container, Paper
+    TextField, Select, MenuItem, FormControl, InputLabel, Button, Grid, Container
 } from "@mui/material";
 
 // Custom icon for the marker
@@ -164,9 +163,7 @@ export default function CreatePlant() {
                 {/* Left Card (Form) */}
                 <Grid item xs={12} md={6}>
                     <div className="whiteFullCard"> {/* Left card container */}
-                        <Typography variant="h5" component="h2" gutterBottom>
-                            Adicionar planta
-                        </Typography>
+                        <h2 align="center">Adicionar planta</h2>
                         <form onSubmit={handleSubmit}>
                             <TextField
                                 label="Nome"
