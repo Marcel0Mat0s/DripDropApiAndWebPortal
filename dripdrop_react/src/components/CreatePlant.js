@@ -1,36 +1,56 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import L from 'leaflet';
+import "leaflet/dist/leaflet.css";
+import {
+    TextField, Select, MenuItem, FormControl, InputLabel, Button,
+    Box, Typography, Grid, Container, Paper
+} from "@mui/material";
 
-// View to create a plant
-export default function CreatePlant(){
+// Custom icon for the marker
+const plantIcon = new L.Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/128/1647/1647460.png', // Replace with your icon URL
+    iconSize: [40, 40],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+});
 
-    // inicializes the navigate function
+function LocationMarker({ setInputs }) {
+    const [position, setPosition] = useState(null);
+    const map = useMapEvents({
+        click(e) {
+            map.flyTo(e.latlng, map.getZoom());
+            setPosition(e.latlng); // Update local state
+            setInputs(values => ({ ...values, location: `${e.latlng.lat}, ${e.latlng.lng}` })); // Update parent state
+        },
+    });
+
+    return position === null ? null : (
+        <Marker position={position} icon={plantIcon}>
+            <Popup>Localização Selecionada: {position.lat}, {position.lng}</Popup>
+        </Marker>
+    );
+}
+
+export default function CreatePlant() {
     const navigate = useNavigate();
+    const [inputs, setInputs] = useState({ location: "", name: "", type: "" });
+    const [types, setTypes] = useState([]);
+    const [mapCenter, setMapCenter] = useState(null);
 
-    // initializes the inputs and types states
-    const [inputs, setInputs] = useState({location: ''})
-    const [types, setTypes] = useState([])
+    const userId = localStorage.getItem("userId");
 
-    // gets the user ID from local storage
-    const userId = localStorage.getItem('userId');
-
-    /**
-     * gets the plant types and the user location when the page loads
-     */
     useEffect(() => {
-
-        // gets the plant types from the API
         getTypes();
 
-        // if the browser supports geolocation, gets the user's location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
-
-                    // Set the location in the Location input
+                    setMapCenter([lat, lon]);
                     setInputs((values) => ({ ...values, location: `${lat}, ${lon}` }));
                 },
                 (error) => {
@@ -43,9 +63,9 @@ export default function CreatePlant(){
     }, []);
 
     /**
-     * Function to get the plant types from the API
-     */
-    function getTypes(){
+       * Function to get the plant types from the API
+       */
+    function getTypes() {
 
         // gets the token from local storage and sets it in the headers
         const token = localStorage.getItem('token');
@@ -56,12 +76,12 @@ export default function CreatePlant(){
         };
 
         // gets the plant types from the API
-        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/null/${userId}`, config).then(function(response){
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/null/${userId}`, config).then(function (response) {
             console.log(response.data);
             setTypes(response.data);
 
-        }).catch(function(error){
-            console.log('Plant types retrieval failed: ',error)
+        }).catch(function (error) {
+            console.log('Plant types retrieval failed: ', error)
         });
 
     }
@@ -77,7 +97,7 @@ export default function CreatePlant(){
         const value = event.target.value;
 
         // sets the new value in the inputs state
-        setInputs(values => ({...values, [name]: value}));
+        setInputs(values => ({ ...values, [name]: value }));
     }
 
     /**
@@ -113,7 +133,7 @@ export default function CreatePlant(){
 
         // Add the user ID to the inputs
         inputs.userId = userId;
-    
+
         // gets the token from local storage and sets it in the headers
         const token = localStorage.getItem('token');
         const config = {
@@ -126,61 +146,92 @@ export default function CreatePlant(){
         console.log(inputs);
 
         // sends the request to the API to create the plant
-        axios.post(`https://dripdrop.danielgraca.com/PHP-API/plants/null/${userId}/save`, inputs, config).then(function(response){
+        axios.post(`https://dripdrop.danielgraca.com/PHP-API/plants/null/${userId}/save`, inputs, config).then(function (response) {
             console.log(response.data);
 
             // redirect to the plant page after creation to show the new plant id to the user
             navigate('/plant')
         })
-        .catch(function(error){
-            console.log('Plant creation failed: ',error)
-        })
+            .catch(function (error) {
+                console.log('Plant creation failed: ', error)
+            })
     }
 
-    return(
-        <div>
-            <h1>Criar Planta</h1>
-            <form onSubmit={handleSubmit}>
-            <table align="center">
-                    <tbody>
-                        <tr>
-                            <th>
-                                <label>Nome: </label>
-                            </th>
-                            <td>
-                                <input class='roundedS' type="text" name="name" onChange={handleChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label >Local: </label>
-                            </th>
-                            <td>
-                                <input id="location" class="roundedS" type="text" name="location" value={inputs.location} onChange={handleChange}/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label>Tipo: </label>
-                            </th>
-                            <td>
-                                <select class='roundedS' style={{width: '100%'}} name="type" onChange={handleChange}>
-                                    <option value="">Seleciona um tipo</option>
-                                    {types.map((type) => 
-                                        <option key={type.id} value={type.id}>{type.name}</option>
-                                    )}
-                                </select>
-                            </td>
-                        </tr>
-                        <br/>
-                        <tr>
-                            <td colSpan="2" align="right">
-                                <button class="buttonYes">Criar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
-    )
+    return (
+        <Container maxWidth="lg" mt={2}> {/* Container for layout */}
+            <Grid container spacing={10} mt={2}> {/* Grid for layout */}
+
+                {/* Left Card (Form) */}
+                <Grid item xs={12} md={6}>
+                    <div className="whiteFullCard"> {/* Left card container */}
+                        <Typography variant="h5" component="h2" gutterBottom>
+                            Adicionar planta
+                        </Typography>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Nome"
+                                name="name"
+                                fullWidth
+                                value={inputs.name}
+                                onChange={handleChange}
+                                margin="normal"
+                            />
+                            <FormControl fullWidth margin="normal">
+                                <InputLabel id="type-label">Tipo</InputLabel>
+                                <Select
+                                    labelId="type-label"
+                                    name="type"
+                                    value={inputs.type}
+                                    onChange={handleChange}
+                                >
+                                    {types.map((type) => (
+                                        <MenuItem key={type.id} value={type.id}>{type.name}</MenuItem>
+                                    ))}
+
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                label="Localização (lat, lng)"
+                                name="location"
+                                fullWidth
+                                value={inputs.location}
+                                onChange={handleChange}
+                                margin="normal"
+                                disabled // Disable direct input, get from map
+                            />
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                sx={{ mt: 2 }}
+                            > Adicionar </Button>
+                        </form>
+                    </div>
+                </Grid>
+
+                {/* Right Card (Map) */}
+                <Grid item xs={12} md={6}>
+                    <div className="whiteFullCard"> {/* Right card container */}
+                        {mapCenter && (
+                            <MapContainer
+                                center={mapCenter}
+                                zoom={12}
+                                style={{ height: "500px" }}
+                            >
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                />
+                                <LocationMarker setInputs={setInputs} />
+                            </MapContainer>
+                        )}
+                    </div>
+                </Grid>
+            </Grid>
+        </Container>
+    );
+
+
 }
+
+
