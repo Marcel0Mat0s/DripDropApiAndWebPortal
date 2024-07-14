@@ -1,3 +1,5 @@
+import React from 'react';
+
 // view for the main page of the app
 export default function Main(){
 

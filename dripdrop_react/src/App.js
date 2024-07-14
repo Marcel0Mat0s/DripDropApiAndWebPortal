@@ -14,57 +14,101 @@ import ListNewPlantID from './components/ListNewPlantID';
 import Info from './components/Info';
 import About from './components/About';
 import ListAllStates from './components/ListAllStates';
-
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { removeToken, removeUserId } from './redux/actions';
 
 // Main component
 function App() {
 
-  // Function to navigate to a path
-  function navigateTo(path){
-    return function(){
-      window.location.href = path;
-    } 
-  }
+  const token = useSelector((state) => state.auth.token);
+  const userid = useSelector((state) => state.auth.userId);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const plantsViewButton = document.getElementById('plantsView');
+    const defViewButton = document.getElementById('defView');
+    const sessionButton = document.getElementById('sessionButton');
+
+    if (!token) {
+    } else {
+      try {
+        if (plantsViewButton) {
+          plantsViewButton.classList.remove('disabled');
+        }
+        if (defViewButton) {
+          defViewButton.classList.remove('disabled');
+          defViewButton.classList.remove('invisible');
+        }
+        // Change the session button to logout button that when clicked calls the logout function
+        if (sessionButton) {
+          sessionButton.innerHTML = 'Terminar Sessão';
+          sessionButton.href = '/login';
+          sessionButton.onclick = logout;
+        }
+      } catch (e) {
+        console.log(e);
+      } 
+    }
+  }, [token]);
+
+  /**
+     * Function to logout the user
+     * 
+     */
+  const logout = () => {
+
+    // Remove the token from the redux store and local storage
+    dispatch(removeToken());
+    localStorage.removeItem('token');
+
+    // Remove the user id from the redux store and local storage
+    dispatch(removeUserId());
+    localStorage.removeItem('userId');
+
+    console.log('Logged out');
+}
 
   return (
-    
-    <div className="App">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
+    <BrowserRouter>
+      <div className="App">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
 
-          <a class="navbar-brand" aria-current="page" href="/">DripDropDigital</a>
+            <a class="navbar-brand" aria-current="page" href="/">DripDropDigital</a>
 
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-              <li class="nav-item">
-                <a class="nav-link" href="/about">Sobre</a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/about">Sobre</a>
+                </li>
 
-              <li class="nav-item">
-                <a class="nav-link" href="/info">Tutorial</a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/info">Tutorial</a>
+                </li>
 
-              <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Plantas</a>
-              </li>
-            </ul>
+                <li class="nav-item">
+                  <a id="plantsView" class="nav-link disabled" aria-disabled="true" href="/plants">Plantas</a>
+                </li>
 
-            <a class="nav-link d-flex" href="/login">Iniciar Sessão</a>
-           
+                <li class="nav-item">
+                  <a id="defView" class="nav-link disabled invisible" aria-disabled="true" href={`/user/${userid}/edit`} >Definições</a>
+                </li>
+              </ul>
+
+              <a id="sessionButton" class="nav-link d-flex" href="/login">Iniciar Sessão</a>
+            
+            </div>
           </div>
-        </div>
-      </nav>
-      <br/>
-      <BrowserRouter>
-        <nav>
-          <ul>
-          </ul>
         </nav>
+        <br/>
         <Routes>
           <Route index element={<Home/>} />
           <Route path="user/create" element={<CreateUser/>} />
@@ -80,8 +124,8 @@ function App() {
           <Route path="about" element={<About/>} />
           <Route path="states/all/:plantId" element={<ListAllStates/>} />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 

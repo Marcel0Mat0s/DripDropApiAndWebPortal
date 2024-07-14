@@ -73,32 +73,12 @@ export default function LoginUser(){
             console.log(token);
 
             // Redirect to the main page
-            navigate('/main');
+            navigate('/plants');
             
         } catch (error) {
             console.log('Authentication failed: ', error);
             alert("Email ou palavra-passe incorretos");
         }
-    }
-  
-    /**
-     * Function to logout the user
-     * 
-     */
-    const logout = () => {
-
-        // Remove the token from the redux store and local storage
-        dispatch(removeToken());
-        localStorage.removeItem('token');
-
-        // Remove the user id from the redux store and local storage
-        dispatch(removeUserId());
-        localStorage.removeItem('userId');
-
-        // Redirect to the principal page
-        navigate('/');
-
-        console.log('Logged out');
     }
 
     /**
