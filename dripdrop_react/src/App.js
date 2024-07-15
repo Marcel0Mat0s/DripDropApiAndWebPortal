@@ -48,6 +48,10 @@ function App() {
           sessionButton.href = '/login';
           sessionButton.onclick = logout;
         }
+        // starts a session timeout of 60 minutes
+        setTimeout(() => {
+          logout();
+        }, 3600000);
       } catch (e) {
         console.log(e);
       } 

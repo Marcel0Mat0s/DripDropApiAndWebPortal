@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import logo from '../images/dripdropdigital.png';
 
 export default function EditUser(){
 
@@ -92,36 +93,38 @@ export default function EditUser(){
 
     return(
         <div>  
-            <h1>Definições</h1>
-            <form onSubmit={handleSubmit}>
-                <table cellSpacing="10" align="center">
-                    <tbody>
-                        <tr>
-                            <th>
-                                <label>Nome: </label>
-                            </th>
-                            <td>
-                                <input class="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
-                            </td>
-                        </tr>
+            <img src={logo} alt='DripDrop' style={{width: '220px'}} />
+            <br/>
+            <br/>
+            <div class="whiteFullCard d-flex items-align-center">
+                <div align="center" style={{width: '100%'}}>
+                    <form onSubmit={handleSubmit}>
+                        <table cellSpacing="20" align="center" style={{margin: '50px'}}>
+                            <thead>
+                                <tr>
+                                    <h2 colSpan="2" align="left">Definições:</h2>
+                                    <br/>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingNome" class="form-control" value={inputs.name} type="name" name="name" onChange={handleChange}/>
+                                        <label for="floatingNome" >Nome: </label>
+                                    </div>
 
-                        <tr>
-                            <th>
-                                <label>Email: </label>
-                            </th>
-                            <td>
-                                <input class="roundedS" value={inputs.email} type="text" name="email" onChange={handleChange}/>
-                            </td>
-                        </tr>
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingEmail" class="form-control" value={inputs.email} type="email" name="email" onChange={handleChange}/> 
+                                        <label for="floatingEmail" >Email: </label>
+                                    </div>
 
-                        <tr>
-                            <td colSpan="2" align="right">
-                                <button class="buttonYes">Guardar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
+                                    <div colSpan="2" align="right">
+                                        <button class="btn btn-outline-success">Guardar</button>
+                                    </div>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
         </div>
     )
 }

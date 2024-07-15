@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import logo from '../images/dripdropdigital.png';
 
 // View to list all the plants of a user
 export default function ListPlants(){
@@ -71,28 +72,21 @@ export default function ListPlants(){
     }
 
     return(
-        <div>
-            <h1>Lista de Plantas</h1>
-            <table align='center'>
-                <tbody>
-                    {plants.map((plant, key) =>
-                        <tr key={key}>
-                            <td class='tdSpace'>
-                                <Link style={{color: '#D3D3D3'}} to={`/states/${plant.id}/${plant.type}/${plant.name}`} >{plant.name}</Link>
-                            </td>
-                            <td class='tdSpace'>
-                                <Link class='buttonYes' to={`/plant/${plant.id}/edit`}>Editar</Link>
-                            </td>
-                            <td class='tdSpace'>
-                                <button class='buttonNo' onClick={() => deletePlant(plant.id)}>Apagar</button>
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+        <div class="">
+            <img src={logo} alt='DripDrop' style={{width: '220px'}} />
             <br/>
-            <button class='buttonBlue' onClick={goTo("/main")}>Voltar</button>
-            <button class='buttonBlue' onClick={goTo("/plant/create")}>+</button>
+            <div class="w-100" >
+                <button class='buttonBlue position-relative top-50 start-50 float-right' style={{marginRight: '60px', marginBottom: '10px', width:"40px", height:"40px"}} onClick={goTo("/plant/create")}>+</button>
+            </div>
+            <div class=" w-100 whiteFullCard">
+                <div class="row" >
+                    {plants.map((plant, key) =>
+                        <div className="blueFullBoard" class="col blueFullCard" key={key}>
+                            <Link style={{color: '#000000', textDecoration: 'none'}} to={`/states/${plant.id}/${plant.type}/${plant.name}`} >{plant.name}</Link>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
         
     )
