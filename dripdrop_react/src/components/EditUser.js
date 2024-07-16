@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from '../images/dripdropdigital.png';
+import { removeToken, removeUserId } from '../redux/actions';
+import { useDispatch } from 'react-redux';
+
 
 export default function EditUser(){
 
@@ -14,6 +17,9 @@ export default function EditUser(){
     // gets the id from the URL
     const {id} = useParams();
 
+    // gets the dispatch function from the redux store
+    const dispatch = useDispatch();
+
     // gets the user data from the API when the page loads
     useEffect(() => {
         getUser();
@@ -22,7 +28,6 @@ export default function EditUser(){
     /**
      * Function to get the user data from the API
      * 
-     * @returns
      */
     function getUser(){
 
@@ -38,6 +43,18 @@ export default function EditUser(){
         axios.get(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}`, config).then(function(response){
             console.log(response.data);
             setInputs(response.data);
+        }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
         });
     }
 

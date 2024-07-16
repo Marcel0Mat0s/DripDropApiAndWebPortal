@@ -7,7 +7,6 @@ import LoginUser from './components/LoginUser';
 import ListPlants from './components/ListPlants';
 import CreatePlant from './components/CreatePlant';
 import Main from './components/Main';
-import logo from './images/dripdropdigital.png';
 import EditPlant from './components/EditPlant';
 import ListStates from './components/ListStates';
 import ListNewPlantID from './components/ListNewPlantID';
@@ -73,7 +72,7 @@ function App() {
     localStorage.removeItem('userId');
 
     console.log('Logged out');
-}
+  }
 
   return (
     <BrowserRouter>
