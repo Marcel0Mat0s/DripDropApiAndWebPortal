@@ -1,6 +1,47 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import L from 'leaflet';
+import "leaflet/dist/leaflet.css";
+import { useDispatch } from "react-redux";
+import { removeToken, removeUserId } from "../redux/actions";
+
+// Custom icon for the marker
+const plantIcon = new L.Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/128/1647/1647460.png',
+    iconSize: [40, 40],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+});
+
+/**
+ * 
+ * Component to create a marker on the map
+ * 
+ * @param {*} setInputs
+ * @param {*} initialPosition
+ * 
+ * @returns 
+ */
+function LocationMarker({ setInputs, initialPosition }) {
+    const [position, setPosition] = useState(initialPosition);
+    
+    const map = useMapEvents({
+        click(e) {
+            map.flyTo(e.latlng, map.getZoom());
+            setPosition(e.latlng); // Update local state
+            setInputs(values => ({ ...values, location: `${e.latlng.lat}, ${e.latlng.lng}` }));
+        },
+    });
+
+    // Returns the marker on the map if the position is not null
+    return position === null ? null : (
+        <Marker position={position} icon={plantIcon}>
+            <Popup>Localização Selecionada: {position.lat}, {position.lng}</Popup>
+        </Marker>
+    );
+}
 
 // View to edit a plant
 export default function EditPlant(){
@@ -11,12 +52,16 @@ export default function EditPlant(){
     // initializes the inputs and types states
     const [inputs, setInputs] = useState([]);
     const [types, setTypes] = useState([]);
+    const [mapCenter, setMapCenter] = useState(null);
 
     // gets the plant ID from the URL
     const {id} = useParams();
 
     // Gets the user ID from local storage
     const userId = localStorage.getItem('userId');
+
+    // initializes the dispatch function
+    const dispatch = useDispatch();
 
     // get the plant types and the plant data from the API when the page loads
     useEffect(() => {
@@ -45,7 +90,18 @@ export default function EditPlant(){
             setTypes(response.data);
 
         }).catch(function(error){
-            console.log('Plant types retrieval failed: ',error)
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
         });
 
     }
@@ -69,6 +125,25 @@ export default function EditPlant(){
         axios.get(`https://dripdrop.danielgraca.com/PHP-API/plants/${id}/${userId}`, config).then(function(response){
             console.log(response.data)
             setInputs(response.data)
+
+            // Extract the saved location and set the map center and initial position for the marker
+            const location = response.data.location.split(", ");
+            const lat = parseFloat(location[0]);
+            const lon = parseFloat(location[1]);
+            setMapCenter([lat, lon]);
+        }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
         });
     }
 
@@ -125,51 +200,73 @@ export default function EditPlant(){
     }
 
     return(
-        <div>  
-            <h1>Editar Planta</h1>
-            <form onSubmit={handleSubmit}>
-                <table align="center">
-                    <tbody width="100%">
-                        <tr>
-                            <th>
-                                <label>Nome: </label>
-                            </th>
-                            <td >
-                                <input class="roundedS" value={inputs.name} type="text" name="name" onChange={handleChange}/>
-                            </td>
-                        </tr>
+        <div class="d-flex items-align-center">
+            <div class="row p-0 w-100">
 
-                        <tr>
-                            <th>
-                                <label >Local: </label>
-                            </th>
-                            <td>
-                                <input id="location" class="roundedS" type="text" name="location" value={inputs.location} onChange={handleChange}/>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>
-                                <label>Tipo: </label>
-                            </th>
-                            <td>
-                                <select class="roundedS" style={{width: '100%'}} name="type" value={inputs.type} onChange={handleChange}>
-                                    <option value="">Selecione um tipo</option>
-                                    {types.map((type) => 
-                                        <option key={type.id} value={type.id}>{type.name}</option>
-                                    )}
-                                </select>
-                            </td>
-                        </tr>
+                <div class="col m-5 whiteFullCard">
+                    <div class="h-25">
+                        <h1 align="center">Edite a sua planta!🪴</h1>
                         <br/>
-                        <tr>
-                            <td colSpan="2" align="right">
-                                <button class='buttonYes'>Guardar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
+                        <hr class="hr hr-blurry" />
+                        <br/>
+                    </div>
+                    <div class="h-75">
+                        <form onSubmit={handleSubmit}>
+                            <table align="center" class="text-light w-75">
+                                <thead>
+                                    <tr>
+                                        <td class="text-dark">
+                                            <h2 align="left">Edite os campos:</h2>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingName" class="form-control" value={inputs.name} type="text" name="name" onChange={handleChange} placeholder="nome"/>
+                                        <label for="floatingName">Nome</label>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <input id="location" class="form-control" type="text" name="location" value={inputs.location} onChange={handleChange} disabled/>
+                                        <label for="location">Localização (lat, long)</label>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select p-3" aria-label="Floating label select example" name="type" value={inputs.type} onChange={handleChange}>
+                                            <option value="">Selecione um tipo</option>
+                                            {types.map((type) => 
+                                                <option key={type.id} value={type.id}>{type.name}</option>
+                                            )}
+                                        </select>
+                                    </div>
+                                    <br/>
+                                    <tr>
+                                        <td class="d-flex bd-highlight">
+                                            <button align="left" onclick="history.back()" class="btn btn-outline-danger">Cancelar</button> 
+                                            <button align="right" class='btn btn-outline-success ms-auto p-2 bd-highlight'>Guardar</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col m-5 p-3 whiteFullCard">
+                        {mapCenter && (
+                            <MapContainer
+                                center={mapCenter}
+                                zoom={12}
+                                style={{ height: "100%", borderRadius: "50px" }}
+                            >
+                                <TileLayer 
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                />
+                                <LocationMarker setInputs={setInputs} initialPosition={mapCenter} />
+                            </MapContainer>
+                        )}
+                </div>
+            </div>
         </div>
     )
 }
