@@ -125,7 +125,7 @@ function App() {
           <Route path="plant" element={<ListNewPlantID/>} />
           <Route path="info" element={<Info/>} />
           <Route path="about" element={<About/>} />
-          <Route path="states/all/:plantId" element={<ListAllStates/>} />
+          <Route path="states/all/:plantId/:plantType" element={<ListAllStates/>} />
         </Routes>
       </div>
     </BrowserRouter>

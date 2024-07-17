@@ -15,6 +15,9 @@ export default function ListStates(){
     const {plantType} = useParams();
     const {plantName} = useParams();
 
+    // saves the plant type in local storage
+    localStorage.setItem('plantType', plantType);
+
     // initializes the state
     const [state, setState] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,7 +62,7 @@ export default function ListStates(){
         };
 
         // gets the plant type minimum humidity from the API
-        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/${plantType}/${userId}/all`, config).then(function(response){
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/${plantType}/${userId}`, config).then(function(response){
             const minHumiditySoil = response.data.min_humidity;
             const maxHumiditySoil = response.data.max_humidity;
             const minNDVI = response.data.min_ndvi;
@@ -222,7 +225,7 @@ export default function ListStates(){
                             
                             <div class="col p-0 m-2" style={{ alignContent: "center"}}>
                                 <div style={{ alignContent: "center",}}>
-                                    <button class=" btn btn-outline-info" style={{borderRadius:"50%", width: "15vh", height: "15vh" }} onClick={() => navigate(`/states/all/${plantId}`)}>Gráficos</button>
+                                    <button class=" btn btn-outline-info" style={{borderRadius:"50%", width: "15vh", height: "15vh" }} onClick={() => navigate(`/states/all/${plantId}/${plantType}`)}>Gráficos</button>
                                 </div>
                             </div>
                             
