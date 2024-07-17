@@ -109,11 +109,11 @@ export default function LoginUser(){
                     
                     <form class="h-75" onSubmit={handleSubmit}>
                         <br/>
-                        <table align="center" class="text-light">
+                        <table align="center" class="text-light w-75">
                             <thead>
                                 <tr>
                                     <td class="text-dark">
-                                        <h2 align="left">Iniciar Sessão</h2>
+                                        <h2 align="left">Inicie Sessão:</h2>
                                     </td>
                                 </tr>
                                 <br/>

@@ -116,21 +116,21 @@ export default function EditUser(){
             <div class="whiteFullCard d-flex items-align-center">
                 <div align="center" style={{width: '100%'}}>
                     <form onSubmit={handleSubmit}>
-                        <table cellSpacing="20" align="center" style={{margin: '50px'}}>
+                        <table class="text-light w-75" cellSpacing="20" align="center" style={{margin: '50px'}}>
                             <thead>
                                 <tr>
-                                    <h2 colSpan="2" align="left">Definições:</h2>
+                                    <h2 class="text-dark" align="left">⚙️Definições:</h2>
                                     <br/>
                                 </tr>
                             </thead>
                             <tbody>
                                     <div class="form-floating mb-3">
-                                        <input id="floatingNome" class="form-control" value={inputs.name} type="name" name="name" onChange={handleChange}/>
+                                        <input id="floatingNome" class="form-control" value={inputs.name} type="name" name="name" onChange={handleChange} placeholder="nome"/>
                                         <label for="floatingNome" >Nome: </label>
                                     </div>
 
                                     <div class="form-floating mb-3">
-                                        <input id="floatingEmail" class="form-control" value={inputs.email} type="email" name="email" onChange={handleChange}/> 
+                                        <input id="floatingEmail" class="form-control" value={inputs.email} type="email" name="email" onChange={handleChange} placeholder="nome@exemplo.com" /> 
                                         <label for="floatingEmail" >Email: </label>
                                     </div>
 

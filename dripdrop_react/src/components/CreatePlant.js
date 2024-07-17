@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
-import {
-    TextField, Select, MenuItem, FormControl, InputLabel, Button, Grid, Container
-} from "@mui/material";
+import { useDispatch } from "react-redux";
+import { removeToken, removeUserId } from "../redux/actions";
 
 // Custom icon for the marker
 const plantIcon = new L.Icon({
@@ -16,16 +15,25 @@ const plantIcon = new L.Icon({
     popupAnchor: [1, -34],
 });
 
+/**
+ * 
+ * Component to create a marker on the map
+ * 
+ * @param {*} setInputs
+ * 
+ * @returns 
+ */
 function LocationMarker({ setInputs }) {
     const [position, setPosition] = useState(null);
     const map = useMapEvents({
         click(e) {
             map.flyTo(e.latlng, map.getZoom());
             setPosition(e.latlng); // Update local state
-            setInputs(values => ({ ...values, location: `${e.latlng.lat}, ${e.latlng.lng}` })); // Update parent state
+            setInputs(values => ({ ...values, location: `${e.latlng.lat}, ${e.latlng.lng}` }));
         },
     });
 
+    // Returns the marker on the map if the position is not null
     return position === null ? null : (
         <Marker position={position} icon={plantIcon}>
             <Popup>Localização Selecionada: {position.lat}, {position.lng}</Popup>
@@ -34,22 +42,30 @@ function LocationMarker({ setInputs }) {
 }
 
 export default function CreatePlant() {
+
     const navigate = useNavigate();
-    const [inputs, setInputs] = useState({ location: "", name: "", type: "" });
+    const [inputs, setInputs] = useState({ location: ""});
     const [types, setTypes] = useState([]);
     const [mapCenter, setMapCenter] = useState(null);
 
     const userId = localStorage.getItem("userId");
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
+        
         getTypes();
 
+        // Checks if the browser supports geolocation
         if (navigator.geolocation) {
+            // Gets the current position of the user
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
+                    // Sets the map center to the user's location
                     setMapCenter([lat, lon]);
+                    // Sets the location in the inputs
                     setInputs((values) => ({ ...values, location: `${lat}, ${lon}` }));
                 },
                 (error) => {
@@ -79,8 +95,18 @@ export default function CreatePlant() {
             console.log(response.data);
             setTypes(response.data);
 
-        }).catch(function (error) {
-            console.log('Plant types retrieval failed: ', error)
+        }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
         });
 
     }
@@ -150,85 +176,92 @@ export default function CreatePlant() {
 
             // redirect to the plant page after creation to show the new plant id to the user
             navigate('/plant')
-        })
-            .catch(function (error) {
-                console.log('Plant creation failed: ', error)
-            })
+        }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
+        });
     }
 
     return (
-        <Container maxWidth="lg" mt={2}> {/* Container for layout */}
-            <Grid container spacing={10} mt={2}> {/* Grid for layout */}
+        <div class="d-flex items-align-center">
+            <div class="row p-0 w-100">
 
-                {/* Left Card (Form) */}
-                <Grid item xs={12} md={6}>
-                    <div className="whiteFullCard"> {/* Left card container */}
-                        <h2 align="center">Adicionar planta</h2>
+                <div class="col m-5 whiteFullCard">
+                    
+                    <div class="h-25">
+                        <h1 align="center">Crie uma nova planta!🪴</h1>
+                        <br/>
+                        <hr class="hr hr-blurry" />
+                        <br/>
+                    </div>
+                    <div class="h-75">
                         <form onSubmit={handleSubmit}>
-                            <TextField
-                                label="Nome"
-                                name="name"
-                                fullWidth
-                                value={inputs.name}
-                                onChange={handleChange}
-                                margin="normal"
-                            />
-                            <FormControl fullWidth margin="normal">
-                                <InputLabel id="type-label">Tipo</InputLabel>
-                                <Select
-                                    labelId="type-label"
-                                    name="type"
-                                    value={inputs.type}
-                                    onChange={handleChange}
-                                >
-                                    {types.map((type) => (
-                                        <MenuItem key={type.id} value={type.id}>{type.name}</MenuItem>
-                                    ))}
+                            <table align="center" class="text-light w-75">
+                                <thead>
+                                    <tr>
+                                        <td class="text-dark">
+                                            <h2 align="left">Preencha os campos:</h2>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingName" class="form-control" type="name" name="name" onChange={handleChange} placeholder="nome"/>
+                                        <label for="floatingName">Nome</label>
+                                    </div>
 
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                label="Localização (lat, lng)"
-                                name="location"
-                                fullWidth
-                                value={inputs.location}
-                                onChange={handleChange}
-                                margin="normal"
-                                disabled // Disable direct input, get from map
-                            />
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                fullWidth
-                                sx={{ mt: 2 }}
-                            > Adicionar </Button>
+                                    <div class="form-floating mb-3">
+                                        <select id="floatingType" class="form-select p-3" aria-label="Floating label select example" name="type" onChange={handleChange}>
+                                            <option value="">Selecione um tipo</option>
+                                            {types.map((type) => 
+                                                <option key={type.id} value={type.id}>{type.name}</option>
+                                            )}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingLocation" class="form-control" type="text" name="location" value={inputs.location} onChange={handleChange} disabled/>
+                                        <label for="floatingLocation">Localização (lat, lng)</label>
+                                    </div>
+
+                                    <div align="right">
+                                        <button class="btn btn-outline-success" type="submit">
+                                            Adicionar
+                                        </button>
+                                    </div>
+                                </tbody>
+                            </table>
                         </form>
                     </div>
-                </Grid>
+                </div>
 
-                {/* Right Card (Map) */}
-                <Grid item xs={12} md={6}>
-                    <div className="whiteFullCard"> {/* Right card container */}
+                <div class="col m-5 p-3 whiteFullCard">
                         {mapCenter && (
                             <MapContainer
                                 center={mapCenter}
                                 zoom={12}
-                                style={{ height: "500px" }}
+                                style={{ height: "100%", borderRadius: "50px" }}
                             >
-                                <TileLayer
+                                <TileLayer 
                                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                 />
                                 <LocationMarker setInputs={setInputs} />
                             </MapContainer>
                         )}
-                    </div>
-                </Grid>
-            </Grid>
-        </Container>
+                </div>
+            </div>
+        </div>
     );
-
-
 }
 
 

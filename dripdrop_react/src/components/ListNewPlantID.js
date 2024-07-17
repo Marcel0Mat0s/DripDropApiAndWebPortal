@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import logo from '../images/dripdropdigital.png';
 
 // View to list the new plant ID
 export default function ListNewPlantID() {
@@ -41,15 +42,45 @@ export default function ListNewPlantID() {
     }
 
     return(
-        <div>
-            <h1>O ID da sua nova planta é:</h1>
-            <h1 id='plantId'>x</h1>
-            <p>Clique <a style={{color: 'grey'}} href='https://192.168.4.1:5000' target="_blank" rel="noopener noreferrer">aqui</a> após 
-            se conectar à rede:</p>
-            <p> DripDropDigital do dispositivo com a palavra-passe "dripdrop123#" para o configurar</p>
+        <div>  
+            <img src={logo} alt='DripDrop' style={{width: '220px'}} />
             <br/>
+            <br/>
+            <div class='container whiteCard'>
+                <table align='center'>
+                    <thead>
+                        <tr>
+                            <h1 align="left">O ID da sua nova planta é:</h1>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <h1 id='plantId'>x</h1>
+                        </tr>
+                        <tr>
+                            <p align="left">Clique <a style={{color: 'grey'}} href='https://192.168.4.1:5000' target="_blank" rel="noopener noreferrer">aqui</a> após 
+                            se conectar à seguinte rede do dispositivo:</p>
+                        </tr>
+                        <tr>
+                            <td align='left'>
+                                <p class="fw-bold w-auto">SSID - DripDropDigital</p>
+                                <p class="fw-bold w-auto">Palavra-Passe - dripdrop123#</p>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <p align="left" class="w-auto">Desta forma pode fácilmente configurar-lo e desfrutar!🫡</p>
+                        </tr>
+                        <tr align="right">
+                            <button class='btn btn-outline-success'  onClick={() => navigate('/main')}>Continuar</button>
+                        </tr>
 
-            <button class='buttonYes' onClick={() => navigate('/main')}>Continuar</button>
+                    </tbody>
+
+                    
+                </table>
+            </div>
+
         </div>
     );
 }

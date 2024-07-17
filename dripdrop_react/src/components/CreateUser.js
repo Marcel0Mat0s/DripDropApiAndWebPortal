@@ -66,24 +66,28 @@ export default function CreateUser(){
                         <br/>
                     </div>
                     <div class="h-75">
-                        <br/>
-                        <h2 align="center">Preencha os campos:</h2>
-                        <br/>
                         <form onSubmit={handleSubmit}>
-                            <table align="center" class="text-light">
+                            <table align="center" class="text-light w-75">
+                                <thead>
+                                    <tr>
+                                        <td class="text-dark">
+                                            <h2 align="left">Preencha os campos:</h2>
+                                        </td>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     <div class="form-floating mb-3">
-                                        <input id="floatingName" class="form-control" type="name" name="name" onChange={handleChange}/>
+                                        <input id="floatingName" class="form-control" type="name" name="name" onChange={handleChange} placeholder="nome"/>
                                         <label for="floatingName">Nome</label>
                                     </div>
 
                                     <div class="form-floating mb-3">
-                                        <input id="floatingEmail" class="form-control" type="email" name="email" onChange={handleChange}/>
+                                        <input id="floatingEmail" class="form-control" type="email" name="email" onChange={handleChange} placeholder="nome@example.com"/>
                                         <label for="floatingEmail">Email</label>
                                     </div>
 
                                     <div class="form-floating mb-3">
-                                        <input id="floatingPassword" class="form-control" type="password" name="password" onChange={handleChange}/>
+                                        <input id="floatingPassword" class="form-control" type="password" name="password" onChange={handleChange} placeholder="password"/>
                                         <label for="floatingPassword">Palavra-passe</label>
                                     </div>
 
