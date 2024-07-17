@@ -90,6 +90,7 @@ export default function ListStates(){
             localStorage.removeItem('userId');
             // navigates to the login page if the user is not authenticated
             navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
         });
     }
 
@@ -124,6 +125,7 @@ export default function ListStates(){
             localStorage.removeItem('userId');
             // navigates to the login page if the user is not authenticated
             navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
         });
     }
 
@@ -148,6 +150,9 @@ export default function ListStates(){
             console.log(response.data)
             // navigates to the plants list
             navigate(`/plants`);
+        }).catch(function(error){
+            console.log(error);
+            alert("Erro ao apagar a planta. Por favor tente novamente.");
         });
     }
 

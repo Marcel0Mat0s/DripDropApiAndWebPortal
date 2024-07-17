@@ -3,11 +3,11 @@ import logo from '../images/dripdropdigital.png';
 // view to display the about page
 export default function About(){
     return(
-        <div>
+        <div className="container">
             <img src={logo} alt='DripDrop' style={{width: '220px'}} />
             <br/>
             <br/>
-            <div className="whiteFullCard d-flex items-align-center">
+            <div class="whiteFullCard d-flex items-align-center">
                 <table align='center' style={{width: '70%'}}>
                     <tbody>
                         <tr>

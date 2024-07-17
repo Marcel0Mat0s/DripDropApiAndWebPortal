@@ -55,6 +55,7 @@ export default function EditUser(){
             localStorage.removeItem('userId');
             // navigates to the login page if the user is not authenticated
             navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
         });
     }
 
@@ -101,15 +102,24 @@ export default function EditUser(){
         axios.put(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/main')
-        })
-        .catch(error => {
-            console.log('Failed to update user: ', error);
-            alert('Failed to update user');
+        }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
         });
     }
 
     return(
-        <div>  
+        <div class="container">  
             <img src={logo} alt='DripDrop' style={{width: '220px'}} />
             <br/>
             <br/>

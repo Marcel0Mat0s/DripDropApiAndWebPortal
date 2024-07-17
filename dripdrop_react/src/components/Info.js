@@ -3,11 +3,11 @@ import logo from '../images/dripdropdigital.png';
 // view with the tutorial information to display
 export default function Info(){
     return(
-        <div>
+        <div class="container">
             <img src={logo} alt='DripDrop' style={{width: '220px'}} />
             <br/>
             <br/>
-            <div className="whiteFullCard" class="d-flex items-align-center whiteFullCard">
+            <div class="d-flex items-align-center whiteFullCard">
                 <table align='center' >
                     <tbody>
                         <tr>

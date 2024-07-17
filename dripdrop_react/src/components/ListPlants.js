@@ -56,31 +56,7 @@ export default function ListPlants(){
             localStorage.removeItem('userId');
             // navigates to the login page if the user is not authenticated
             navigate('/login');
-        });
-    }
-
-
-
-    /**
-     * Function to delete a plant
-     * 
-     * @param {*} id
-     * @returns
-     */
-    const deletePlant = (id) => {
-
-        // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        };
-
-        // deletes the plant from the API
-        axios.delete(`https://dripdrop.danielgraca.com/PHP-API/plants/${id}/${userId}/${id}/delete`, config).then(function(response){
-            console.log(response.data)
-            getPlants();
+            alert("Sessão expirada. Por favor faça login novamente.");
         });
     }
 
@@ -95,16 +71,16 @@ export default function ListPlants(){
     }
 
     return(
-        <div class="">
+        <div class="container">
             <img src={logo} alt='DripDrop' style={{width: '220px'}} />
             <br/>
             <div class="w-100" >
-                <button class='buttonBlue position-relative top-50 start-50 float-right' style={{marginRight: '60px', marginBottom: '10px', width:"40px", height:"40px"}} onClick={goTo("/plant/create")}>+</button>
+                <button class='buttonBlue position-relative top-50 start-50 float-right fs-4 text-center pb-2' style={{ width:"40px", height:"40px"}} onClick={goTo("/plant/create")}>+</button>
             </div>
             <div class=" w-100 whiteFullCard">
-                <div class="row" >
+                <div class="row d-flex justify-content-evenly" >
                     {plants.map((plant, key) =>
-                        <div className="blueFullBoard" class="col blueFullCard" key={key}>
+                        <div className="blueFullBoard" class="col-2 blueFullCard" key={key}>
                             <Link style={{color: '#000000', textDecoration: 'none'}} to={`/states/${plant.id}/${plant.type}/${plant.name}`} >{plant.name}</Link>
                         </div>
                     )}

@@ -47,9 +47,9 @@ export default function CreateUser(){
             localStorage.setItem('token', response.data.token);
             console.log(response.data);
             navigate('/')
-        })
-        .catch(function(error){
+        }).catch(function(error){
             console.log('Authentication failed: ',error)
+            alert('Erro ao criar a conta, por favor tente novamente mais tarde')
         })
     }
     

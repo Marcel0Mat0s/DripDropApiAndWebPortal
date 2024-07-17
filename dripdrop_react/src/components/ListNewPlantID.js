@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import logo from '../images/dripdropdigital.png';
+import { removeToken, removeUserId } from '../redux/actions';
+import { useDispatch } from 'react-redux';
 
 // View to list the new plant ID
 export default function ListNewPlantID() {
@@ -11,6 +13,9 @@ export default function ListNewPlantID() {
 
     // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
+
+    // gets the dispatch function from the redux store
+    const dispatch = useDispatch();
 
     // gets the plant ID when the page loads
     useEffect(() => {
@@ -38,6 +43,19 @@ export default function ListNewPlantID() {
             // gets the last plant ID from the response.data array and sets it in the html
             document.getElementById('plantId').innerHTML = response.data[response.data.length - 1].id;
 
+        }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
         });
     }
 
@@ -72,7 +90,7 @@ export default function ListNewPlantID() {
                             <p align="left" class="w-auto">Desta forma pode fácilmente configurar-lo e desfrutar!🫡</p>
                         </tr>
                         <tr align="right">
-                            <button class='btn btn-outline-success'  onClick={() => navigate('/main')}>Continuar</button>
+                            <button class='btn btn-outline-success'  onClick={() => navigate('/plants')}>Continuar</button>
                         </tr>
 
                     </tbody>
