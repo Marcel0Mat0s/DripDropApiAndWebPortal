@@ -28,9 +28,11 @@ export default function ListAllStates(){
 
     // initializes the state
     const [state, setState] = useState([]);
+    const [stateByDay, setStateByDay] = useState();
     const [minHumidity, setMinHumidity] = useState();
     const [maxHumidity, setMaxHumidity] = useState();
     const [minNDVI, setMinNDVI] = useState();
+    const [selectedDate, setSelectedDate] = useState('');
 
     // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
@@ -45,6 +47,20 @@ export default function ListAllStates(){
         getType();
         
     }, [plantId]);
+
+    useEffect(() => {
+        if (selectedDate) {
+            const day = selectedDate.split("-")[2];
+            const filteredStates = state.filter(item => item.date.split("-")[2] === day);
+            setStateByDay(filteredStates);
+        } else {
+            setStateByDay(state);
+        }
+    }, [selectedDate, state]);
+
+    const handleDateChange = (event) => {
+        setSelectedDate(event.target.value);
+    };
 
     /**
      * 
@@ -102,6 +118,7 @@ export default function ListAllStates(){
         axios.get( `https://dripdrop.danielgraca.com/PHP-API/states/null/${userId}/${plantId}/all`, config).then(function(response){
             console.log(response.data)
             setState(response.data)
+            setStateByDay(response.data)
         }).catch(function(error){
             console.log(error);
             // ends the session if the token is invalid
@@ -216,15 +233,14 @@ export default function ListAllStates(){
     const ndviData = {
 
         // label and data for the x-axis 
-        labels: state.map(item => item.date).reverse(),
-
+        labels: stateByDay ? stateByDay.map(item => item.date).reverse() : [],
         // datasets for the chart
         datasets: [
             {
                 // label for the y-axis
                 label: 'NDVI',
                 // data for the y-axis
-                data: state.map(item => item.ndvi).reverse(),
+                data: stateByDay ? stateByDay.map(item => item.ndvi).reverse() : [],
                 tension: 0.5,
                 fill: false,
                 backgroundColor: 'rgb(75, 192, 192)',
@@ -234,7 +250,7 @@ export default function ListAllStates(){
                 // label for the y-axis
                 label: 'Mínimo',
                 // data for the y-axis
-                data: state.map(item => minNDVI).reverse(),
+                data: stateByDay ? stateByDay.map(item => minNDVI).reverse() : [],
                 tension: 0.5,
                 fill: false,
                 backgroundColor: 'rgb(145, 14, 4)',
@@ -279,7 +295,7 @@ export default function ListAllStates(){
     const precipitationData = {
             
             // label and data for the x-axis
-            labels: state.map(item => item.date + ' ' + item.time).reverse(),
+            labels: stateByDay ? stateByDay.map(item => item.date + ' ' + item.time).reverse() : [],
     
             // datasets for the chart
             datasets: [
@@ -287,7 +303,7 @@ export default function ListAllStates(){
                     // label for the y-axis
                     label: 'Precipitação',
                     // data for the y-axis
-                    data: state.map(item => item.precipitation).reverse(),
+                    data: stateByDay ? stateByDay.map(item => item.precipitation).reverse() : [],
                     tension: 0.5,
                     fill: true,
                     backgroundColor: 'rgb(75, 192, 192)',
@@ -334,7 +350,7 @@ export default function ListAllStates(){
     const temperatureData = {
                     
                 // label and data for the x-axis 
-                labels: state.map(item => item.date + ' ' + item.time).reverse(),
+                labels: stateByDay ? stateByDay.map(item => item.date + ' ' + item.time).reverse() : [],
             
                 // datasets for the chart
                 datasets: [
@@ -342,7 +358,7 @@ export default function ListAllStates(){
                     // label for the y-axis
                     label: 'Humidade do Solo',
                     // data for the y-axis
-                    data: state.map(item => item.humidity_soil).reverse(),
+                    data: stateByDay ? stateByDay.map(item => item.humidity_soil).reverse() : [],
                     tension: 0.5,
                     backgroundColor: 'rgb(75, 192, 192, 1)',
                     borderColor: 'rgba(75, 192, 192, 0.2)',
@@ -352,7 +368,7 @@ export default function ListAllStates(){
                     // label for the y-axis
                     label: 'Temperatura',
                     // data for the y-axis
-                    data: state.map(item => item.temperature).reverse(),
+                    data: stateByDay ? stateByDay.map(item => item.temperature).reverse() : [],
                     tension: 0.5,
                     backgroundColor: 'rgb(192, 75, 75, 1)',
                     borderColor: 'rgba(192, 75, 75, 0.2)',
@@ -362,7 +378,7 @@ export default function ListAllStates(){
                     // label for the y-axis
                     label: 'H. Min.',
                     // data for the y-axis
-                    data: state.map(item => minHumidity).reverse(),
+                    data: stateByDay ? stateByDay.map(item => minHumidity).reverse() : [],
                     tension: 0.5,
                     backgroundColor: 'rgb(145, 14, 4, 1)',
                     borderColor: 'rgba(145, 14, 4, 1)',
@@ -374,7 +390,7 @@ export default function ListAllStates(){
                     // label for the y-axis
                     label: 'H. Max.',
                     // data for the y-axis
-                    data: state.map(item => maxHumidity).reverse(),
+                    data: stateByDay ? stateByDay.map(item => maxHumidity).reverse() : [],
                     tension: 0.5,
                     backgroundColor: 'rgb(14, 110, 14, 1)',
                     borderColor: 'rgba(14, 110, 14, 1)',
@@ -419,19 +435,19 @@ export default function ListAllStates(){
      */
     const irrigationData = {
         // label and data for the x-axis
-        labels: state.map(item => item.date + ' ' + item.time).reverse(),
+        labels: stateByDay ? stateByDay.map(item => item.date + ' ' + item.time).reverse() : [],
 
         // datasets for the chart
         datasets: [
             {
                 label: 'Irrigação ON',
-                data: state.map(state => (state.irrigation === 'ON' ? 1 : 0)),
+                data: stateByDay ? stateByDay.map(state => (state.irrigation === 'ON' ? 1 : 0)) : [],
                 backgroundColor: 'rgba(75, 192, 192, 1)',
                 stack: 'irrigation',
             },
             {
                 label: 'Irrigação OFF',
-                data: state.map(state => (state.irrigation === 'OFF' ? 1 : 0)),
+                data: stateByDay ? stateByDay.map(state => (state.irrigation === 'OFF' ? 1 : 0)) : [],
                 backgroundColor: 'rgba(192, 75, 75, 1)',
                 stack: 'irrigation',
             },
@@ -478,7 +494,7 @@ export default function ListAllStates(){
     const windSpeedData = {
 
         // label and data for the x-axis
-        labels: state.map(item => item.date + ' ' + item.time).reverse(),
+        labels: stateByDay ? stateByDay.map(item => item.date + ' ' + item.time).reverse() : [],
 
         // datasets for the chart
         datasets: [
@@ -486,7 +502,7 @@ export default function ListAllStates(){
                 // label for the y-axis
                 label: 'Velocidade do Vento',
                 // data for the y-axis
-                data: state.map(item => item.wind_speed).reverse(),
+                data: stateByDay ? stateByDay.map(item => item.wind_speed).reverse() : [],
                 tension: 0.5,
                 fill: false,
                 backgroundColor: 'rgb(75, 192, 192)',
@@ -530,7 +546,7 @@ export default function ListAllStates(){
     const ndviHumiditySoilData = {
 
         // label and data for the x-axis
-        labels: state.map(item => item.date + ' ' + item.time).reverse(),
+        labels: stateByDay ? stateByDay.map(item => item.date + ' ' + item.time).reverse() : [],
 
         // datasets for the chart
         datasets: [
@@ -538,7 +554,7 @@ export default function ListAllStates(){
                 // label for the y-axis
                 label: 'Humidade do Solo',
                 // data for the y-axis
-                data: state.map(item => item.humidity_soil).reverse(),
+                data: stateByDay ? stateByDay.map(item => item.humidity_soil).reverse() : [],
                 tension: 0.5,
                 fill: false,
                 backgroundColor: 'rgb(75, 192, 192)',
@@ -548,7 +564,7 @@ export default function ListAllStates(){
                 // label for the y-axis
                 label: 'NDVI',
                 // data for the y-axis
-                data: state.map(item => item.ndvi).reverse(),
+                data: stateByDay ? stateByDay.map(item => item.ndvi).reverse() : [],
                 tension: 0.5,
                 fill: false,
                 backgroundColor: 'rgb(192, 75, 75)',
@@ -585,8 +601,9 @@ export default function ListAllStates(){
 
     return(
         <div class="w-100" style={{padding: '12px', alignContent: 'center'}}>
-            <div class="d-flex justify-content-between m-2">
+            <div class="d-flex justify-content m-2">
                 <button class='btn btn-outline-success' onClick={() => toExcel(state)} style={{ align: "left", paddingLeft: "12px" }}>Transferir</button>
+                <input id="dia" type="date" class="form-control" placeholder="Pesquisar" style={{width: '200px', align: "left", marginLeft: "12px"}} onChange={handleDateChange}/>
             </div>
             <div class="row w-100 d-flex justify-content-between" style={{padding: '12px', height:"80vh"}}>
 

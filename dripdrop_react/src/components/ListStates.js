@@ -27,7 +27,7 @@ export default function ListStates(){
 
     // gets the dispatch function from the redux store
     const dispatch = useDispatch();
-    
+
     // gets the plant state from the API when the page loads
     useEffect(() => {
         
@@ -35,6 +35,7 @@ export default function ListStates(){
         const interval = setInterval(() => {
             getState();
             verifyState();
+            averageNDVI();
         }, 60000); // 60 seconds
 
         getState(); 
@@ -42,6 +43,46 @@ export default function ListStates(){
         // Clear interval on component unmount
         return () => clearInterval(interval);
     }, [plantId]);
+
+    /**
+     * Function to calculate the average NDVI of the day
+     * 
+     */
+    function averageNDVI(date) {
+        // Check if the date is defined before proceeding
+        if (!date) {
+            console.error("Date is undefined");
+            return 0; // Return 0 or some default value if date is undefined
+        }
+    
+        // gets just the day from the date
+        console.log(date);
+        const day = date.split("-")[2];
+        console.log(day);
+    
+        // initializes the sum and the count
+        let sum = 0;
+        let count = 0;
+    
+        // iterates through the states
+        state.forEach((element) => {
+            // gets the day from the date
+            const dayState = element.date.split(" ")[0].split("-")[2];
+    
+            // if the day of the state is the same as the state displayed, adds the NDVI to the sum
+            if(day === dayState){
+                sum += element.ndvi;
+                count++;
+            }
+        });
+
+        // calcilates the average NDVI of the day with 2 decimal places
+        sum = sum/count;
+        sum = sum.toFixed(3);
+    
+        // returns the average NDVI
+        return sum;
+    }
 
     /**
      * Function to verify the state of the plant
@@ -244,6 +285,16 @@ export default function ListStates(){
                                 </div>
                                 <div class="h-50 py-3" style={{ alignContent: "center"}}>
                                     <h3 id="NDVI">{state[currentIndex].ndvi}</h3>
+                                </div>
+                            </div>
+
+                            <div class="col-auto whiteCard m-2" style={{ alignContent: "center"}}>
+                                <div class="h-50" style={{ alignContent: "center"}}>
+                                    <h3 class="mx-5 my-0 fs-4">NDVI diário</h3>
+                                    <hr class=" w-100 hr hr-blurry my-1" />
+                                </div>
+                                <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                    <h3 id="NDVI">{averageNDVI(state[currentIndex].date)}</h3>
                                 </div>
                             </div>
 
