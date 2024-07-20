@@ -111,7 +111,6 @@ function App() {
             </div>
           </div>
         </nav>
-        <br/>
         <Routes>
           <Route index element={<Home/>} />
           <Route path="user/create" element={<CreateUser/>} />

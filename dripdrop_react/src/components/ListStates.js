@@ -21,6 +21,9 @@ export default function ListStates(){
     // initializes the state
     const [state, setState] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [maxHumiditySoil, setMaxHumiditySoil] = useState(0);
+    const [minHumiditySoil, setMinHumiditySoil] = useState(0);
+    const [minNDVI, setMinNDVI] = useState(0);
 
     // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
@@ -34,15 +37,18 @@ export default function ListStates(){
         // gets the plant state from the API every 20 seconds
         const interval = setInterval(() => {
             getState();
-            verifyState();
             averageNDVI();
-        }, 60000); // 60 seconds
+        }, 300000);
 
         getState(); 
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
     }, [plantId]);
+
+    useEffect(() => {
+        verifyState();
+    }, [state]);
 
     /**
      * Function to calculate the average NDVI of the day
@@ -89,6 +95,9 @@ export default function ListStates(){
      * 
      */
     function verifyState(){
+
+        console.log("HEY");
+
         // if there are no states, returns
         if(state.length === 0){
             return;
@@ -106,7 +115,11 @@ export default function ListStates(){
         axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/${plantType}/${userId}`, config).then(function(response){
             const minHumiditySoil = response.data.min_humidity;
             const maxHumiditySoil = response.data.max_humidity;
-            const minNDVI = response.data.min_ndvi;
+            const minNDVI = response.data.min_NDVI;
+
+            setMinHumiditySoil(minHumiditySoil);
+            setMaxHumiditySoil(maxHumiditySoil);
+            setMinNDVI(minNDVI);
 
             // if the current humidity is below the plant type minimum humidity, sends an alert
             if( state[currentIndex].humidity_soil < minHumiditySoil){
@@ -223,133 +236,194 @@ export default function ListStates(){
             <div class=" w-100 d-flex justify-content-between">
                 <h1 style={{ textAlign: "left", paddingLeft: "12px" }}>{plantName}</h1>
             </div>
-            <br/>
-            <div class="container w-100">
-                <div class="row w-100">
+            <div class="container w-100 ">
+                <div class="row w-100 d-flex justify-content-center">
                     {state.length > 0 && (
                         <>
-                            <div class="col-auto whiteCard m-2" style={{alignContent: "center"}}>
-                                <div class="row h-100 d-flex justify-content-between">
-                                    <td class="w-auto" style={{alignContent: "center"}}>
-                                        <h3 class="fs-4">Temperatura</h3>
+                            <div class="col p-1" style={{alignContent: "center"}}>
+                                <div class="h-100  d-flex justify-content-between" style={{ alignContent: "center"}}>
+                                    <td style={{alignContent: "center"}}>
+                                        <a class="blueBallCard fw-bold fs-4 text-center" onClick={handlePrev}>&#8249;</a>
                                     </td>
-                                    <td class="w-auto">
-                                        <vr class="h-100 vr vr-blurry"></vr>
-                                    </td>
-                                    <td class="w-auto" style={{alignContent: "center"}}>
-                                        <h3>{state[currentIndex].temperature}</h3>
+                                    <td style={{alignContent: "center"}}>
+                                        <a class="blueBallCard fw-bold fs-4 text-center" onClick={handleNext}>&#8250;</a>
                                     </td>
                                 </div>
                             </div>
-                            <div class="col-auto whiteCard m-2">
-                                <div class="h-50" style={{ alignContent: "center"}}>
-                                    <h3 class="fs-4">Humidade do Ar</h3>
-                                    <hr class=" w-100 hr hr-blurry my-1" />
+
+                            <div class="col p-1">
+                                <button class="btn btn-outline-info h-100 w-100" style={{borderRadius: "25px"}} onClick={() => navigate(`/states/all/${plantId}/${plantType}`)}>Gráficos</button>
+                            </div>
+                            <div class="col p-1">
+                                <button class="w-100 btn btn-outline-danger h-100" style={{borderRadius:"25px"}} onClick={() => deletePlant(plantId)}>Apagar</button>
+                            </div>
+                            <div class="col p-1">
+                                <button class="w-100 btn btn-outline-success h-100" style={{borderRadius:"25px"}} onClick={() => navigate(`/plant/${plantId}/edit`)}>Editar</button>
+                            </div>
+
+                            <div class="w-100"></div>
+
+                            <div class="col p-1" style={{alignContent: "center"}}>
+                                <div class="whiteCard h-100 " style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="fs-4">Temperatura</h3>
+                                        <hr class=" w-100 hr hr-blurry" />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3>{state[currentIndex].temperature}</h3>
+                                    </div>
                                 </div>
-                                <div class="h-50 py-3" style={{ alignContent: "center"}}>
-                                    <h3>{state[currentIndex].humidity_air}</h3>
+                            </div>
+                            <div class="col p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="fs-4">Humidade do Ar</h3>
+                                        <hr class=" w-100 hr hr-blurry " />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3>{state[currentIndex].humidity_air}</h3>
+                                    </div>
                                 </div>    
                             </div>
-                            <div class="col-auto whiteCard m-2">
-                                <div class="h-50" style={{ alignContent: "center"}}>
-                                    <h3 class="fs-4">Direção do Vento</h3>
-                                    <hr class=" w-100 hr hr-blurry my-1" />
-                                </div>
-                                <div class="h-50 py-3" style={{ alignContent: "center"}}>
-                                    <h3>{state[currentIndex].wind_direction}</h3>
-                                </div>
-                            </div>
-                            <div class="col-auto whiteCard m-2">
-                                <div class="h-50" style={{ alignContent: "center"}}>
-                                    <h3 class="mx-5 my-0 fs-4">Data e Hora</h3>
-                                    <hr class=" w-100 hr hr-blurry my-1" />
-                                </div>
-                                <div class="h-50 py-3" style={{ alignContent: "center"}}>
-                                    <h3>{state[currentIndex].date} ás {state[currentIndex].time}</h3>
-                                </div>
-                            </div>
-                            
-                            <div class="col p-0 m-2" style={{ alignContent: "center"}}>
-                                <div style={{ alignContent: "center",}}>
-                                    <button class=" btn btn-outline-info" style={{borderRadius:"50%", width: "15vh", height: "15vh" }} onClick={() => navigate(`/states/all/${plantId}/${plantType}`)}>Gráficos</button>
-                                </div>
-                            </div>
-                            
-
-                            <div class="w-100"></div>
-
-                            <div class="col-auto whiteCard m-2" style={{ alignContent: "center"}}>
-                                <div class="h-50" style={{ alignContent: "center"}}>
-                                    <h3 class="mx-5 my-0 fs-4">NDVI</h3>
-                                    <hr class=" w-100 hr hr-blurry my-1" />
-                                </div>
-                                <div class="h-50 py-3" style={{ alignContent: "center"}}>
-                                    <h3 id="NDVI">{state[currentIndex].ndvi}</h3>
-                                </div>
-                            </div>
-
-                            <div class="col-auto whiteCard m-2" style={{ alignContent: "center"}}>
-                                <div class="h-50" style={{ alignContent: "center"}}>
-                                    <h3 class="mx-5 my-0 fs-4">NDVI diário</h3>
-                                    <hr class=" w-100 hr hr-blurry my-1" />
-                                </div>
-                                <div class="h-50 py-3" style={{ alignContent: "center"}}>
-                                    <h3 id="NDVI">{averageNDVI(state[currentIndex].date)}</h3>
-                                </div>
-                            </div>
-
-                            <div class="col-auto whiteCard m-2">
-                                <div class="row h-100 d-flex justify-content-between">
-                                    <td class="w-auto" style={{alignContent: "center"}}>
+                            <div class="col p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
                                         <h3 class="fs-4">Velocidade do Vento</h3>
-                                    </td>
-                                    <td class="w-auto">
-                                        <vr class="h-100 vr vr-blurry"></vr>
-                                    </td>
-                                    <td class="w-auto" style={{alignContent: "center"}}>
+                                        <hr class="h-100 hr hr-blurry"></hr>
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
                                         <h3>{state[currentIndex].wind_speed}</h3>
-                                    </td>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-auto whiteCard m-2">
-                                <div class="row h-100 d-flex justify-content-between">
-                                    <td class="w-auto" style={{alignContent: "center"}}>
-                                        <h3 class="fs-4">Precipitação</h3>
-                                    </td>
-                                    <td class="w-auto">
-                                        <vr class="h-100 vr vr-blurry"></vr>
-                                    </td>
-                                    <td class="w-auto" style={{alignContent: "center"}}>
-                                        <h3>{state[currentIndex].precipitation}</h3>
-                                    </td>
-                                </div>
-                            </div>
-                            <div class="col whiteCard m-2">
-                                <div class="h-50" style={{ alignContent: "center"}}>
-                                    <h3 class="fs-4">Humidade do Solo</h3>
-                                    <hr class=" w-100 hr hr-blurry my-1" />
-                                </div>
-                                <div class="h-50 py-3" style={{ alignContent: "center"}}>
-                                    <h3 id="humiditySoil">{state[currentIndex].humidity_soil}</h3>
+                            <div class="col p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="fs-4">Direção do Vento</h3>
+                                        <hr class=" w-100 hr hr-blurry " />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3>{state[currentIndex].wind_direction}</h3>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="w-100"></div>
 
-                            <div class="col-6 whiteCard m-2">
-                                <img src={formatImageSrc(state[currentIndex].image)} alt="Imagem" class="w-100" style={{borderRadius:"15px"}}/>
+                            <div class="col p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="mx-5 my-0 fs-4">Data e Hora</h3>
+                                        <hr class="w-100 hr hr-blurry" />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3>{state[currentIndex].date} às {state[currentIndex].time}</h3>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-auto m-2" style={{ alignContent: "center"}}>
-                                <div class="h-50">
-                                    <div class="row whiteCard d-flex justify-content-between">
-                                        <td class="w-auto" style={{ alignContent: "center", padding: "12% 5px 12% 5px"}}>
+                            
+                            <div class="col p-1" style={{ alignContent: "center"}}>
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="my-0 fs-4">NDVI</h3>
+                                        <hr class=" w-100 hr hr-blurry " />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3 id="NDVI">{state[currentIndex].ndvi}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-1" style={{ alignContent: "center"}}>
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="my-0 fs-4">NDVI Diário</h3>
+                                        <hr class=" w-100 hr hr-blurry" />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3 id="NDVI">{averageNDVI(state[currentIndex].date)}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-1" style={{ alignContent: "center"}}>
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="my-0 fs-4">NDVI Mínimo</h3>
+                                        <hr class=" w-100 hr hr-blurry" />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3 id="NDVI">{minNDVI}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="w-100"></div>
+
+                            <div class="col p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="fs-4">Humidade Mínima</h3>
+                                        <hr class=" w-100 hr hr-blurry " />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3 id="humiditySoil">{minHumiditySoil}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="fs-4">Humidade do Solo</h3>
+                                        <hr class=" w-100 hr hr-blurry " />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3 id="humiditySoil">{state[currentIndex].humidity_soil}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="fs-4">Humidade Máxima</h3>
+                                        <hr class=" w-100 hr hr-blurry "/>
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3 id="humiditySoil"> {maxHumiditySoil}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="h-50" style={{ alignContent: "center"}}>
+                                        <h3 class="fs-4">Precipitação</h3>
+                                        <hr class=" w-100 hr hr-blurry" />
+                                    </div>
+                                    <div class="h-50 py-3" style={{ alignContent: "center"}}>
+                                        <h3>{state[currentIndex].precipitation}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="w-100"></div>
+
+                            <div class="col-8 p-1">
+                                <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <img src={formatImageSrc(state[currentIndex].image)} alt="Imagem" class="w-100" style={{borderRadius:"15px"}}/>
+                                </div>
+                            </div>
+                            <div class="col p-0 m-0" style={{ alignContent: "center"}}></div>
+                            <div class="col-auto p-0" style={{ alignContent: "center"}}>
+
+                                <div class="h-50 p-1" style={{ alignContent: "center"}}>
+                                    <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                    <div class="row d-flex justify-content-between">
+                                        <td class="w-auto" style={{ alignContent: "center"}}>
                                             <h2 class="fs-4">Rega</h2>
                                         </td>
                                         <td class="w-auto">
                                             <vr class="h-100 vr vr-blurry"></vr>
                                         </td>
                                         <td class="w-auto" style={{ alignContent: "center"}}>
-                                            <h2>{state[currentIndex].irrigation}</h2>
+                                            <h2 class="fs-4">{state[currentIndex].irrigation}</h2>
                                         </td>
                                         <td class="w-auto" style={{ alignContent: "center"}}>
                                             <label class="switch">
@@ -361,44 +435,32 @@ export default function ListStates(){
                                             </label>
                                         </td>
                                     </div>
+                                    </div>
                                 </div>
-                                <div class="h-50">
-                                    <div class="row whiteCard d-flex justify-content-between">
-                                        <td class="w-auto" style={{ alignContent: "center", padding: "12% 0px 12% 0px"}}>
-                                            <h2 class="fs-4">Modo</h2>
-                                        </td>
-                                        <td class="w-auto">
-                                            <vr class="h-100 vr vr-blurry"></vr>
-                                        </td>
-                                        <td class="w-auto" style={{ alignContent: "center"}}>
-                                            <h2>Automatico</h2>
-                                            
-                                        </td>
-                                        <td class="w-auto" style={{ alignContent: "center"}}>
-                                            <label class="switch">
-                                                <input type="checkbox" disabled={currentIndex !== 0} checked={true}/>
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </td>
+                                <div class="h-50 p-1" style={{ alignContent: "center"}}>
+                                    <div class="whiteCard h-100" style={{ alignContent: "center"}}>
+                                        <div class="row d-flex justify-content-between">
+                                            <td class="w-auto" style={{ alignContent: "center"}}>
+                                                <h2 class="fs-4">Modo</h2>
+                                            </td>
+                                            <td class="w-auto">
+                                                <vr class="h-100 vr vr-blurry"></vr>
+                                            </td>
+                                            <td class="w-auto" style={{ alignContent: "center"}}>
+                                                <h2 class="fs-4">Automatico</h2>
+                                            </td>
+                                            <td class="w-auto" style={{ alignContent: "center"}}>
+                                                <label class="switch">
+                                                    <input type="checkbox" disabled={currentIndex !== 0} checked={true}/>
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </td>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </>
                     )}
-                    <div class="col m-2">
-                        <div class="h-50">
-                            <div class="w-100 h-auto whiteCard" style={{ alignContent: "center", padding: "12% 5px 12% 5px"}}>
-                                <button class="w-100 btn btn-outline-danger my-2" onClick={() => deletePlant(plantId)}>Apagar</button>
-                                <button class="w-100 btn btn-outline-success my-1" onClick={() => navigate(`/plant/${plantId}/edit`)}>Editar</button>
-                            </div>
-                        </div>
-                        <div class="h-50">
-                            <div class="w-100 d-flex justify-content-around" style={{ padding: "0px 5px 0px 5px"}}>
-                                <a class="blueBallCard fw-bold fs-4 text-center" onClick={handlePrev}>&#8249;</a>
-                                <a class="blueBallCard fw-bold fs-4 text-center" onClick={handleNext}>&#8250;</a>
-                            </div>
-                        </div>
-                    </div>  
                 </div>
             </div>
         </div>  

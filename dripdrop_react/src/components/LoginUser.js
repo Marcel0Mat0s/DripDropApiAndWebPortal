@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken, removeToken, setUserId, removeUserId } from './../redux/actions';
 import logo from '../images/dripdropdigital.png';
 
 // View to login a user
-export default function LoginUser(){
+export default function LoginUser() {
 
     // initializes the navigate function
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ export default function LoginUser(){
         const value = event.target.value;
 
         // sets the new value in the inputs state
-        setInputs(values => ({...values, [name]: value}));
+        setInputs(values => ({ ...values, [name]: value }));
     }
 
     /**
@@ -52,11 +52,11 @@ export default function LoginUser(){
      * @param {*} email 
      * @param {*} password 
      */
-    const login = async(email, password) => {
+    const login = async (email, password) => {
         try {
 
             // Send a POST request to the server
-            const response = await axios.post('https://dripdrop.danielgraca.com/PHP-API/login', {email, password});
+            const response = await axios.post('https://dripdrop.danielgraca.com/PHP-API/login', { email, password });
 
             // Get the token and user id from the response
             const token = response.data.token;
@@ -74,7 +74,7 @@ export default function LoginUser(){
 
             // Redirect to the main page
             navigate('/plants');
-            
+
         } catch (error) {
             console.log('Authentication failed: ', error);
             alert("Email ou palavra-passe incorretos");
@@ -88,83 +88,109 @@ export default function LoginUser(){
      * @returns 
      */
     const navigateTo = (path) => {
-        return function(){
+        return function () {
             navigate(path);
-        } 
+        }
     }
 
-    return(
-        <div class="d-flex items-align-center">
-            <div class="row p-0 w-100">
-                
-                <div className="whiteFullCard" class="col m-5 whiteFullCard">
+    /**
+     * Function to show the password
+     */
+    function myFunction() {
+        try {
+            var x = document.getElementById("floatingPassword");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        } catch (error) {
+            console.log('Error: ', error);
+        }
+    }
 
-                    <div class="h-25">
+    return (
+        <div className="d-flex items-align-center">
+            <div className="row p-0 w-100">
+
+                <div className="col m-5 whiteFullCard">
+
+                    <div className="h-25">
                         <h1 align="center">Entre na sua conta DripDrop!</h1>
-                        <br/>
+                        <br />
 
-                        <hr class="hr hr-blurry" />
-                        <br/>
+                        <hr className="hr hr-blurry" />
+                        <br />
                     </div>
-                    
-                    <form class="h-75" onSubmit={handleSubmit}>
-                        <br/>
-                        <table align="center" class="text-light w-75">
+
+                    <form className="h-75" onSubmit={handleSubmit}>
+                        <br />
+                        <table align="center" className="text-light w-75">
                             <thead>
                                 <tr>
-                                    <td class="text-dark">
+                                    <td className="text-dark">
                                         <h2 align="left">Inicie Sessão:</h2>
                                     </td>
                                 </tr>
-                                <br/>
                             </thead>
-                            <tbody>
-                                <div class="form-floating mb-3">
-                                    <input id="floatingEmail" class="form-control" type="email" name="email" placeholder="name@example.com" onChange={handleChange}/>
-                                    <label for="floatingEmail">Email</label>
-                                </div>
-                                
-                                <div class="form-floating mb-3">
-                                    <input id="floatingPassword" class="form-control" type="password" name="password" placeholder="Password" onChange={handleChange}/>
-                                    <label for="floatingPassword">Palavra-passe</label>
-                                </div>
-                                
-                                <div colSpan="2" align="right">
-                                    <button class="btn btn-outline-success">Iniciar Sessão</button>
-                                </div>
-                                
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-                <div className="whiteFullCard" class="col m-5 whiteFullCard">
-                    <div class="h-25">
-                        <h1 align="center">Ainda não tem conta? 😢</h1>
-                        <br/>
-                        <hr class="hr hr-blurry" />
-                        <br/>
-                    </div>
-                    <div class="h-75">
-                        <br/>
-                        <table align="center" class="w-75">
                             <tbody>
                                 <tr>
                                     <td>
-                                        <h2 align="left">Registe-se já!</h2>
-                                        <br/>
-                                        <p align='left'>Crie a sua conta DripDrop e comece já a monitorizar as suas plantas!</p>
-                                        <br/>
+                                        <div className="form-floating mb-3">
+                                            <input id="floatingEmail" className="form-control" type="email" name="email" placeholder="name@example.com" onChange={handleChange} />
+                                            <label htmlFor="floatingEmail">Email</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div className="form-floating mb-3">
+                                            <input id="floatingPassword" className="form-control" type="password" name="password" placeholder="Password" onChange={handleChange} />
+                                            <label htmlFor="floatingPassword">Palavra-passe</label>
+                                            <div className="form-check d-flex justify-content-start" >
+                                                <input className="form-check-input" type="checkbox" onClick={myFunction}/>
+                                                <label className="text-dark fw-bold">Mostrar Palavra-passe</label>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="right">
-                                        <button class="btn btn-outline-success" align="end" onClick={navigateTo("/user/create")}>Criar Conta</button>
+                                        <button className="btn btn-outline-success">Iniciar Sessão</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div className="col m-5 whiteFullCard">
+                    <div className="h-25">
+                        <h1 align="center">Ainda não tem conta? 😢</h1>
+                        <br />
+                        <hr className="hr hr-blurry" />
+                        <br />
+                    </div>
+                    <div className="h-75">
+                        <br />
+                        <table align="center" className="w-75">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h2 align="left">Registe-se já!</h2>
+                                        <br />
+                                        <p align='left'>Crie a sua conta DripDrop e comece já a monitorizar as suas plantas!</p>
+                                        <br />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <button className="btn btn-outline-success" align="end" onClick={navigateTo("/user/create")}>Criar Conta</button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>  
+                </div>
             </div>
         </div>
     )

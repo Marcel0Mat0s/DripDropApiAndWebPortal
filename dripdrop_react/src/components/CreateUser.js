@@ -52,6 +52,24 @@ export default function CreateUser(){
             alert('Erro ao criar a conta, por favor tente novamente mais tarde')
         })
     }
+
+    /**
+     * Function to show the password
+     * 
+     * @returns
+     */
+    function myFunction() {
+        try{
+            var x = document.getElementById("floatingPassword");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        } catch (error){
+            console.log('Error: ', error)
+        }
+    }
     
     return(
         <div class="d-flex items-align-center">
@@ -89,6 +107,10 @@ export default function CreateUser(){
                                     <div class="form-floating mb-3">
                                         <input id="floatingPassword" class="form-control" type="password" name="password" onChange={handleChange} placeholder="password"/>
                                         <label for="floatingPassword">Palavra-passe</label>
+                                        <div className="form-check d-flex justify-content-start" >
+                                            <input className="form-check-input" type="checkbox" onClick={myFunction}/>
+                                            <label className="text-dark fw-bold">Mostrar Palavra-passe</label>
+                                        </div>
                                     </div>
 
                                     <tr>
