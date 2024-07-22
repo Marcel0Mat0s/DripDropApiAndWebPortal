@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import axios from "axios";
 import { useNavigate, useParams} from "react-router-dom";
 import * as XLSX from 'xlsx';
@@ -25,6 +25,8 @@ export default function ListAllStates(){
     const {plantId} = useParams();
     // gets the plant type from the URL
     const {plantType} = useParams();
+    // gets the plant name from the URL
+    const {plantName} = useParams();
 
     // initializes the state
     const [state, setState] = useState([]);
@@ -33,6 +35,8 @@ export default function ListAllStates(){
     const [maxHumidity, setMaxHumidity] = useState();
     const [minNDVI, setMinNDVI] = useState();
     const [selectedDate, setSelectedDate] = useState('');
+
+    const chartRefs = useRef([]);
 
     // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
@@ -44,7 +48,6 @@ export default function ListAllStates(){
     useEffect(() => {
         
         getAllState();
-        getType();
         
     }, [plantId]);
 
@@ -61,43 +64,6 @@ export default function ListAllStates(){
     const handleDateChange = (event) => {
         setSelectedDate(event.target.value);
     };
-
-    /**
-     * 
-     * Function to get the type of a plant from the API
-     * 
-     */
-    function getType(){
-            
-            // gets the token from local storage and sets it in the headers
-            const token = localStorage.getItem('token');
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            };
-    
-            // gets the plant type from the API
-            axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/${plantType}/${userId}`, config).then(function(response){
-                console.log(response.data)
-                setMinHumidity(response.data.min_humidity);
-                setMaxHumidity(response.data.max_humidity);
-                setMinNDVI(response.data.min_NDVI);
-            }).catch(function(error){
-                console.log(error);
-                // ends the session if the token is invalid
-                // Remove the token from the redux store and local storage
-                dispatch(removeToken());
-                localStorage.removeItem('token');
-    
-                // Remove the user id from the redux store and local storage
-                dispatch(removeUserId());
-                localStorage.removeItem('userId');
-                // navigates to the login page if the user is not authenticated
-                navigate('/login');
-                alert("Sessão expirada. Por favor faça login novamente.");
-            });
-    }
 
     /**
      * Function to get all the states of a plant from the API
@@ -119,6 +85,27 @@ export default function ListAllStates(){
             console.log(response.data)
             setState(response.data)
             setStateByDay(response.data)
+        }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
+        });
+
+        // gets the plant type from the API
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/${plantType}/${userId}`, config).then(function(response){
+            console.log(response.data)
+            setMinHumidity(response.data.min_humidity);
+            setMaxHumidity(response.data.max_humidity);
+            setMinNDVI(response.data.min_NDVI);
         }).catch(function(error){
             console.log(error);
             // ends the session if the token is invalid
@@ -219,6 +206,30 @@ export default function ListAllStates(){
         });
 
     }    
+
+    /**
+     * Function to make the div with full width (makes him col-12)
+     * 
+     * @param {*} event
+     * @returns
+     */
+    function fullScreen(event){
+        const target = event.currentTarget;
+        const isFullScreen = target.classList.contains('col-12');
+        const parentElement = target.parentElement;
+        target.classList.toggle('col-12');
+        if (isFullScreen) {
+            // Reset height if already full screen
+            target.style.height = '40vh';
+        } else {
+            // Set height to 80vh if not full screen
+            target.style.height = '80vh';
+        }
+
+        // Move the clicked div to the top of its parent container
+        parentElement.insertBefore(target, parentElement.firstChild);
+    }
+
     
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////// CHARTS ////////////////////////////////////////////
@@ -267,6 +278,8 @@ export default function ListAllStates(){
      */
     const ndviOptions = {
         scales: {
+            responsive: true,
+            maintainAspectRatio: false,
             x: {
                 title: {
                     display: true,
@@ -320,6 +333,8 @@ export default function ListAllStates(){
      * */
     const precipitationOptions = {
         scales: {
+            responsive: true,
+            maintainAspectRatio: false,
             x: {
                 stacked: true,
                 title: {
@@ -408,6 +423,8 @@ export default function ListAllStates(){
      */
     const temperatureOptions = {
         scales: {
+            responsive: true,
+            maintainAspectRatio: false,
             x: {
                 title: {
                     display: true,
@@ -461,6 +478,8 @@ export default function ListAllStates(){
      */
     const irrigationOptions = {
         scales: {
+            responsive: true,
+            maintainAspectRatio: false,
             x: {
                 stacked: true,
                 title: {
@@ -518,6 +537,8 @@ export default function ListAllStates(){
      */
     const windSpeedOptions = {
         scales: {
+            responsive: true,
+            maintainAspectRatio: false,
             x: {
                 title: {
                     display: true,
@@ -580,6 +601,8 @@ export default function ListAllStates(){
      **/
     const ndviHumiditySoilOptions = {
         scales: {
+            responsive: true,
+            maintainAspectRatio: false,
             x: {
                 title: {
                     display: true,
@@ -599,38 +622,122 @@ export default function ListAllStates(){
     };
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                title: { display: true, text: 'Data e Hora' },
+                ticks: { display: false }
+            },
+            y: {
+                title: { display: false },
+            },
+        },
+    };
+
+    const createChartData = (label, dataPoints, label2, dataPoints2 = [], minData , maxData) => ({
+        labels: stateByDay ? stateByDay.map(item => item.date + ' ' + item.time).reverse() : [],
+        datasets: [
+            {
+                label,
+                data: stateByDay ? dataPoints.reverse() : [],
+                tension: 0.5,
+                fill: false,
+                backgroundColor: 'rgb(75, 192, 192)',
+                borderColor: 'rgba(75, 192, 192, 0.2)',
+            },
+            ...(dataPoints2.length ? [{
+                label: label2,
+                data: stateByDay ? dataPoints2.reverse() : [],
+                tension: 0.5,
+                fill: false,
+                backgroundColor: 'rgb(192, 75, 75)',
+                borderColor: 'rgba(192, 75, 75, 0.2)',
+            }] : []),
+            ...(typeof minData != 'undefined' ? [{
+                label: 'Mínimo',
+                // mindata is a number
+                data: stateByDay ? minData.reverse() : [],
+                tension: 0.5,
+                fill: false,
+                backgroundColor: 'rgb(145, 14, 4)',
+                borderColor: 'rgba(145, 14, 4)',
+                pointRadius: 0,
+                pointHoverRadius: 0,
+            }] : []),
+            ...(typeof maxData != 'undefined' ? [{
+                label: 'Máximo',
+                data: stateByDay ? maxData.reverse() : [],
+                tension: 0.5,
+                fill: false,
+                backgroundColor: 'rgb(14, 110, 14)',
+                borderColor: 'rgba(14, 110, 14)',
+                pointRadius: 0,
+                pointHoverRadius: 0,
+            }] : []),
+        ],
+    });
+
+    
+
+    const ndviDataVar = createChartData('NDVI',stateByDay ? stateByDay.map(item => item.ndvi) : [] , [], [], minNDVI ? stateByDay.map(item => minNDVI) : []);
+    const precipitationDataVar = createChartData('Precipitação',stateByDay ? stateByDay.map(item => item.precipitation) : [] );
+    const temperatureDataVar = createChartData('Temperatura',stateByDay ? stateByDay.map(item => item.temperature) : []);
+    const ndviHumiditySoilDataVar = createChartData('NDVI', 
+                                                    stateByDay ? stateByDay.map(item => item.ndvi) : [] , 
+                                                    'Humidade do Solo', 
+                                                    stateByDay ? stateByDay.map(item => item.humidity_soil) : [], 
+                                                    minHumidity ? stateByDay.map(item => minHumidity) : [], 
+                                                    maxHumidity ? stateByDay.map(item => maxHumidity) : []);
+    const irrigationDataVar = createChartData('Irrigação',stateByDay ? stateByDay.map(item => item.irrigation === 'ON' ? 1 : 0) : [], 'Irrigação OFF', stateByDay ? stateByDay.map(item => item.irrigation === 'OFF' ? 1 : 0) : []);
+    const windSpeedDataVar = createChartData('Velocidade do Vento',stateByDay ? stateByDay.map(item => item.wind_speed) : [] );
+
     return(
         <div class="w-100" style={{padding: '12px', alignContent: 'center'}}>
-            <div class="d-flex justify-content m-2">
-                <button class='btn btn-outline-success' onClick={() => toExcel(state)} style={{ align: "left", paddingLeft: "12px" }}>Transferir</button>
+            <div class="d-flex justify-content my-2">
+                <button class='btn btn-outline-info' onClick={() => navigate(`/states/${plantId}/${plantType}/${plantName}`)} style={{ align: "right", paddingLeft: "12px" }}>Voltar</button>
+                <button class='btn btn-outline-success' onClick={() => toExcel(state)} style={{ align: "left", marginLeft: "12px" }}>Transferir</button>
                 <input id="dia" type="date" class="form-control" placeholder="Pesquisar" style={{width: '200px', align: "left", marginLeft: "12px"}} onChange={handleDateChange}/>
             </div>
-            <div class="row w-100 d-flex justify-content-between" style={{padding: '12px', height:"80vh"}}>
+            <div class="row w-100 d-flex justify-content-between" style={{padding: '0px', height:"80vh"}}>
 
-                <div key="precipitation-chart" class="col-3 whiteCard m-2" style={{alignContent: 'center'}}>
-                    <Bar data={precipitationData} options={precipitationOptions} class="w-100"/>
+                <div key="precipitation-chart" class="col-4 p-2 m-0" style={{alignContent: 'center', height: '40vh'}} onClick={fullScreen}>
+                    <div class="whiteCard h-100">
+                    <Bar data={precipitationDataVar} options={precipitationOptions} class="w-100" ref={el => chartRefs.current[0] = el}/>
+                    </div>
                 </div>
 
-                <div key="ndvi-chart" class="col whiteCard m-2" style={{alignContent: 'center'}}>
-                    <Line data={ndviData} options={ndviOptions} class="w-100"/>
+                <div key="ndvi-chart" class="col-4 p-2 m-0" style={{alignContent: 'center', height: '40vh'}} onClick={fullScreen}>
+                    <div class="whiteCard h-100">
+                    <Line data={ndviDataVar} options={chartOptions} class="w-100" ref={el => chartRefs.current[1] = el}/>
+                    </div>
                 </div>
 
-                <div class="col whiteCard m-2" style={{alignContent: 'center'}}>
-                    <Line data={temperatureData} options={temperatureOptions} class="w-100"/>
+                <div class="col-4 p-2 m-0" style={{alignContent: 'center', height: '40vh'}} onClick={fullScreen}>
+                    <div class="whiteCard h-100">
+                    <Line data={temperatureDataVar} options={chartOptions} class="w-100" ref={el => chartRefs.current[2] = el}/>
+                    </div>
                 </div>
 
-                <div class="w-100"></div>
-
-                <div class="col whiteCard m-2" style={{alignContent: 'center'}}>
-                    <Line data={ndviHumiditySoilData} options={ndviHumiditySoilOptions} class="w-100"/>
+                <div class="col-4 p-2 m-0" style={{alignContent: 'center', height: '40vh'}} onClick={fullScreen}>
+                    <div class="whiteCard h-100">
+                    <Line data={ndviHumiditySoilDataVar} options={chartOptions} class="w-100" ref={el => chartRefs.current[3] = el}/>
+                    </div>
                 </div>
 
-                <div class="col whiteCard m-2" style={{alignContent: 'center'}}>
-                    <Bar data={irrigationData} options={irrigationOptions} class="w-100" />
+                <div class="col-4 p-2 m-0" style={{alignContent: 'center', height: '40vh'}} onClick={fullScreen}>
+                    <div class="whiteCard h-100">
+                    <Bar data={irrigationDataVar} options={chartOptions} class="w-100" ref={el => chartRefs.current[4] = el}/>
+                    </div>
                 </div>
 
-                <div class="col-3 whiteCard m-2" style={{alignContent: 'center'}}>
-                <Line data={windSpeedData} options={windSpeedOptions} class="w-100"/>
+                <div class="col-4 p-2 m-0" style={{alignContent: 'center', height: '40vh'}} onClick={fullScreen}>
+                    <div class="whiteCard h-100">
+                    <Line data={windSpeedDataVar} options={chartOptions} class="w-100" ref={el => chartRefs.current[5] = el}/>
+                    </div>
                 </div>
             
             </div>

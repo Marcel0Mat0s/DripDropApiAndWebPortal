@@ -10,6 +10,7 @@ export default function CreateUser(){
 
     // initializes the inputs state
     const [inputs, setInputs] = useState([])
+    const [loading, setLoading] = useState(false);
 
     /**
      * Function to handle the change on the inputs
@@ -30,28 +31,47 @@ export default function CreateUser(){
      * @returns
      * 
      */
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         ////////////////////////////// Validations //////////////////////////////
 
-        // cheks if all fields are filled
-        if(!inputs.name || !inputs.email || !inputs.password){
+        // checks if all fields are filled
+        if (!inputs.name || !inputs.email || !inputs.password) {
             alert('Por favor preencha todos os campos');
             return;
         }
 
+        // checks if the email already exists in the database
+        try {
+            setLoading(true);
+            const response = await axios.get('https://dripdrop.danielgraca.com/PHP-API/users/get');
+            const emailExists = response.data.some(user => user.email.toLowerCase() === inputs.email.toLowerCase());
+            if (emailExists) {
+                alert('O email já possui uma conta associada');
+                setLoading(false);
+                return;
+            }
+        } catch (error) {
+            console.log('Error: ', error);
+            setLoading(false);
+            return;
+        }
 
         // sends the data to the API to create the user
-        axios.post('https://dripdrop.danielgraca.com/PHP-API/users/save', inputs).then(function(response){
+        try {
+            const response = await axios.post('https://dripdrop.danielgraca.com/PHP-API/users/save', inputs);
             localStorage.setItem('token', response.data.token);
             console.log(response.data);
-            navigate('/')
-        }).catch(function(error){
-            console.log('Authentication failed: ',error)
-            alert('Erro ao criar a conta, por favor tente novamente mais tarde')
-        })
+            navigate('/');
+        } catch (error) {
+            console.log('Authentication failed: ', error);
+            alert('Erro ao criar a conta, por favor tente novamente mais tarde');
+        } finally {
+            setLoading(false);
+        }
     }
+
 
     /**
      * Function to show the password

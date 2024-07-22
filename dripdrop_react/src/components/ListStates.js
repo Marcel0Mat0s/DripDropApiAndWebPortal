@@ -96,8 +96,6 @@ export default function ListStates(){
      */
     function verifyState(){
 
-        console.log("HEY");
-
         // if there are no states, returns
         if(state.length === 0){
             return;
@@ -252,7 +250,7 @@ export default function ListStates(){
                             </div>
 
                             <div class="col p-1">
-                                <button class="btn btn-outline-info h-100 w-100" style={{borderRadius: "25px"}} onClick={() => navigate(`/states/all/${plantId}/${plantType}`)}>Gráficos</button>
+                                <button class="btn btn-outline-info h-100 w-100" style={{borderRadius: "25px"}} onClick={() => navigate(`/states/all/${plantId}/${plantType}/${plantName}`)}>Gráficos</button>
                             </div>
                             <div class="col p-1">
                                 <button class="w-100 btn btn-outline-danger h-100" style={{borderRadius:"25px"}} onClick={() => deletePlant(plantId)}>Apagar</button>

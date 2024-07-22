@@ -101,7 +101,7 @@ export default function EditUser(){
         // sends the data to the API to update the user
         axios.put(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
             console.log(response.data);
-            navigate('/main')
+            navigate('/plants')
         }).catch(function(error){
             console.log(error);
             // ends the session if the token is invalid

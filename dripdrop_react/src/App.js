@@ -6,7 +6,6 @@ import EditUser from './components/EditUser'
 import LoginUser from './components/LoginUser';
 import ListPlants from './components/ListPlants';
 import CreatePlant from './components/CreatePlant';
-import Main from './components/Main';
 import EditPlant from './components/EditPlant';
 import ListStates from './components/ListStates';
 import ListNewPlantID from './components/ListNewPlantID';
@@ -47,10 +46,6 @@ function App() {
           sessionButton.href = '/login';
           sessionButton.onclick = logout;
         }
-        // starts a session timeout of 60 minutes
-        setTimeout(() => {
-          logout();
-        }, 3600000);
       } catch (e) {
         console.log(e);
       } 
@@ -116,7 +111,6 @@ function App() {
           <Route path="user/create" element={<CreateUser/>} />
           <Route path="user/:id/edit" element={<EditUser/>} />
           <Route path="login" element={<LoginUser/>} />
-          <Route path="main" element={<Main/>} />
           <Route path="plants" element={<ListPlants/>} />
           <Route path="plant/create" element={<CreatePlant/>} />
           <Route path="plant/:id/edit" element={<EditPlant/>} />
@@ -124,7 +118,7 @@ function App() {
           <Route path="plant" element={<ListNewPlantID/>} />
           <Route path="info" element={<Info/>} />
           <Route path="about" element={<About/>} />
-          <Route path="states/all/:plantId/:plantType" element={<ListAllStates/>} />
+          <Route path="states/all/:plantId/:plantType/:plantName" element={<ListAllStates/>} />
         </Routes>
       </div>
     </BrowserRouter>
