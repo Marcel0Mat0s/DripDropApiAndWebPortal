@@ -53,9 +53,11 @@ export default function ListAllStates(){
 
     useEffect(() => {
         if (selectedDate) {
-            const day = selectedDate.split("-")[2];
-            const filteredStates = state.filter(item => item.date.split("-")[2] === day);
-            setStateByDay(filteredStates);
+            console.log(selectedDate);
+            getStateByDate(selectedDate);
+            //const day = selectedDate.split("-")[2];
+            //const filteredStates = state.filter(item => item.date.split("-")[2] === day);
+            //setStateByDay(filteredStates);
         } else {
             setStateByDay(state);
         }
@@ -64,6 +66,41 @@ export default function ListAllStates(){
     const handleDateChange = (event) => {
         setSelectedDate(event.target.value);
     };
+
+    /**
+     * Function to get the states of a plant from the API from a specific date
+     * 
+     * @param {*} date
+     */
+    function getStateByDate(date){
+            
+        // gets the token from local storage and sets it in the headers
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+    
+        // gets the plant states from the API
+        axios.get( `https://dripdrop.danielgraca.com/PHP-API/states/${date}/${userId}/${plantId}/${date}`, config).then(function(response){
+            console.log(response.data)
+            setStateByDay(response.data)
+        }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
+    
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
+        });
+    }
 
     /**
      * Function to get all the states of a plant from the API
