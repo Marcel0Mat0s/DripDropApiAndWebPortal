@@ -242,7 +242,7 @@ export default function EditPlant(){
                                     <br/>
                                     <tr>
                                         <td class="d-flex bd-highlight">
-                                            <a align="left" href={`/plants`} class="btn btn-outline-danger">Cancelar</a> 
+                                            <a align="left" href={`/states/${id}/${inputs.type}/${inputs.name}`} class='btn btn-outline-danger p-2 bd-highlight'>Cancelar</a>
                                             <button align="right" class='btn btn-outline-success ms-auto p-2 bd-highlight'>Guardar</button>
                                         </td>
                                     </tr>

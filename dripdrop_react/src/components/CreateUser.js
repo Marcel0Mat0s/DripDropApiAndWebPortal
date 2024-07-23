@@ -48,7 +48,7 @@ export default function CreateUser(){
             const response = await axios.get('https://dripdrop.danielgraca.com/PHP-API/users/get');
             const emailExists = response.data.some(user => user.email.toLowerCase() === inputs.email.toLowerCase());
             if (emailExists) {
-                alert('O email já possui uma conta associada');
+                alert('O email introduzido já está associado a uma conta existente');
                 setLoading(false);
                 return;
             }
