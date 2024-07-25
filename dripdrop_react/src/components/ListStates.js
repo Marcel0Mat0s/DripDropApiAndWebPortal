@@ -24,6 +24,12 @@ export default function ListStates(){
     const [maxHumiditySoil, setMaxHumiditySoil] = useState(0);
     const [minHumiditySoil, setMinHumiditySoil] = useState(0);
     const [minNDVI, setMinNDVI] = useState(0);
+    const [messages, setMessages] = useState([]);
+    const [ws, setWs] = useState(null);
+    const [topic, setTopic] = useState('');
+    const [payload, setPayload] = useState('');
+    const [manMode, setManMode] = useState('automatico');
+    const [rega, setRega] = useState('"OFF"');
 
     // gets the user ID from local storage
     const userId = localStorage.getItem('userId');
@@ -49,6 +55,55 @@ export default function ListStates(){
     useEffect(() => {
         verifyState();
     }, [state]);
+
+    useEffect(() => {
+        const websocket = new WebSocket('ws://localhost:3001');
+    
+        websocket.onopen = () => {
+          console.log('WebSocket connection established');
+        };
+    
+        websocket.onerror = (error) => {
+          console.error('WebSocket error:', error);
+        };
+    
+        websocket.onclose = (event) => {
+          console.error('WebSocket closed:', event);
+        };
+    
+        websocket.onmessage = (event) => {
+            console.log('Received message:', event.data);
+            try {
+                const data = JSON.parse(event.data);
+                setMessages(prevMessages => [
+                    ...prevMessages,
+                    { topic: data.topic, message: data.message }
+                ]);
+
+                if (data.topic === 'rega') {
+                    setRega(data.message);
+                } else if (data.topic === 'manMode') {
+                    setManMode(data.message);
+                }
+            } catch (error) {
+                console.error('Error parsing message:', error);
+            }
+        };
+    
+        setWs(websocket);
+    
+        return () => {
+          websocket.close();
+        };
+    }, []);
+
+    // Function to send a message to the MQTT broker
+    const sendMessage = (newTopic, newPayload) => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            const message = JSON.stringify({ topic: newTopic, payload: newPayload });
+            ws.send(message);
+        }
+    };
 
     /**
      * Function to calculate the average NDVI of the day
@@ -217,6 +272,26 @@ export default function ListStates(){
      */
     function formatImageSrc(image){
         return `data:image/png;base64,${image}`;
+    }
+
+    /**
+     * Function to handle the manual mode switch
+     * 
+     */
+    const handleManualSwitch = () => {
+        const newMode = manMode === 'automatico' ? 'manual' : 'automatico';
+        setManMode(newMode);
+        sendMessage('manMode', newMode);
+    }
+
+    /**
+     * Function to handle the irrigation switch
+     * 
+     */
+    const handleIrrigationSwitch = () => {
+        const newRega = rega === '"OFF"' ? '"ON"' : '"OFF"';
+        setRega(newRega);
+        sendMessage('rega', newRega);
     }
 
     // Function to navigate to the previous state
@@ -421,13 +496,16 @@ export default function ListStates(){
                                             <vr class="h-100 vr vr-blurry"></vr>
                                         </td>
                                         <td class="w-auto" style={{ alignContent: "center"}}>
-                                            <h2 class="fs-4">{state[currentIndex].irrigation}</h2>
+                                            <h2 id="regaLabel" class="fs-4">{rega}</h2>
                                         </td>
                                         <td class="w-auto" style={{ alignContent: "center"}}>
                                             <label class="switch">
                                                 <input type="checkbox" 
-                                                disabled={currentIndex !== 0}
-                                                checked={state[currentIndex].irrigation === "ON"}
+                                                // if the current index is not 0 or the manMode is automatico, the switch is disabled
+                                                disabled={currentIndex !== 0 || manMode === "automatico"}
+                                                // if regaLabel is ON, the switch is checked
+                                                checked={rega === '"ON"'}
+                                                onClick={handleIrrigationSwitch}
                                                 />
                                                 <span class="slider round"></span>
                                             </label>
@@ -445,11 +523,15 @@ export default function ListStates(){
                                                 <vr class="h-100 vr vr-blurry"></vr>
                                             </td>
                                             <td class="w-auto" style={{ alignContent: "center"}}>
-                                                <h2 class="fs-4">Automatico</h2>
+                                                <h2 id="manModeLabel" class="fs-4">{manMode}</h2>
                                             </td>
                                             <td class="w-auto" style={{ alignContent: "center"}}>
                                                 <label class="switch">
-                                                    <input type="checkbox" disabled={currentIndex !== 0} checked={true}/>
+                                                    <input id="manModeSwitch" type="checkbox" 
+                                                    disabled={currentIndex !== 0} 
+                                                    checked={manMode === "automatico"}
+                                                    onClick={handleManualSwitch}
+                                                    />
                                                     <span class="slider round"></span>
                                                 </label>
                                             </td>
