@@ -26,8 +26,6 @@ export default function ListStates(){
     const [minNDVI, setMinNDVI] = useState(0);
     const [messages, setMessages] = useState([]);
     const [ws, setWs] = useState(null);
-    const [topic, setTopic] = useState('');
-    const [payload, setPayload] = useState('');
     const [manMode, setManMode] = useState('automatico');
     const [rega, setRega] = useState('"OFF"');
 
@@ -60,15 +58,18 @@ export default function ListStates(){
         const websocket = new WebSocket('ws://localhost:3001');
     
         websocket.onopen = () => {
-          console.log('WebSocket connection established');
+            console.log('WebSocket connection established');
+
+            // Sends the Plant ID to the server
+            websocket.send(JSON.stringify({ action: 'subscribe', plantID: plantId }));
         };
     
         websocket.onerror = (error) => {
-          console.error('WebSocket error:', error);
+            console.error('WebSocket error:', error);
         };
     
         websocket.onclose = (event) => {
-          console.error('WebSocket closed:', event);
+            console.error('WebSocket closed:', event);
         };
     
         websocket.onmessage = (event) => {
@@ -80,9 +81,9 @@ export default function ListStates(){
                     { topic: data.topic, message: data.message }
                 ]);
 
-                if (data.topic === 'rega') {
+                if (data.topic === `${plantId}/rega`) {
                     setRega(data.message);
-                } else if (data.topic === 'manMode') {
+                } else if (data.topic === `${plantId}/manMode`) {
                     setManMode(data.message);
                 }
             } catch (error) {
@@ -100,7 +101,7 @@ export default function ListStates(){
     // Function to send a message to the MQTT broker
     const sendMessage = (newTopic, newPayload) => {
         if (ws && ws.readyState === WebSocket.OPEN) {
-            const message = JSON.stringify({ topic: newTopic, payload: newPayload });
+            const message = JSON.stringify({ action: 'publish', topic: newTopic, payload: newPayload });
             ws.send(message);
         }
     };
@@ -281,7 +282,7 @@ export default function ListStates(){
     const handleManualSwitch = () => {
         const newMode = manMode === 'automatico' ? 'manual' : 'automatico';
         setManMode(newMode);
-        sendMessage('manMode', newMode);
+        sendMessage(`${plantId}/manMode`, newMode);
     }
 
     /**
@@ -291,7 +292,7 @@ export default function ListStates(){
     const handleIrrigationSwitch = () => {
         const newRega = rega === '"OFF"' ? '"ON"' : '"OFF"';
         setRega(newRega);
-        sendMessage('rega', newRega);
+        sendMessage(`${plantId}/rega`, newRega);
     }
 
     // Function to navigate to the previous state
