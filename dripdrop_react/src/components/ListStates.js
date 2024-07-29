@@ -55,7 +55,7 @@ export default function ListStates(){
     }, [state]);
 
     useEffect(() => {
-        const websocket = new WebSocket('ws://localhost:3001');
+        const websocket = new WebSocket('wss://dripdrop.danielgraca.com/ws');
     
         websocket.onopen = () => {
             console.log('WebSocket connection established');
