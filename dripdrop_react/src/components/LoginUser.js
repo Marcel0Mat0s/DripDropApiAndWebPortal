@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken, removeToken, setUserId, removeUserId } from './../redux/actions';
-import logo from '../images/dripdropdigital.png';
+import { setToken, removeToken, setUserId, removeUserId, setRole, removeRole } from '../redux/actions';
 
 // View to login a user
 export default function LoginUser() {
@@ -58,9 +57,10 @@ export default function LoginUser() {
             // Send a POST request to the server
             const response = await axios.post('https://dripdrop.danielgraca.com/PHP-API/login', { email, password });
 
-            // Get the token and user id from the response
+            // Get the token and user id and role from the response
             const token = response.data.token;
             const userId = response.data.userId;
+            const role = response.data.role;
 
             // Set the token in the redux store and local storage
             dispatch(setToken(token));
@@ -70,6 +70,11 @@ export default function LoginUser() {
             dispatch(setUserId(userId));
             localStorage.setItem('userId', userId);
 
+            // Set the role in the redux store and local storage
+            dispatch(setRole(role));
+            localStorage.setItem('role', role);
+
+            console.log('Authentication successful: ', response.data);
             console.log(token);
 
             // Redirect to the main page

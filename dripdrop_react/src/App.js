@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import './App.css';
 import Home from './components/Home';
 import CreateUser from './components/CreateUser';
@@ -12,16 +12,20 @@ import ListNewPlantID from './components/ListNewPlantID';
 import Info from './components/Info';
 import About from './components/About';
 import ListAllStates from './components/ListAllStates';
-import { useSelector } from 'react-redux';
+import ListUsers from './components/ListUsers';
+import ListTypes from './components/ListTypes';
+import EditType from './components/EditType';
+import CreateType from './components/CreateType';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { removeToken, removeUserId } from './redux/actions';
+import { removeToken, removeUserId, removeRole } from './redux/actions';
 
 // Main component
 function App() {
 
   const token = useSelector((state) => state.auth.token);
   const userid = useSelector((state) => state.auth.userId);
+  const role = useSelector((state) => state.auth.role);
 
   const dispatch = useDispatch();
 
@@ -31,6 +35,23 @@ function App() {
     const sessionButton = document.getElementById('sessionButton');
 
     if (!token) {
+      try {
+        if (plantsViewButton) {
+          plantsViewButton.classList.add('disabled');
+        }
+        if (defViewButton) {
+          defViewButton.classList.add('disabled');
+          defViewButton.classList.add('invisible');
+        }
+        // Change the session button to login button that when clicked calls the login function
+        if (sessionButton) {
+          sessionButton.innerHTML = 'Iniciar Sessão';
+          sessionButton.href = '/login';
+          sessionButton.onclick = null;
+        }
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       try {
         if (plantsViewButton) {
@@ -66,8 +87,18 @@ function App() {
     dispatch(removeUserId());
     localStorage.removeItem('userId');
 
+    // remove the role from the redux store and local storage
+    dispatch(removeRole());
+    localStorage.removeItem('role');
+
     console.log('Logged out');
   }
+
+  // Private route component to check if the user is logged in and has the role of admin
+  const PrivateRoute = ({ element, ...rest }) => {
+    const role = useSelector((state) => state.auth.role);
+    return role === 'admin' ? element : <Navigate to="/" />;
+  };
 
   return (
     <BrowserRouter>
@@ -99,6 +130,18 @@ function App() {
                 <li class="nav-item">
                   <a id="defView" class="nav-link disabled invisible" aria-disabled="true" href={`/user/${userid}/edit`} >Definições</a>
                 </li>
+
+                {role === 'admin' ? 
+                  <>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/users">Utilizadores</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/types">Tipos de Plantas</a>
+                  </li>
+                  </>
+                  : null
+                }
               </ul>
 
               <a id="sessionButton" class="nav-link d-flex" href="/login">Iniciar Sessão</a>
@@ -119,6 +162,10 @@ function App() {
           <Route path="info" element={<Info/>} />
           <Route path="about" element={<About/>} />
           <Route path="states/all/:plantId/:plantType/:plantName" element={<ListAllStates/>} />
+          <Route path="users" element={<PrivateRoute element={<ListUsers />} />} />
+          <Route path="types" element={<PrivateRoute element={<ListTypes />} />} />
+          <Route path="type/:id/edit" element={<PrivateRoute element={<EditType />} />} />
+          <Route path="type/create" element={<PrivateRoute element={<CreateType />} />} />
         </Routes>
       </div>
     </BrowserRouter>

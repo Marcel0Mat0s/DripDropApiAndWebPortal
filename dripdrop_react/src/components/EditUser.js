@@ -3,7 +3,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from '../images/dripdropdigital.png';
 import { removeToken, removeUserId } from '../redux/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 
 export default function EditUser(){
@@ -19,6 +20,9 @@ export default function EditUser(){
 
     // gets the dispatch function from the redux store
     const dispatch = useDispatch();
+
+    // gets the role from the redux store
+    const role = useSelector((state) => state.auth.role);
 
     // gets the user data from the API when the page loads
     useEffect(() => {
@@ -90,6 +94,32 @@ export default function EditUser(){
             return;
         }
 
+        // If the user is an admin, checks if the role and password are filled
+        if(role === 'admin'){
+            if(!inputs.role || !inputs.password){
+                alert('Por favor preencha todos os campos');
+                return;
+            }
+
+            // checks if the password has at least 8 characters
+            if(inputs.password.length < 8){
+                alert('A palavra-passe tem de ter pelo menos 8 caracteres');
+                return;
+            }
+
+            // checks if the role is either user or admin
+            if(inputs.role !== 'user' && inputs.role !== 'admin'){
+                alert('O role tem de ser user ou admin');
+                return;
+            }
+
+            // hashes the password
+            const bcrypt = require('bcryptjs');
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(inputs.password, salt);
+            inputs.password = hash;
+        }
+
         // gets the token from local storage and sets it in the headers
         const token = localStorage.getItem('token');
         const config = {
@@ -118,6 +148,22 @@ export default function EditUser(){
         });
     }
 
+    /**
+     * Function to show the password
+     */
+    function myFunction() {
+        try {
+            var x = document.getElementById("floatingPassword");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        } catch (error) {
+            console.log('Error: ', error);
+        }
+    }
+
     return(
         <div class="container">  
             <img src={logo} alt='DripDrop' style={{width: '220px'}} />
@@ -143,6 +189,25 @@ export default function EditUser(){
                                         <input id="floatingEmail" class="form-control" value={inputs.email} type="email" name="email" onChange={handleChange} placeholder="nome@exemplo.com" /> 
                                         <label for="floatingEmail" >Email: </label>
                                     </div>
+
+                                    {role === 'admin' ? 
+                                        <>
+                                        <div class="form-floating mb-3">
+                                            <input id="floatingRole" class="form-control" value={inputs.role} type="role" name="role" onChange={handleChange} placeholder="role"/>
+                                            <label for="floatingRole" >Role: </label>
+                                        </div>
+
+                                        <div class="form-floating mb-3">
+                                            <input id="floatingPassword" class="form-control" type="password" name="password" onChange={handleChange} placeholder="password"/>
+                                            <label for="floatingPassword" >Password: </label>
+                                            <div className="form-check d-flex justify-content-start" >
+                                                <input className="form-check-input" type="checkbox" onClick={myFunction}/>
+                                                <label className="text-dark fw-bold">Mostrar Palavra-passe</label>
+                                            </div>
+                                        </div>
+                                        </>
+                                        : null
+                                    }
 
                                     <div colSpan="2" align="right">
                                         <button class="btn btn-outline-success">Guardar</button>

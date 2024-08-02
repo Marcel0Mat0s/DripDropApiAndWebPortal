@@ -1,10 +1,11 @@
-import { SET_TOKEN, REMOVE_TOKEN, SET_USER_ID, REMOVE_USER_ID } from './actions';
+import { SET_TOKEN, REMOVE_TOKEN, SET_USER_ID, REMOVE_USER_ID, SET_ROLE, REMOVE_ROLE } from './actions';
 
 
 // Initial state of the auth reducer
 const initialState = {
     token: localStorage.getItem('token') || '',
     userId: localStorage.getItem('userId') || '',
+    role: localStorage.getItem('role') || '',
 };
 
 // Auth reducer to set and remove token
@@ -37,6 +38,20 @@ const authReducer = (state = initialState, action) => {
         return {
             ...state,
             userId: '',
+        };
+
+    // Set the role to the state
+    case SET_ROLE:
+        return {
+            ...state,
+            role: action.payload,
+        };
+
+    // Remove the role from the state
+    case REMOVE_ROLE:
+        return {
+            ...state,
+            role: '',
         };
         
     default:
