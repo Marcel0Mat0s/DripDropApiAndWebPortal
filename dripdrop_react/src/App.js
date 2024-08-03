@@ -11,14 +11,19 @@ import ListStates from './components/ListStates';
 import ListNewPlantID from './components/ListNewPlantID';
 import Info from './components/Info';
 import About from './components/About';
-import ListAllStates from './components/ListAllStates';
+import ListAllStates from './components/ListGraphs';
 import ListUsers from './components/ListUsers';
 import ListTypes from './components/ListTypes';
 import EditType from './components/EditType';
 import CreateType from './components/CreateType';
+import DetailsUser from './components/DetailsUser';
+import DetailsType from './components/DetailsType';
+import ListUserPlants from './components/ListUserPlants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { removeToken, removeUserId, removeRole } from './redux/actions';
+import CreateUserPlant from './components/CreateUserPlant';
+import UserForgotPass from './components/UserForgotPass';
 
 // Main component
 function App() {
@@ -166,6 +171,11 @@ function App() {
           <Route path="types" element={<PrivateRoute element={<ListTypes />} />} />
           <Route path="type/:id/edit" element={<PrivateRoute element={<EditType />} />} />
           <Route path="type/create" element={<PrivateRoute element={<CreateType />} />} />
+          <Route path="user/:id/details" element={<PrivateRoute element={<DetailsUser />} />} />
+          <Route path="type/:id/details" element={<PrivateRoute element={<DetailsType />} />} />
+          <Route path="user/:id/plants" element={<PrivateRoute element={<ListUserPlants />} />} />
+          <Route path="user/:id/plants/create" element={<PrivateRoute element={<CreateUserPlant />} />} />
+          <Route path="user/forgot" element={<UserForgotPass />} />
         </Routes>
       </div>
     </BrowserRouter>

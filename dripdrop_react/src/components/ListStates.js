@@ -387,11 +387,11 @@ export default function ListStates(){
                             <div class="col p-1">
                                 <div class="whiteCard h-100" style={{ alignContent: "center"}}>
                                     <div class="h-50" style={{ alignContent: "center"}}>
-                                        <h3 class="mx-5 my-0 fs-4">Data e Hora</h3>
-                                        <hr class="w-100 hr hr-blurry" />
+                                        <h3 class="fs-4">Precipitação</h3>
+                                        <hr class=" w-100 hr hr-blurry" />
                                     </div>
                                     <div class="h-50 py-3" style={{ alignContent: "center"}}>
-                                        <h3>{state[currentIndex].date} às {state[currentIndex].time}</h3>
+                                        <h3>{state[currentIndex].precipitation}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -468,11 +468,11 @@ export default function ListStates(){
                             <div class="col p-1">
                                 <div class="whiteCard h-100" style={{ alignContent: "center"}}>
                                     <div class="h-50" style={{ alignContent: "center"}}>
-                                        <h3 class="fs-4">Precipitação</h3>
-                                        <hr class=" w-100 hr hr-blurry" />
+                                        <h3 class="mx-5 my-0 fs-4">Data e Hora</h3>
+                                        <hr class="w-100 hr hr-blurry" />
                                     </div>
                                     <div class="h-50 py-3" style={{ alignContent: "center"}}>
-                                        <h3>{state[currentIndex].precipitation}</h3>
+                                        <h3>{state[currentIndex].date} às {state[currentIndex].time}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -484,8 +484,7 @@ export default function ListStates(){
                                     <img src={formatImageSrc(state[currentIndex].image)} alt="Imagem" class="w-100" style={{borderRadius:"15px"}}/>
                                 </div>
                             </div>
-                            <div class="col p-0 m-0" style={{ alignContent: "center"}}></div>
-                            <div class="col-auto p-0" style={{ alignContent: "center"}}>
+                            <div class="col p-0" style={{ alignContent: "center"}}>
 
                                 <div class="h-50 p-1" style={{ alignContent: "center"}}>
                                     <div class="whiteCard h-100" style={{ alignContent: "center"}}>

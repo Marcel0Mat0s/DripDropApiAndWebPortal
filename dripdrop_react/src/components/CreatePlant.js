@@ -231,7 +231,7 @@ export default function CreatePlant() {
                                     </div>
 
                                     <div class="form-floating mb-3">
-                                        <input id="floatingLocation" class="form-control" type="text" name="location" value={inputs.location} onChange={handleChange} disabled/>
+                                        <input id="floatingLocation" class="form-control" type="text" name="location" value={inputs.location} onChange={handleChange}/>
                                         <label for="floatingLocation">Localização (lat, lng)</label>
                                     </div>
 

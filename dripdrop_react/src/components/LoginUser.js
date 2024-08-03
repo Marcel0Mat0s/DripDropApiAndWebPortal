@@ -160,8 +160,9 @@ export default function LoginUser() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right">
-                                        <button className="btn btn-outline-success">Iniciar Sessão</button>
+                                    <td class="d-flex bd-highlight">
+                                        <a align="left" className=" bd-highlight" href="/user/forgot">Esqueceu-se da palavra-passe?</a>
+                                        <button align="right" className="btn btn-outline-success ms-auto bd-highlight">Iniciar Sessão</button>
                                     </td>
                                 </tr>
                             </tbody>

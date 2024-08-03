@@ -63,32 +63,6 @@ export default function ListUsers() {
   }
 
   /**
-   * Function to delete a user
-   * 
-   * @param {number} id
-   * @returns
-   */
-  function deleteUser(id) {
-    // gets the token from local storage and sets it in the headers
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    // deletes the user from the API
-    axios
-      .delete(`https://dripdrop.danielgraca.com/PHP-API/users/${id}`, config)
-      .then(function (response) {
-        console.log(response.data);
-        getUsers();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
-  /**
    * Function to navigate to a path
    *
    * @param {string} path
@@ -110,7 +84,6 @@ export default function ListUsers() {
             <tr>
               <th scope="col">ID</th>
               <th scope="col">Email</th>
-              <th scope="col">Tipo</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -119,10 +92,8 @@ export default function ListUsers() {
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.email}</td>
-                <td>{user.role}</td>
                 <td>
-                  <Link class="btn btn-info" to={`/user/${user.id}/edit`}>Editar</Link>
-                  <button class="btn btn-danger mx-1" onClick={() => deleteUser(user.id)}>Apagar</button>
+                  <Link class="btn btn-info" to={`/user/${user.id}/details`}>Detalhes</Link>
                 </td>
               </tr>
             ))}

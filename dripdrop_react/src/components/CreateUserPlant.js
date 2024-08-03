@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
@@ -9,7 +9,7 @@ import { removeToken, removeUserId } from "../redux/actions";
 
 // Custom icon for the marker
 const plantIcon = new L.Icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/128/1647/1647460.png',
+    iconUrl: 'https://cdn-icons-png.flaticon.com/128/1647/1647460.png', // Replace with your icon URL
     iconSize: [40, 40],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -20,13 +20,11 @@ const plantIcon = new L.Icon({
  * Component to create a marker on the map
  * 
  * @param {*} setInputs
- * @param {*} initialPosition
  * 
  * @returns 
  */
-function LocationMarker({ setInputs, initialPosition }) {
-    const [position, setPosition] = useState(initialPosition);
-    
+function LocationMarker({ setInputs }) {
+    const [position, setPosition] = useState(null);
     const map = useMapEvents({
         click(e) {
             map.flyTo(e.latlng, map.getZoom());
@@ -43,41 +41,53 @@ function LocationMarker({ setInputs, initialPosition }) {
     );
 }
 
-// View to edit a plant
-export default function EditPlant(){
+export default function CreateUserPlant() {
 
-    // inicializes the navigate function
     const navigate = useNavigate();
-
-    // initializes the inputs and types states
-    const [inputs, setInputs] = useState([]);
+    const [inputs, setInputs] = useState({ location: ""});
     const [types, setTypes] = useState([]);
     const [mapCenter, setMapCenter] = useState(null);
 
-    // gets the plant ID from the URL
+    // gets the user ID from the URL
     const {id} = useParams();
-
-    // Gets the user ID from local storage
-    const userId = localStorage.getItem('userId');
 
     // Gets the role from the redux store
     const role = useSelector((state) => state.auth.role);
 
-    // initializes the dispatch function
+    // Gets the admin id from the redux store
+    const adminId = useSelector((state) => state.auth.userId);
+
     const dispatch = useDispatch();
 
-    // get the plant types and the plant data from the API when the page loads
     useEffect(() => {
+        
         getTypes();
-        getPlant();
+
+        // Checks if the browser supports geolocation
+        if (navigator.geolocation) {
+            // Gets the current position of the user
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    // Sets the map center to the user's location
+                    setMapCenter([lat, lon]);
+                    // Sets the location in the inputs
+                    setInputs((values) => ({ ...values, location: `${lat}, ${lon}` }));
+                },
+                (error) => {
+                    console.error("Error getting geolocation: ", error);
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
     }, []);
 
     /**
-     * Gets the plant types from the API
-     *
-     * @returns
-     */
-    function getTypes(){
+       * Function to get the plant types from the API
+       */
+    function getTypes() {
 
         // gets the token from local storage and sets it in the headers
         const token = localStorage.getItem('token');
@@ -88,7 +98,7 @@ export default function EditPlant(){
         };
 
         // gets the plant types from the API
-        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/null/${userId}`, config).then(function(response){
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/null/${adminId}`, config).then(function (response) {
             console.log(response.data);
             setTypes(response.data);
 
@@ -110,11 +120,52 @@ export default function EditPlant(){
     }
 
     /**
-     * function to get the plant data from the API
-     * 
+     * Function to handle the change in the inputs
+     * @param {*} event
      * @returns
      */
-    function getPlant(){
+    const handleChange = (event) => {
+        // gets the name and value of the input that changed
+        const name = event.target.name;
+        const value = event.target.value;
+
+        // sets the new value in the inputs state
+        setInputs(values => ({ ...values, [name]: value }));
+    }
+
+    /**
+     * Function to handle the submit of the form
+     * @param {*} event
+     * @returns
+     */
+    const handleSubmit = (event) => {
+
+        // prevents the default behavior of the form
+        event.preventDefault();
+
+        /////////////////////////////VALIDATIONS///////////////////////////////
+
+        // checks if the user ID is available
+        if (!id) {
+            console.error("No user ID available for request.");
+            console.log("User ID: ", id);
+            return;
+        }
+
+        // checks if all the inputs are filled and valid
+        if (!inputs.name || !inputs.location || !inputs.type) {
+            alert("Todos os campos são obrigatórios.");
+            return;
+        }
+
+        // checks if the location is in the correct format
+        if (!inputs.location.includes(',')) {
+            alert("A localização deve estar no formato 'latitude, longitude'.");
+            return;
+        }
+
+        // Add the user ID to the inputs
+        inputs.userId = id;
 
         // gets the token from local storage and sets it in the headers
         const token = localStorage.getItem('token');
@@ -124,16 +175,15 @@ export default function EditPlant(){
             }
         };
 
-        // gets the plant data from the API
-        axios.get(`https://dripdrop.danielgraca.com/PHP-API/plants/${id}/${userId}`, config).then(function(response){
-            console.log(response.data)
-            setInputs(response.data)
+        // Prints the inputs to the console
+        console.log(inputs);
 
-            // Extract the saved location and set the map center and initial position for the marker
-            const location = response.data.location.split(", ");
-            const lat = parseFloat(location[0]);
-            const lon = parseFloat(location[1]);
-            setMapCenter([lat, lon]);
+        // sends the request to the API to create the plant
+        axios.post(`https://dripdrop.danielgraca.com/PHP-API/plants/null/${id}///${role}`, inputs, config).then(function (response) {
+            console.log(response.data);
+
+            // redirect to the list of plants of the user
+            navigate(`/user/${id}/plants`);
         }).catch(function(error){
             console.log(error);
             // ends the session if the token is invalid
@@ -150,71 +200,14 @@ export default function EditPlant(){
         });
     }
 
-    /** 
-     * Function to handle the change in the inputs
-     * 
-     * @param {*} event
-     * @returns
-     */
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setInputs(values => ({...values, [name]: value}));
-    }
-
-    /**
-     * Function to handle the submit of the form
-     *  
-     * @param {*} event
-     * @returns
-     */
-    const handleSubmit = (event) => {
-
-        // prevents the default behavior of the form
-        event.preventDefault();
-
-        console.log(inputs);
-
-        ///////////////////////////// Validations /////////////////////////////
-
-        // checks if all the fields are filled
-        if(!inputs.name || !inputs.location || !inputs.type){
-            alert('Por favor preencha todos os campos');
-            return;
-        }
-
-        // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        };
-
-        // Sends the data to the API to update the plant
-        axios.put(`https://dripdrop.danielgraca.com/PHP-API/plants/${id}/${userId}/edit`, inputs, config).then(function(response){
-            console.log(response.data);
-            alert('Planta atualizada com sucesso!');
-            
-            if (role === 'admin') {
-                navigate(`/user/${inputs.fk_user}/plants`);
-            } else {
-                navigate('/plants');
-            }
-        })
-        .catch(error => {
-            console.log('Failed to update user: ', error);
-            alert('Erro ao atualizar a planta. Por favor tente novamente.');
-        });
-    }
-
-    return(
+    return (
         <div class="d-flex items-align-center">
             <div class="row p-0 w-100">
 
                 <div class="col m-5 whiteFullCard">
+                    
                     <div class="h-25">
-                        <h1 align="center">Edite a sua planta!🪴</h1>
+                        <h1 align="center">Crie uma nova planta!🪴</h1>
                         <br/>
                         <hr class="hr hr-blurry" />
                         <br/>
@@ -225,40 +218,34 @@ export default function EditPlant(){
                                 <thead>
                                     <tr>
                                         <td class="text-dark">
-                                            <h2 align="left">Edite os campos:</h2>
+                                            <h2 align="left">Preencha os campos:</h2>
                                         </td>
                                     </tr>
                                 </thead>
-                                <tbody >
+                                <tbody>
                                     <div class="form-floating mb-3">
-                                        <input id="floatingName" class="form-control" value={inputs.name} type="text" name="name" onChange={handleChange} placeholder="nome"/>
+                                        <input id="floatingName" class="form-control" type="name" name="name" onChange={handleChange} placeholder="nome"/>
                                         <label for="floatingName">Nome</label>
                                     </div>
 
                                     <div class="form-floating mb-3">
-                                        <input id="location" class="form-control" type="text" name="location" value={inputs.location} onChange={handleChange} disabled/>
-                                        <label for="location">Localização (lat, long)</label>
-                                    </div>
-
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select p-3" aria-label="Floating label select example" name="type" value={inputs.type} onChange={handleChange}>
+                                        <select id="floatingType" class="form-select p-3" aria-label="Floating label select example" name="type" onChange={handleChange}>
                                             <option value="">Selecione um tipo</option>
                                             {types.map((type) => 
                                                 <option key={type.id} value={type.id}>{type.name}</option>
                                             )}
                                         </select>
                                     </div>
-                                    <br/>
-                                    <tr>
-                                        <td class="d-flex bd-highlight">
-                                            {role === 'admin' ? (
-                                                <a align="left" href={`/user/${inputs.fk_user}/plants`} class='btn btn-outline-danger p-2 bd-highlight'>Cancelar</a>
-                                            ) : (
-                                                <a align="left" href={`/states/${id}/${inputs.type}/${inputs.name}`} class='btn btn-outline-danger p-2 bd-highlight'>Cancelar</a>
-                                            )}
-                                            <button align="right" class='btn btn-outline-success ms-auto p-2 bd-highlight'>Guardar</button>
-                                        </td>
-                                    </tr>
+
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingLocation" class="form-control" type="text" name="location" value={inputs.location} onChange={handleChange}/>
+                                        <label for="floatingLocation">Localização (lat, lng)</label>
+                                    </div>
+
+                                    <td className="d-flex bd-highlight">
+                                        <a align="left" href={`/user/${id}/plants`} class='btn btn-outline-danger p-2 bd-highlight'>Cancelar</a>
+                                        <button align="right" class='btn btn-outline-success ms-auto p-2 bd-highlight' type="submit">Adicionar</button>
+                                    </td>
                                 </tbody>
                             </table>
                         </form>
@@ -275,11 +262,11 @@ export default function EditPlant(){
                                 <TileLayer 
                                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                 />
-                                <LocationMarker setInputs={setInputs} initialPosition={mapCenter} />
+                                <LocationMarker setInputs={setInputs} />
                             </MapContainer>
                         )}
                 </div>
             </div>
         </div>
-    )
+    );
 }

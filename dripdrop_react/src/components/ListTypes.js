@@ -116,8 +116,6 @@ export default function ListTypes() {
           <tr>
             <th>ID</th>
             <th>Nome</th>
-            <th>Humidade</th>
-            <th>NDVI Mínimo</th>
             <th></th>
           </tr>
         </thead>
@@ -126,18 +124,13 @@ export default function ListTypes() {
             <tr key={type.id}>
               <td>{type.id}</td>
               <td>{type.name}</td>
-              <td>{type.min_humidity} - {type.max_humidity}</td>
-              <td>{type.min_NDVI}</td>
               <td>
-                <a href={`/type/${type.id}/edit`} class="btn btn-info">
-                  Editar
-                </a>
-                <a href="#" class="btn btn-danger mx-1" onClick={() => deleteType(type.id)}>
-                  Apagar
+                <a href={`/type/${type.id}/details`} class="btn btn-info">
+                  Detalhes
                 </a>
               </td>
             </tr>
-            ))}
+          ))}
         </tbody>
       </table>
       </div>

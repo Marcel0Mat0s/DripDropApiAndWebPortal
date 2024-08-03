@@ -84,7 +84,7 @@ export default function EditType() {
         ////////////////// Validation //////////////////
 
         // checks if all the fields are filled
-        if (!type.name || !type.Hmax || !type.Hmin || !type.NDVIMin) {
+        if (!type.name || !type.max_humidity || !type.min_humidity || !type.min_NDVI) {
             alert("Por favor preencha todos os campos.");
             return;
         }
