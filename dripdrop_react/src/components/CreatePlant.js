@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
-import { useDispatch } from "react-redux";
-import { removeToken, removeUserId } from "../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { removeToken, removeUserId, removeRole } from "../redux/actions";
 
 // Custom icon for the marker
 const plantIcon = new L.Icon({
@@ -50,6 +50,9 @@ export default function CreatePlant() {
 
     const userId = localStorage.getItem("userId");
 
+    // gets the role from the redux store
+    const role = useSelector((state) => state.auth.role);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -91,7 +94,7 @@ export default function CreatePlant() {
         };
 
         // gets the plant types from the API
-        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/null/${userId}`, config).then(function (response) {
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/types/null/${userId}///${role}`, config).then(function (response) {
             console.log(response.data);
             setTypes(response.data);
 
@@ -105,6 +108,11 @@ export default function CreatePlant() {
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -172,24 +180,14 @@ export default function CreatePlant() {
         console.log(inputs);
 
         // sends the request to the API to create the plant
-        axios.post(`https://dripdrop.danielgraca.com/PHP-API/plants/null/${userId}/save`, inputs, config).then(function (response) {
+        axios.post(`https://dripdrop.danielgraca.com/PHP-API/plants/null/${userId}/save//${role}`, inputs, config).then(function (response) {
             console.log(response.data);
 
             // redirect to the plant page after creation to show the new plant id to the user
             navigate('/plant')
         }).catch(function(error){
             console.log(error);
-            // ends the session if the token is invalid
-            // Remove the token from the redux store and local storage
-            dispatch(removeToken());
-            localStorage.removeItem('token');
-
-            // Remove the user id from the redux store and local storage
-            dispatch(removeUserId());
-            localStorage.removeItem('userId');
-            // navigates to the login page if the user is not authenticated
-            navigate('/login');
-            alert("Sessão expirada. Por favor faça login novamente.");
+            alert("Erro ao criar a planta. Por favor tente novamente.");
         });
     }
 

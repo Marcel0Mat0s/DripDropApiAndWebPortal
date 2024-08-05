@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from '../images/dripdropdigital.png';
-import { removeToken, removeUserId } from '../redux/actions';
+import { removeToken, removeUserId, removeRole } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -44,7 +44,7 @@ export default function EditUser(){
         };
 
         // gets the user data from the API
-        axios.get(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}`, config).then(function(response){
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}///${role}`, config).then(function(response){
             console.log(response.data);
             setInputs(response.data);
         }).catch(function(error){
@@ -57,6 +57,11 @@ export default function EditUser(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -129,22 +134,12 @@ export default function EditUser(){
         };
 
         // sends the data to the API to update the user
-        axios.put(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}/edit`, inputs, config).then(function(response){
+        axios.put(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}/edit//${role}`, inputs, config).then(function(response){
             console.log(response.data);
             navigate('/plants')
         }).catch(function(error){
             console.log(error);
-            // ends the session if the token is invalid
-            // Remove the token from the redux store and local storage
-            dispatch(removeToken());
-            localStorage.removeItem('token');
-
-            // Remove the user id from the redux store and local storage
-            dispatch(removeUserId());
-            localStorage.removeItem('userId');
-            // navigates to the login page if the user is not authenticated
-            navigate('/login');
-            alert("Sessão expirada. Por favor faça login novamente.");
+            alert("Erro ao atualizar o Cliente, tenta novamente.");
         });
     }
 
@@ -190,24 +185,25 @@ export default function EditUser(){
                                         <label for="floatingEmail" >Email: </label>
                                     </div>
 
+
                                     {role === 'admin' ? 
                                         <>
                                         <div class="form-floating mb-3">
                                             <input id="floatingRole" class="form-control" value={inputs.role} type="role" name="role" onChange={handleChange} placeholder="role"/>
                                             <label for="floatingRole" >Role: </label>
                                         </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input id="floatingPassword" class="form-control" type="password" name="password" onChange={handleChange} placeholder="password"/>
-                                            <label for="floatingPassword" >Password: </label>
-                                            <div className="form-check d-flex justify-content-start" >
-                                                <input className="form-check-input" type="checkbox" onClick={myFunction}/>
-                                                <label className="text-dark fw-bold">Mostrar Palavra-passe</label>
-                                            </div>
-                                        </div>
                                         </>
                                         : null
                                     }
+
+                                    <div class="form-floating mb-3">
+                                        <input id="floatingPassword" class="form-control" type="password" name="password" onChange={handleChange} placeholder="password"/>
+                                        <label for="floatingPassword" >Palavra-passe: </label>
+                                        <div className="form-check d-flex justify-content-start" >
+                                            <input className="form-check-input" type="checkbox" onClick={myFunction}/>
+                                            <label className="text-dark fw-bold">Mostrar Palavra-passe</label>
+                                        </div>
+                                    </div>
 
                                     <div colSpan="2" align="right">
                                         <button class="btn btn-outline-success">Guardar</button>

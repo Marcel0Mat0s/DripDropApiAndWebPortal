@@ -112,6 +112,11 @@ export default function CreateUserPlant() {
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -186,17 +191,7 @@ export default function CreateUserPlant() {
             navigate(`/user/${id}/plants`);
         }).catch(function(error){
             console.log(error);
-            // ends the session if the token is invalid
-            // Remove the token from the redux store and local storage
-            dispatch(removeToken());
-            localStorage.removeItem('token');
-
-            // Remove the user id from the redux store and local storage
-            dispatch(removeUserId());
-            localStorage.removeItem('userId');
-            // navigates to the login page if the user is not authenticated
-            navigate('/login');
-            alert("Sessão expirada. Por favor faça login novamente.");
+            alert("Erro ao criar a planta. Por favor tente novamente.");
         });
     }
 

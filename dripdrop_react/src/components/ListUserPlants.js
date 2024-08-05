@@ -2,9 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { removeToken, removeUserId } from "../redux/actions";
+import { removeToken, removeUserId, removeRole } from "../redux/actions";
 import logo from '../images/dripdropdigital.png';
-import { Button } from "bootstrap";
 
 
 // View to list all the users
@@ -65,8 +64,14 @@ export default function ListUsers() {
                 // Remove the user id from the redux store and local storage
                 dispatch(removeUserId());
                 localStorage.removeItem("userId");
+
+                // Remove the role from the redux store and local storage
+                dispatch(removeRole());
+                localStorage.removeItem("role");
+
                 // navigates to the login page if the user is not authenticated
                 navigate("/login");
+                alert("Sessão expirada. Por favor faça login novamente.");
             });
     }
 
@@ -88,9 +93,8 @@ export default function ListUsers() {
 
         // deletes the plant from the API
         axios.delete(`https://dripdrop.danielgraca.com/PHP-API/plants/${id}/${userId}/${id}/delete`, config).then(function(response){
-            console.log(response.data)
-            // navigates to the plants list
-            navigate(`/plants`);
+            console.log(response.data);
+            getUserPlants();
         }).catch(function(error){
             console.log(error);
             alert("Erro ao apagar a planta. Por favor tente novamente.");

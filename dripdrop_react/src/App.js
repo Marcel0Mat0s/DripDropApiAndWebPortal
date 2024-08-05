@@ -129,7 +129,7 @@ function App() {
                 </li>
 
                 <li class="nav-item">
-                  <a id="plantsView" class="nav-link disabled" aria-disabled="true" href="/plants">Plantas</a>
+                  <a id="plantsView" class="nav-link disabled" aria-disabled="true" href="/plants">Plantações</a>
                 </li>
 
                 <li class="nav-item">
@@ -139,7 +139,7 @@ function App() {
                 {role === 'admin' ? 
                   <>
                   <li class="nav-item">
-                    <a class="nav-link" href="/users">Utilizadores</a>
+                    <a class="nav-link" href="/users">Clientes</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="/types">Tipos de Plantas</a>

@@ -36,21 +36,25 @@ export default function CreateType() {
           .get(`https://dripdrop.danielgraca.com/PHP-API/types`, config)
           .then(function (response) {
               console.log(response.data);
-          })
-          .catch(function (error) {
-              console.log(error);
-              // ends the session if the token is invalid
-              // Remove the token from the redux store and local storage
-              dispatch(removeToken());
-              localStorage.removeItem("token");
+          }).catch(function(error){
+            console.log(error);
+            // ends the session if the token is invalid
+            // Remove the token from the redux store and local storage
+            dispatch(removeToken());
+            localStorage.removeItem('token');
 
-              // Remove the user id from the redux store and local storage
-              dispatch(removeUserId());
-              localStorage.removeItem("userId");
-              // navigates to the login page if the user is not authenticated
-              navigate("/login");
-              alert("Sessão expirada. Por favor faça login novamente.");
-          });
+            // Remove the user id from the redux store and local storage
+            dispatch(removeUserId());
+            localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+            
+            // navigates to the login page if the user is not authenticated
+            navigate('/login');
+            alert("Sessão expirada. Por favor faça login novamente.");
+        });
     }, []);
 
     /**
@@ -98,22 +102,7 @@ export default function CreateType() {
             })
             .catch(function (error) {
                 console.log(error);
-                // ends the session if the token is invalid
-                // Remove the token from the redux store and local storage
-                dispatch(removeToken());
-                localStorage.removeItem("token");
-
-                // Remove the user id from the redux store and local storage
-                dispatch(removeUserId());
-                localStorage.removeItem("userId");
-
-                // Remove the role from the redux store and local storage
-                dispatch(removeRole());
-                localStorage.removeItem("role");
-
-                // navigates to the login page if the user is not authenticated
-                navigate("/login");
-                alert("Sessão expirada. Por favor faça login novamente.");
+                alert("Erro ao criar o tipo de planta, por favor tente novamente.");
             });
     }
 

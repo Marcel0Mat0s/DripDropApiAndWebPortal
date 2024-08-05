@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaf
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import { useDispatch, useSelector } from "react-redux";
-import { removeToken, removeUserId } from "../redux/actions";
+import { removeToken, removeUserId, removeRole } from "../redux/actions";
 
 // Custom icon for the marker
 const plantIcon = new L.Icon({
@@ -102,6 +102,11 @@ export default function EditPlant(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+            
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -194,13 +199,13 @@ export default function EditPlant(){
         // Sends the data to the API to update the plant
         axios.put(`https://dripdrop.danielgraca.com/PHP-API/plants/${id}/${userId}/edit`, inputs, config).then(function(response){
             console.log(response.data);
-            alert('Planta atualizada com sucesso!');
-            
+           
             if (role === 'admin') {
                 navigate(`/user/${inputs.fk_user}/plants`);
             } else {
                 navigate('/plants');
-            }
+            } 
+            alert('Planta atualizada com sucesso!');
         })
         .catch(error => {
             console.log('Failed to update user: ', error);

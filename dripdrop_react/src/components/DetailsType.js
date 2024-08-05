@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from '../images/dripdropdigital.png';
-import { removeToken, removeUserId } from '../redux/actions';
+import { removeToken, removeUserId, removeRole } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -59,6 +59,11 @@ export default function DetailsType(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert('Sessão expirada. Por favor faça login novamente.');
@@ -83,19 +88,10 @@ export default function DetailsType(){
         axios.delete(`https://dripdrop.danielgraca.com/PHP-API/types/${id}/${userId}`, config).then(function(response){
             console.log(response.data);
             navigate('/types');
+            alert('Tipo apagado com sucesso.');
         }).catch(function(error){
             console.log(error);
-            // ends the session if the token is invalid
-            // Remove the token from the redux store and local storage
-            dispatch(removeToken());
-            localStorage.removeItem('token');
-
-            // Remove the user id from the redux store and local storage
-            dispatch(removeUserId());
-            localStorage.removeItem('userId');
-            // navigates to the login page if the user is not authenticated
-            navigate('/login');
-            alert('Sessão expirada. Por favor faça login novamente.');
+            alert('Erro ao apagar o tipo. Por favor tente novamente.');
         }
         );
     }

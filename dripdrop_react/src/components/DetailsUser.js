@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import logo from '../images/dripdropdigital.png';
-import { removeToken, removeUserId } from '../redux/actions';
+import { removeToken, removeUserId, removeRole } from '../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -44,7 +44,7 @@ export default function DetailsUser(){
         };
 
         // gets the user data from the API
-        axios.get(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}`, config).then(function(response){
+        axios.get(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}///${role}`, config).then(function(response){
             console.log(response.data);
             setInputs(response.data);
         }).catch(function(error){
@@ -57,6 +57,12 @@ export default function DetailsUser(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+            // navigates to the login page if the user is not authenticated
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -80,15 +86,15 @@ export default function DetailsUser(){
 
         // deletes the user from the API
         axios
-        .delete(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}`, config)
+        .delete(`https://dripdrop.danielgraca.com/PHP-API/users/${id}/${id}///${role}`, config)
         .then(function (response) {
             console.log(response.data);
-            alert("Utilizador apagado com sucesso.");
+            alert("Cliente apagado com sucesso.");
             navigate('/users');
         })
         .catch(function (error) {
             console.log(error);
-            alert("Erro ao apagar o utilizador.");
+            alert("Erro ao apagar o Cliente.");
         });
     }
 

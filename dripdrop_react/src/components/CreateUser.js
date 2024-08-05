@@ -88,7 +88,7 @@ export default function CreateUser(){
             else navigate('/');
         } catch (error) {
             console.log('Authentication failed: ', error);
-            alert('Erro ao criar a conta, por favor tente novamente mais tarde');
+            alert('Erro ao criar a conta, por favor tente novamente novamente.');
         } finally {
             setLoading(false);
         }
@@ -125,7 +125,7 @@ export default function CreateUser(){
                             <table class="text-light w-75" cellSpacing="20" align="center" style={{margin: '50px'}}>
                                 <thead>
                                     <tr>
-                                        <h2 class="text-dark" align="left">🪪Criar um Utilizador:</h2>
+                                        <h2 class="text-dark" align="left">🪪Criar um Cliente:</h2>
                                         <br/>
                                     </tr>
                                 </thead>
