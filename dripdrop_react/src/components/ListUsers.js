@@ -10,9 +10,6 @@ export default function ListUsers() {
   // initializes the users state
   const [users, setUsers] = useState([]);
 
-  // gets the user ID from local storage
-  const userId = localStorage.getItem("userId");
-
   // gets the navigate function from the router
   const navigate = useNavigate();
 
@@ -25,7 +22,7 @@ export default function ListUsers() {
   // gets the users data from the API when the page loads
   useEffect(() => {
     getUsers();
-  }, []);
+  });
 
   /**
    * Function to get the users data from the API
@@ -60,20 +57,11 @@ export default function ListUsers() {
         // Remove the role from the redux store and local storage
         dispatch(removeRole());
         localStorage.removeItem("role");
-        
+
         // navigates to the login page if the user is not authenticated
         navigate("/login");
         alert("Sessão expirada. Por favor faça login novamente.");
       });
-  }
-
-  /**
-   * Function to navigate to a path
-   *
-   * @param {string} path
-   */
-  function navigateTo(path) {
-    navigate(path);
   }
 
   return (

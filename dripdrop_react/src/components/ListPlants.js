@@ -2,8 +2,8 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import logo from '../images/dripdropdigital.png';
-import { removeToken, removeUserId } from '../redux/actions';
-import { useDispatch } from 'react-redux';
+import { removeToken, removeUserId, removeRole } from '../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // View to list all the plants of a user
@@ -12,8 +12,11 @@ export default function ListPlants(){
     // initializes the plants state
     const [plants, setPlants] = useState([]);
 
-    // gets the user ID from local storage
-    const userId = localStorage.getItem('userId');
+    // gets the token from the redux store
+    const token = useSelector((state) => state.auth.token);
+
+    // gets the user ID from the redux store
+    const userId = useSelector((state) => state.auth.userId);
 
     // gets the navigate function from the router
     const navigate = useNavigate();
@@ -33,7 +36,6 @@ export default function ListPlants(){
     function getPlants(){
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -54,6 +56,11 @@ export default function ListPlants(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+            
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");

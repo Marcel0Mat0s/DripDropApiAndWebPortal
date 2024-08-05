@@ -24,8 +24,8 @@ export default function DetailsType(){
     // gets the dispatch function from the redux store
     const dispatch = useDispatch();
 
-    // gets the role from the redux store
-    const role = useSelector((state) => state.auth.role);
+    // gets the token from the redux store
+    const token = useSelector((state) => state.auth.token);
 
     // gets the user data from the API when the page loads
     useEffect(() => {
@@ -38,7 +38,6 @@ export default function DetailsType(){
      **/
     function getType(){
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`

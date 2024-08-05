@@ -14,11 +14,14 @@ export default function ListUsers() {
     // gets the id from the URL
     const {id} = useParams();
 
-    // gets the user ID from local storage
-    const userId = localStorage.getItem("userId");
+    // gets the user ID from the redux store
+    const userId = useSelector((state) => state.auth.userId);
 
     // gets the role from the redux store
     const role = useSelector((state) => state.auth.role);
+
+    // gets the token from the redux store
+    const token = useSelector((state) => state.auth.token);
 
     // gets the navigate function from the router
     const navigate = useNavigate();
@@ -26,13 +29,10 @@ export default function ListUsers() {
     // gets the dispatch function from the redux store
     const dispatch = useDispatch();
 
-    // gets the token from the redux store
-    const token = useSelector((state) => state.auth.token);
-
     // gets the users data from the API when the page loads
     useEffect(() => {
         getUserPlants();
-    }, []);
+    });
 
     /**
      * Function to get the users plants data from the API
@@ -84,7 +84,6 @@ export default function ListUsers() {
     const deletePlant = (id) => {
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`

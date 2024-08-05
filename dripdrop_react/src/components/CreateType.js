@@ -10,9 +10,6 @@ export default function CreateType() {
     // initializes the type state
     const [type, setType] = useState("");
 
-    // gets the user ID from local storage
-    const userId = localStorage.getItem("userId");
-
     // gets the navigate function from the router
     const navigate = useNavigate();
 

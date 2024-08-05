@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import logo from '../images/dripdropdigital.png';
 
 // View to display the instructions to reset the password
@@ -21,7 +20,6 @@ export default function UserForgotPass() {
                         <tbody>
                             <tr>
                                 <th>
-                                    <h1></h1>
                                 </th>
                                 <td align="left">
                                     <p className="fs-3 fw-bold">Não se estresse, só precisa de seguir os seguintes passos:</p>

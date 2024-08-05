@@ -6,8 +6,8 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { Bar, Line} from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement} from 'chart.js';
-import { removeToken, removeUserId } from '../redux/actions';
-import { useDispatch } from 'react-redux';
+import { removeToken, removeUserId, removeRole } from '../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
 import { m } from "framer-motion";
 import { point } from "leaflet";
 
@@ -44,6 +44,9 @@ export default function ListAllStates(){
     // initializes the dispatch function
     const dispatch = useDispatch();
 
+    // gets the token from the redux store
+    const token = useSelector((state) => state.auth.token);
+
     // gets the plant data from the API when the page loads
     useEffect(() => {
         
@@ -75,7 +78,6 @@ export default function ListAllStates(){
     function getStateByDate(date){
             
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -96,6 +98,11 @@ export default function ListAllStates(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -110,7 +117,6 @@ export default function ListAllStates(){
     function getAllState(){
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -132,6 +138,11 @@ export default function ListAllStates(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -153,9 +164,13 @@ export default function ListAllStates(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+            
             // navigates to the login page if the user is not authenticated
             navigate('/login');
-            alert("Sessão expirada. Por favor faça login novamente.");
         });
     }
 

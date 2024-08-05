@@ -63,6 +63,9 @@ export default function EditPlant(){
     // Gets the role from the redux store
     const role = useSelector((state) => state.auth.role);
 
+    // gets the token from the redux store
+    const token = useSelector((state) => state.auth.token);
+
     // initializes the dispatch function
     const dispatch = useDispatch();
 
@@ -80,7 +83,6 @@ export default function EditPlant(){
     function getTypes(){
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -106,7 +108,7 @@ export default function EditPlant(){
             // Remove the role from the redux store and local storage
             dispatch(removeRole());
             localStorage.removeItem('role');
-            
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -122,7 +124,6 @@ export default function EditPlant(){
     function getPlant(){
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -189,7 +190,6 @@ export default function EditPlant(){
         }
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`

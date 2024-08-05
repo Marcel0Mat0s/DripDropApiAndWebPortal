@@ -84,8 +84,10 @@ export default function CreateUser(){
             localStorage.setItem('token', response.data.token);
             console.log(response.data);
             alert('Conta criada com sucesso!');
+
             if (role === 'admin') navigate('/users');
             else navigate('/');
+            
         } catch (error) {
             console.log('Authentication failed: ', error);
             alert('Erro ao criar a conta, por favor tente novamente novamente.');

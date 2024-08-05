@@ -24,6 +24,9 @@ export default function EditUser(){
     // gets the role from the redux store
     const role = useSelector((state) => state.auth.role);
 
+    // gets the token from the redux store
+    const token = useSelector((state) => state.auth.token);
+
     // gets the user data from the API when the page loads
     useEffect(() => {
         getUser();
@@ -36,7 +39,6 @@ export default function EditUser(){
     function getUser(){
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -126,7 +128,6 @@ export default function EditUser(){
         }
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`

@@ -10,9 +10,6 @@ export default function ListTypes() {
   // initializes the types state
   const [types, setTypes] = useState([]);
 
-  // gets the user ID from local storage
-  const userId = localStorage.getItem("userId");
-
   // gets the navigate function from the router
   const navigate = useNavigate();
 
@@ -25,7 +22,7 @@ export default function ListTypes() {
   // gets the types data from the API when the page loads
   useEffect(() => {
     getTypes();
-  }, []);
+  });
 
   /**
    * Function to get the types data from the API
@@ -64,33 +61,6 @@ export default function ListTypes() {
         // navigates to the login page if the user is not authenticated
         navigate("/login");
         alert("Sessão expirada. Por favor faça login novamente.");
-      });
-  }
-
-  /**
-   * Function to delete a type
-   * 
-   * @param {*} id 
-   * @returns 
-   */
-  function deleteType(id) {
-    // gets the token from local storage and sets it in the headers
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    // sends a DELETE request to the server
-    axios
-      .delete(`https://dripdrop.danielgraca.com/PHP-API/type/${id}`, config)
-      .then(function (response) {
-        console.log(response.data);
-        getTypes();
-      })
-      .catch(function (error) {
-        console.log(error);
-        alert("Erro ao apagar o tipo. Por favor tente novamente.");
       });
   }
 

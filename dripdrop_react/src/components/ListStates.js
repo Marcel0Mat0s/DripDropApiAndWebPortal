@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import axios from "axios";
 import { useNavigate, useParams} from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { removeToken, removeUserId } from "../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { removeToken, removeUserId, removeRole } from "../redux/actions";
 
 // View to list the state of a plant
 export default function ListStates(){
@@ -29,8 +29,11 @@ export default function ListStates(){
     const [manMode, setManMode] = useState('automatico');
     const [rega, setRega] = useState('"OFF"');
 
-    // gets the user ID from local storage
-    const userId = localStorage.getItem('userId');
+    // gets the user ID from the redux store
+    const userId = useSelector((state) => state.auth.userId);
+
+    // gets the token from the redux store
+    const token = useSelector((state) => state.auth.token);
 
     // gets the dispatch function from the redux store
     const dispatch = useDispatch();
@@ -160,7 +163,6 @@ export default function ListStates(){
         }
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -190,17 +192,7 @@ export default function ListStates(){
             }
         }).catch(function(error){
             console.log(error);
-            // ends the session if the token is invalid
-            // Remove the token from the redux store and local storage
-            dispatch(removeToken());
-            localStorage.removeItem('token');
-
-            // Remove the user id from the redux store and local storage
-            dispatch(removeUserId());
-            localStorage.removeItem('userId');
-            // navigates to the login page if the user is not authenticated
-            navigate('/login');
-            alert("Sessão expirada. Por favor faça login novamente.");
+            alert("Erro ao verificar o estado da planta. Por favor tente mais tarde.");
         });
     }
 
@@ -211,7 +203,6 @@ export default function ListStates(){
     function getState(){
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -233,6 +224,11 @@ export default function ListStates(){
             // Remove the user id from the redux store and local storage
             dispatch(removeUserId());
             localStorage.removeItem('userId');
+
+            // Remove the role from the redux store and local storage
+            dispatch(removeRole());
+            localStorage.removeItem('role');
+
             // navigates to the login page if the user is not authenticated
             navigate('/login');
             alert("Sessão expirada. Por favor faça login novamente.");
@@ -248,7 +244,6 @@ export default function ListStates(){
     const deletePlant = (id) => {
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
