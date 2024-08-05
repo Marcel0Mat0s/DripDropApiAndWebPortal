@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { removeToken, removeUserId } from "../redux/actions";
+import { removeToken, removeUserId, removeRole } from "../redux/actions";
 import logo from '../images/dripdropdigital.png';
 
 // View to list all the users
@@ -56,6 +56,11 @@ export default function ListUsers() {
         // Remove the user id from the redux store and local storage
         dispatch(removeUserId());
         localStorage.removeItem("userId");
+
+        // Remove the role from the redux store and local storage
+        dispatch(removeRole());
+        localStorage.removeItem("role");
+        
         // navigates to the login page if the user is not authenticated
         navigate("/login");
         alert("Sessão expirada. Por favor faça login novamente.");

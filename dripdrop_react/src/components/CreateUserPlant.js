@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaf
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import { useDispatch, useSelector } from "react-redux";
-import { removeToken, removeUserId } from "../redux/actions";
+import { removeToken, removeUserId, removeRole } from "../redux/actions";
 
 // Custom icon for the marker
 const plantIcon = new L.Icon({

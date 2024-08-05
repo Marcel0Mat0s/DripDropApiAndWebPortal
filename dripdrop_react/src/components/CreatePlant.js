@@ -53,6 +53,9 @@ export default function CreatePlant() {
     // gets the role from the redux store
     const role = useSelector((state) => state.auth.role);
 
+    // gets the token from the redux store
+    const token = useSelector((state) => state.auth.token);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -86,7 +89,6 @@ export default function CreatePlant() {
     function getTypes() {
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -169,7 +171,6 @@ export default function CreatePlant() {
         inputs.userId = userId;
 
         // gets the token from local storage and sets it in the headers
-        const token = localStorage.getItem('token');
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`

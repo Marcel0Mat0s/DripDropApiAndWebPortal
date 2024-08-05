@@ -66,10 +66,12 @@ export default function ListStates(){
     
         websocket.onerror = (error) => {
             console.error('WebSocket error:', error);
+            alert('Erro na conexão ao servidor. Por favor tente novamente.');
         };
     
         websocket.onclose = (event) => {
             console.error('WebSocket closed:', event);
+            alert('Cliente desconectado. Por favor reconecte para continuar a controlar o sistema.');
         };
     
         websocket.onmessage = (event) => {
@@ -312,7 +314,7 @@ export default function ListStates(){
             </div>
             <div class="container w-100 ">
                 <div class="row w-100 d-flex justify-content-center">
-                    {state.length > 0 && (
+                    {state.length > 0 ? 
                         <>
                             <div class="col p-1" style={{alignContent: "center"}}>
                                 <div class="h-100  d-flex justify-content-between" style={{ alignContent: "center"}}>
@@ -540,7 +542,29 @@ export default function ListStates(){
                                 </div>
                             </div>
                         </>
-                    )}
+                        :
+                        <>
+                            <div class="col p-1">
+                                <div class="whiteFullCard h-100" style={{ alignContent: "center"}}>
+                                    <table class="table-primary w-75 bg-white" align="center">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center">
+                                                    <h3 class="fs-4" align="center">Esta plantação ainda não possui estados registados.</h3>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="d-flex justify-content-around">
+                                                    <button class="btn btn-outline-info mx-1" onClick={() => navigate(`/plant/${plantId}/edit`)}>Editar</button>
+                                                    <button class="btn btn-outline-danger" onClick={() => deletePlant(plantId)}>Apagar</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </>
+                    }
                 </div>
             </div>
         </div>  
