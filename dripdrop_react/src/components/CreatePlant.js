@@ -188,7 +188,7 @@ export default function CreatePlant() {
             navigate('/plant')
         }).catch(function(error){
             console.log(error);
-            alert("Erro ao criar a planta. Por favor tente novamente.");
+            alert("Erro ao criar a plantação. Por favor tente novamente.");
         });
     }
 
@@ -199,7 +199,7 @@ export default function CreatePlant() {
                 <div class="col m-5 whiteFullCard">
                     
                     <div class="h-25">
-                        <h1 align="center">Crie uma nova planta!🪴</h1>
+                        <h1 align="center">Crie uma nova plantação!🪴</h1>
                         <br/>
                         <hr class="hr hr-blurry" />
                         <br/>

@@ -219,7 +219,7 @@ export default function EditPlant(){
 
                 <div class="col m-5 whiteFullCard">
                     <div class="h-25">
-                        <h1 align="center">Edite a sua planta!🪴</h1>
+                        <h1 align="center">Edite a sua plantação!🪴</h1>
                         <br/>
                         <hr class="hr hr-blurry" />
                         <br/>

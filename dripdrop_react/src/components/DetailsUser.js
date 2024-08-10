@@ -131,7 +131,7 @@ export default function DetailsUser(){
                                     </div>
 
                                     <div colSpan="2" align="right">
-                                        <a class="btn btn-outline-info floating" align="left" href={`/user/${id}/plants`}>Plantas</a>
+                                        <a class="btn btn-outline-info floating" align="left" href={`/user/${id}/plants`}>Plantações</a>
                                         <a class="btn btn-outline-info mx-1" href={`/user/${id}/edit`}>Editar</a>
                                         <button class="btn btn-outline-danger" onClick={() => deleteUser(id)}>Apagar</button>
                                     </div>
