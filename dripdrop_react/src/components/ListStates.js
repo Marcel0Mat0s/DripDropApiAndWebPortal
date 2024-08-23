@@ -28,6 +28,7 @@ export default function ListStates(){
     const [ws, setWs] = useState(null);
     const [manMode, setManMode] = useState('automatico');
     const [rega, setRega] = useState('"OFF"');
+    const [loading, setLoading] = useState(true);
 
     // gets the user ID from the redux store
     const userId = useSelector((state) => state.auth.userId);
@@ -47,7 +48,19 @@ export default function ListStates(){
             averageNDVI();
         }, 300000);
 
-        getState(); 
+        async function firstGetState() {
+            
+            setLoading(true);
+            try {
+                await getState(); 
+            } catch (error) {
+                console.error('Error getting state:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        firstGetState();
 
         // Clear interval on component unmount
         return () => clearInterval(interval);
@@ -539,25 +552,41 @@ export default function ListStates(){
                         </>
                         :
                         <>
-                            <div class="col p-1">
-                                <div class="whiteFullCard h-100" style={{ alignContent: "center"}}>
-                                    <table class="table-primary w-75 bg-white" align="center">
-                                        <tbody>
-                                            <tr>
-                                                <td align="center">
-                                                    <h3 class="fs-4" align="center">Esta plantação ainda não possui estados registados.</h3>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="d-flex justify-content-around">
-                                                    <button class="btn btn-outline-info mx-1" onClick={() => navigate(`/plant/${plantId}/edit`)}>Editar</button>
-                                                    <button class="btn btn-outline-danger" onClick={() => deletePlant(plantId)}>Apagar</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            {loading ? 
+                                <div class="col p-1">
+                                    <div class="whiteFullCard h-100" style={{ alignContent: "center"}}>
+                                        <table class="table-primary w-75 bg-white" align="center">
+                                            <tbody>
+                                                <tr>
+                                                    <td align="center">
+                                                        <h3 class="fs-4" align="center">A carregar...</h3>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                                :
+                                <div class="col p-1">
+                                    <div class="whiteFullCard h-100" style={{ alignContent: "center"}}>
+                                        <table class="table-primary w-75 bg-white" align="center">
+                                            <tbody>
+                                                <tr>
+                                                    <td align="center">
+                                                        <h3 class="fs-4" align="center">Esta plantação ainda não possui estados registados.</h3>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="d-flex justify-content-around">
+                                                        <button class="btn btn-outline-info mx-1" onClick={() => navigate(`/plant/${plantId}/edit`)}>Editar</button>
+                                                        <button class="btn btn-outline-danger" onClick={() => deletePlant(plantId)}>Apagar</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
                         </>
                     }
                 </div>

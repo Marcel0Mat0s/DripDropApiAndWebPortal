@@ -24,6 +24,10 @@ import { useEffect } from 'react';
 import { removeToken, removeUserId, removeRole } from './redux/actions';
 import CreateUserPlant from './components/CreateUserPlant';
 import UserForgotPass from './components/UserForgotPass';
+import ListDevices from './components/ListDevices';
+import CreateDevice from './components/CreateDevice';
+import EditDevice from './components/EditDevice';
+import DetailsDevice from './components/DetailsDevice';
 
 // Main component
 function App() {
@@ -38,15 +42,21 @@ function App() {
     const plantsViewButton = document.getElementById('plantsView');
     const defViewButton = document.getElementById('defView');
     const sessionButton = document.getElementById('sessionButton');
+    const devices = document.getElementById('devicesView');
 
     if (!token) {
       try {
         if (plantsViewButton) {
           plantsViewButton.classList.add('disabled');
+          plantsViewButton.classList.add('invisible');
         }
         if (defViewButton) {
           defViewButton.classList.add('disabled');
           defViewButton.classList.add('invisible');
+        }
+        if (devices) {
+          devices.classList.add('disabled');
+          devices.classList.add('invisible');
         }
         // Change the session button to login button that when clicked calls the login function
         if (sessionButton) {
@@ -61,10 +71,15 @@ function App() {
       try {
         if (plantsViewButton) {
           plantsViewButton.classList.remove('disabled');
+          plantsViewButton.classList.remove('invisible');
         }
         if (defViewButton) {
           defViewButton.classList.remove('disabled');
           defViewButton.classList.remove('invisible');
+        }
+        if (devices) {
+          devices.classList.remove('disabled');
+          devices.classList.remove('invisible');
         }
         // Change the session button to logout button that when clicked calls the logout function
         if (sessionButton) {
@@ -129,11 +144,11 @@ function App() {
                 </li>
 
                 <li class="nav-item">
-                  <a id="plantsView" class="nav-link disabled" aria-disabled="true" href="/plants">Plantações</a>
+                  <a id="plantsView" class="nav-link disabled invisible" aria-disabled="true" href="/plants">Plantações</a>
                 </li>
 
                 <li class="nav-item">
-                  <a id="defView" class="nav-link disabled invisible" aria-disabled="true" href={`/user/${userid}/edit`} >Definições</a>
+                  <a id='devicesView' class="nav-link disabled invisible" href="/devices">Dispositivos</a>
                 </li>
 
                 {role === 'admin' ? 
@@ -141,12 +156,18 @@ function App() {
                   <li class="nav-item">
                     <a class="nav-link" href="/users">Clientes</a>
                   </li>
+                  
                   <li class="nav-item">
                     <a class="nav-link" href="/types">Tipos de Plantas</a>
                   </li>
                   </>
                   : null
                 }
+
+                <li class="nav-item">
+                  <a id="defView" class="nav-link disabled invisible" aria-disabled="true" href={`/user/${userid}/edit`} >Definições</a>
+                </li>
+                
               </ul>
 
               <a id="sessionButton" class="nav-link d-flex" href="/login">Iniciar Sessão</a>
@@ -167,6 +188,11 @@ function App() {
           <Route path="info" element={<Info/>} />
           <Route path="about" element={<About/>} />
           <Route path="states/all/:plantId/:plantType/:plantName" element={<ListAllStates/>} />
+          <Route path="devices" element={<ListDevices />} />
+          <Route path="device/add" element={<CreateDevice />} />
+          <Route path="device/:id/edit" element={<EditDevice />} />
+          <Route path="device/:id/details" element={<DetailsDevice />} />
+          <Route path="user/forgot" element={<UserForgotPass />} />
           <Route path="users" element={<PrivateRoute element={<ListUsers />} />} />
           <Route path="types" element={<PrivateRoute element={<ListTypes />} />} />
           <Route path="type/:id/edit" element={<PrivateRoute element={<EditType />} />} />
@@ -175,7 +201,7 @@ function App() {
           <Route path="type/:id/details" element={<PrivateRoute element={<DetailsType />} />} />
           <Route path="user/:id/plants" element={<PrivateRoute element={<ListUserPlants />} />} />
           <Route path="user/:id/plants/create" element={<PrivateRoute element={<CreateUserPlant />} />} />
-          <Route path="user/forgot" element={<UserForgotPass />} />
+
         </Routes>
       </div>
     </BrowserRouter>
