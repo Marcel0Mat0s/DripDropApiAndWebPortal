@@ -55,8 +55,6 @@ export default function ListStates(){
                 await getState(); 
             } catch (error) {
                 console.error('Error getting state:', error);
-            } finally {
-                setLoading(false);
             }
         }
 
@@ -227,6 +225,7 @@ export default function ListStates(){
         axios.get( `https://dripdrop.danielgraca.com/PHP-API/states/null/${userId}/${plantId}/all`, config).then(function(response){
             console.log(response.data)
             setState(response.data)
+            setLoading(false);
         }).catch(function(error){
             console.log(error);
             // ends the session if the token is invalid

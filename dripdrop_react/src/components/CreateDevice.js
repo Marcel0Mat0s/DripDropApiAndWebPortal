@@ -28,7 +28,10 @@ export default function CreateDevice() {
 
     // gets the plants data from the API when the page loads
     useEffect(() => {
-      // gets the token from local storage and sets it in the headers
+        // Add the user id to the device object
+        setDevice({...device, fk_user: userId});
+
+        // gets the token from local storage and sets it in the headers
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -82,13 +85,17 @@ export default function CreateDevice() {
     function handleSubmit(event){
         event.preventDefault();
 
-        // Add the user id to the device object
-        device.fk_user = userId;
-
+        console.log(device);
         //////////////// VALIDATION ////////////////
         // checks if the every field is filled
-        if (!device.id || !device.fk_plant) {
+        if (!device.id ) {
             alert("Por favor preencha todos os campos.");
+            return;
+        }
+
+        // checks if the device has a user 
+        if (!device.fk_user) {
+            alert("Erro ao adicionar o dispositivo. Por favor tente novamente.");
             return;
         }
 
@@ -101,7 +108,7 @@ export default function CreateDevice() {
 
         // updates the device data to the API
         axios
-            .put(`https://dripdrop.danielgraca.com/PHP-API/devices/${device.id}`, device, config)
+            .put(`https://dripdrop.danielgraca.com/PHP-API/devices/${device.id}/${userId}`, device, config)
             .then(function (response) {
                 console.log(response.data);
                 alert("Dispositivo adicionado com sucesso.");
@@ -132,7 +139,7 @@ export default function CreateDevice() {
                             <tbody>
                                 <div class="form-floating mb-3">
                                     <input id="floatingNome" class="form-control" type="id" name="id" onChange={handleChange} placeholder="id"/>
-                                    <label for="floatingNome" >Número Serial </label>
+                                    <label for="floatingNome" >Endereço MAC </label>
                                 </div>
 
                                 <div class="form-floating mb-3">

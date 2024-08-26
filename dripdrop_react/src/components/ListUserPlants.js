@@ -32,7 +32,7 @@ export default function ListUsers() {
     // gets the users data from the API when the page loads
     useEffect(() => {
         getUserPlants();
-    });
+    }, []);
 
     /**
      * Function to get the users plants data from the API

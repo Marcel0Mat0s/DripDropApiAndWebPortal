@@ -23,7 +23,7 @@ export default function ListNewPlantID() {
     // gets the plant ID when the page loads
     useEffect(() => {
         getPlants();
-    });
+    }, []);
 
     /**
      * Function to get the plant ID from the API

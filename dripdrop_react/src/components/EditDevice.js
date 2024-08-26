@@ -38,13 +38,21 @@ export default function EditDevice() {
     // gets the plants data from the API when the page loads
     useEffect(() => {
 
-        getUsers();
+        if (role === 'admin'){
+            getUsers();
+        }
         getDevice();
       
     }, []);
 
     useEffect(() => {
-        getPlants(device.fk_user);
+
+        if(role === 'admin'){
+            getPlants(device.fk_user);
+        } else {
+            getPlants(userId);
+        }
+        
     }, [device.fk_user]);
 
     // gets the users data from the API when the page loads
@@ -175,12 +183,9 @@ export default function EditDevice() {
     function handleSubmit(event){
         event.preventDefault();
 
-        // Add the user id to the device object
-        device.fk_user = userId;
-
         //////////////// VALIDATION ////////////////
         // checks if the every field is filled
-        if (!device.id || !device.fk_plant) {
+        if (!device.id ) {
             alert("Por favor preencha todos os campos.");
             return;
         }

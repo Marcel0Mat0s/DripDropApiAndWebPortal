@@ -22,7 +22,7 @@ export default function ListTypes() {
   // gets the types data from the API when the page loads
   useEffect(() => {
     getTypes();
-  });
+  }, []);
 
   /**
    * Function to get the types data from the API

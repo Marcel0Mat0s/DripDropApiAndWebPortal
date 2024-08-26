@@ -76,6 +76,42 @@ export default function ListDevices() {
     
   }
 
+  /**
+   * Function to search for a device by MAC address (device id)
+   * 
+   * @returns {void}
+   * 
+   */
+  function search() {
+    // gets the search value
+    const input = document.getElementById("macSearch");
+
+    // gets the filter value
+    let filter = input.value.toUpperCase();
+
+    // gets the table rows
+    let rows = document.querySelector("tbody").rows;
+
+    // loops through the table rows
+    for (let i = 0; i < rows.length; i++) {
+      // gets the table data
+      let td = rows[i].cells[0];
+
+      // gets the text content
+      let txtValue = td.textContent || td.innerText;
+
+      // checks if the text content includes the filter value
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        // shows the row
+        rows[i].style.display = "";
+      } else {
+        // hides the row
+        rows[i].style.display = "none";
+      }
+    }
+
+  }
+
   return (
     <div class="container">
       <img src={logo} alt='DripDrop' style={{width: '220px'}} />
@@ -84,6 +120,11 @@ export default function ListDevices() {
         <button class='buttonBlue position-relative top-50 start-50 float-right fs-4 text-center pb-2' style={{ width:"40px", height:"40px"}} onClick={() => navigate("/device/add")}>+</button>
       </div>
       <div class=" w-100 whiteFullCard" style={{backgroundColor: "#212529"}}>
+        <div class="input-group rounded">
+          <input id="macSearch" type="search" class="form-control rounded" placeholder="Endereço MAC" aria-label="Search" aria-describedby="search-addon" />
+          <a class="btn btn-outline-info" onClick={() => search()}>Procurar</a>
+        </div>
+        <br/>
         <table class="table">
           <thead>
             <tr>
