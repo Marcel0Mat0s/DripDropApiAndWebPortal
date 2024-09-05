@@ -127,7 +127,7 @@ export default function DetailsUser(){
 
                                     <div class="form-floating mb-3">
                                         <input id="floatingRole" class="form-control" value={inputs.role} type="role" name="role" placeholder="role" disabled/>
-                                        <label for="floatingRole" >Role: </label>
+                                        <label for="floatingRole" >Cargo: </label>
                                     </div>
 
                                     <div colSpan="2" align="right">

@@ -143,13 +143,18 @@ function App() {
                   <a class="nav-link" href="/info">Tutorial</a>
                 </li>
 
-                <li class="nav-item">
+                {token ?
+                  <>
+                  <li class="nav-item">
                   <a id="plantsView" class="nav-link disabled invisible" aria-disabled="true" href="/plants">Plantações</a>
-                </li>
+                  </li>
 
-                <li class="nav-item">
-                  <a id='devicesView' class="nav-link disabled invisible" href="/devices">Dispositivos</a>
-                </li>
+                  <li class="nav-item">
+                    <a id='devicesView' class="nav-link disabled invisible" href="/devices">Dispositivos</a>
+                  </li>
+                  </>
+                  : null
+                }
 
                 {role === 'admin' ? 
                   <>
@@ -164,9 +169,14 @@ function App() {
                   : null
                 }
 
-                <li class="nav-item">
-                  <a id="defView" class="nav-link disabled invisible" aria-disabled="true" href={`/user/${userid}/edit`} >Definições</a>
-                </li>
+                {token ?
+                  <>
+                  <li class="nav-item">
+                    <a id="defView" class="nav-link disabled invisible" aria-disabled="true" href={`/user/${userid}/edit`} >Definições</a>
+                  </li>
+                  </>
+                  : null
+                }
                 
               </ul>
 

@@ -47,7 +47,7 @@ export default function ListDevices() {
     var axiosURL = `https://dripdrop.danielgraca.com/PHP-API/devices/all/${userId}`;
 
     if (role === 'admin') {
-      axiosURL = `https://dripdrop.danielgraca.com/PHP-API/devices`;
+      axiosURL = `https://dripdrop.danielgraca.com/PHP-API/devices/////admin`;
     }
 
     // gets the devices data from the API

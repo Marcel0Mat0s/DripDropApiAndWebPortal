@@ -245,7 +245,7 @@ export default function CreatePlant() {
                     </div>
                 </div>
 
-                <div class="col m-5 p-3 whiteFullCard">
+                <div class="col m-5 p-3 whiteFullCard" style={{ minWidth: "300px"}}>
                         {mapCenter && (
                             <MapContainer
                                 center={mapCenter}

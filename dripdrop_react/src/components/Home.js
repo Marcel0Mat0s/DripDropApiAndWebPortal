@@ -9,12 +9,12 @@ export default function Home(){
         <div >
             <div class="row w-100">
 
-                <div class="col">
+                <div class="col min-vw-50" style={{ minWidth: "300px"}}>
                     <img src={logo} alt='DripDrop' class="w-75" />
                 </div>
 
-                <div class="col d-flex align-items-center">
-                    <table align='center' class="w-75 " >
+                <div class="col d-flex align-items-center" style={{ minWidth: "300px"}}>
+                    <table align='center' class="min-vw-300px w-75 " >
                         <tbody>
                             <tr>
                                 <td>

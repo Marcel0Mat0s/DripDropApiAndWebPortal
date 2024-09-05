@@ -8,8 +8,8 @@ import logo from '../images/dripdropdigital.png';
 // View to claim a new device
 export default function CreateDevice() {
 
-    // initializes the device state
-    const [device, setDevice] = useState("");
+    // initializes the device state with the plant id null
+    const [device, setDevice] = useState({fk_plant: null});
 
     // initializes the plants from the user state
     const [plants, setPlants] = useState([]);
@@ -89,7 +89,7 @@ export default function CreateDevice() {
         //////////////// VALIDATION ////////////////
         // checks if the every field is filled
         if (!device.id ) {
-            alert("Por favor preencha todos os campos.");
+            alert("O campo Endereço MAC é obrigatório.");
             return;
         }
 

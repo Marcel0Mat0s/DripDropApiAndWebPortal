@@ -103,7 +103,7 @@ export default function EditUser(){
 
         // If the user is an admin, checks if the role and password are filled
         if(role === 'admin'){
-            if(!inputs.role || !inputs.password){
+            if(!inputs.role){
                 alert('Por favor preencha todos os campos');
                 return;
             }
@@ -191,7 +191,7 @@ export default function EditUser(){
                                         <>
                                         <div class="form-floating mb-3">
                                             <input id="floatingRole" class="form-control" value={inputs.role} type="role" name="role" onChange={handleChange} placeholder="role"/>
-                                            <label for="floatingRole" >Role: </label>
+                                            <label for="floatingRole" >Cargo: </label>
                                         </div>
                                         </>
                                         : null

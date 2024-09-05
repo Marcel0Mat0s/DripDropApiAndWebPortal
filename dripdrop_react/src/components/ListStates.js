@@ -326,22 +326,23 @@ export default function ListStates(){
                             <div class="col p-1" style={{alignContent: "center"}}>
                                 <div class="h-100  d-flex justify-content-between" style={{ alignContent: "center"}}>
                                     <td style={{alignContent: "center"}}>
-                                        <a class="blueBallCard fw-bold fs-4 text-center" onClick={handlePrev}>&#8249;</a>
+                                        <a class="btn btn-info fw-bold fs-4 text-center" onClick={handlePrev}>&#8249;</a>
                                     </td>
+                                    <td style={{alignContent: "center"}} class="fs-6">{state[currentIndex].date} às {state[currentIndex].time}</td>
                                     <td style={{alignContent: "center"}}>
-                                        <a class="blueBallCard fw-bold fs-4 text-center" onClick={handleNext}>&#8250;</a>
+                                        <a class="btn btn-info fw-bold fs-4 text-center" onClick={handleNext}>&#8250;</a>
                                     </td>
                                 </div>
                             </div>
 
                             <div class="col p-1">
-                                <button class="btn btn-outline-info h-100 w-100" style={{borderRadius: "25px"}} onClick={() => navigate(`/states/all/${plantId}/${plantType}/${plantName}`)}>Gráficos</button>
+                                <button class="btn btn-outline-info h-100 w-100" style={{borderRadius: "15px"}} onClick={() => navigate(`/states/all/${plantId}/${plantType}/${plantName}`)}>Gráficos</button>
                             </div>
                             <div class="col p-1">
-                                <button class="w-100 btn btn-outline-danger h-100" style={{borderRadius:"25px"}} onClick={() => deletePlant(plantId)}>Apagar</button>
+                                <button class="w-100 btn btn-outline-danger h-100" style={{borderRadius:"15px"}} onClick={() => deletePlant(plantId)}>Apagar</button>
                             </div>
                             <div class="col p-1">
-                                <button class="w-100 btn btn-outline-success h-100" style={{borderRadius:"25px"}} onClick={() => navigate(`/plant/${plantId}/edit`)}>Editar</button>
+                                <button class="w-100 btn btn-outline-success h-100" style={{borderRadius:"15px"}} onClick={() => navigate(`/plant/${plantId}/edit`)}>Editar</button>
                             </div>
 
                             <div class="w-100"></div>
